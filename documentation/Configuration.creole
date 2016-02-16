@@ -6,7 +6,6 @@ Three configurable files will be generated if they do not exist. They are: "conf
 | Option  | Value(s)  | Description |
 | TabListDisabled | true/false | If enabled, NametagEdit will not alter a user's name in the tab. This can also be overriden with the function setPlayerListName(); |
 | MetricsEnabled  | true/false | If 'true', small amounts of data will be sent to MCstats.org so we can keep track of the plugin's popularity. |
-| Chat.Enabled | true/false | If 'true', NametagEdit will format the chat with the "Chat.Format" string |
 | MySQL | true/false | If 'true', NametagEdit will use MySQL to store group/player data |
 
 === groups.yml
