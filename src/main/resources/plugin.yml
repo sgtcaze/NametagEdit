@@ -1,0 +1,9 @@
+name: NametagEdit
+main: com.nametagedit.plugin.NametagEdit
+version: 4.0
+authors: [sgtcaze, Cory]
+soft-depend: [zPermissions, PermissionsEX, GroupManager]
+commands:
+  ne:
+    description: NametagEdit commands
+    aliases: [nte, nametagedit]

@@ -1,0 +1,10 @@
+== Permissions
+
+| Permission | Description |
+| nametagedit.use | Allows a player to use the NametagEdit plugin |
+| nametagedit.reload | Allows a user to reload the plugin's data |
+| nametagedit.clear.others | Allows a player to clear ANYONE's prefix/suffix |
+| nametagedit.clear.self | Allows a player to only clear their own prefix/suffix |
+| nametagedit.edit.others | Allows a player to edit ANYONE's prefix/suffix |
+| nametagedit.edit.self | Allows a player to only edit their own prefix/suffix |
+| nametagedit.groups | Allows usage of ALL group subcommands (create, edit, remove) |

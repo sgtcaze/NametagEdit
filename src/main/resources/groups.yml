@@ -1,0 +1,9 @@
+Groups:
+  Admin:
+    Permission: nte.admin
+    Prefix: '&c'
+    Suffix: '&f'
+  Moderator:
+    Permission: nte.moderator
+    Prefix: '&2'
+    Suffix: '&f'

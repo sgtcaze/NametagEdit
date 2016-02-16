@@ -1,0 +1,58 @@
+== API and Developers
+
+To use the NametagEdit API, you have 2 choices: reference NametagEdit in your libraries, or use Maven.
+
+== Maven
+
+Add the following repository to your POM.xml:
+
+{{{
+<repository>
+    <id>upstream</id>
+    <url>http://ci.playmc.cc/plugin/repository/everything/</url>
+</repository>
+}}}
+
+Then add the dependency:
+
+{{{
+<dependency>
+    <groupId>com.nametagedit</groupId>
+    <artifactId>nametagedit</artifactId>
+    <version>1.0</version>
+</dependency>
+}}}
+
+== API Usage
+
+=== Events
+
+You can choose to listen to the NametagEvent. This event fires BEFORE a nametag is changed.
+
+There are 5 available parameters. The player, value, change type, change reason and storage type.
+
+Example Usage:
+
+{{{
+    @EventHandler
+    public void onNametagEvent(NametagEvent event) {
+        if (event.getChangeReason() == NametagEvent.ChangeReason.PLUGIN) {
+            if (event.getChangeType() == NametagEvent.ChangeType.PREFIX) {
+                Player player = Bukkit.getPlayerExact(event.getPlayer());
+                player.sendMessage("The value was: " + event.getValue());
+            }
+        }
+    }
+}}}
+
+=== API Methods
+
+There are various methods available through the API. You can access these methods via NametagEdit.getApi()
+
+Example Usage:
+
+{{{
+    public void something(Player player) {
+        NametagEdit.getApi().setPrefix(player, "&c");
+    }
+}}}

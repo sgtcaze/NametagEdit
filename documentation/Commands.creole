@@ -1,0 +1,39 @@
+== Commands
+
+| Command | Parameters | Description |
+| nte | N/A | Displays all available command arguments |
+| nte | debug | Displays debug information |
+| nte | reload | Reloads configuration and nametags |
+| nte | clear [player] | Clears the prefix and suffix for a player |
+| nte | <prefix/suffix> [player] <text> | Sets the prefix or suffix for a player |
+| nte | groups list | Lists all loaded groups |
+| nte | groups add [group] | Creates a new group |
+| nte | groups remove [group] | Removes a group |
+| nte | groups [group] [perm] <value> | Sets the default permission for a group |
+| nte | groups [group] [prefix] <value> | Sets the prefix for a group |
+| nte | groups [group] [suffix] <value> | Sets the suffix for a group |
+| nte | groups [group] clear <prefix/suffix> | Clears the suffix for a group |
+
+== Example Command Usage
+
+=== Editing Invidiual Prefixes/Suffixes
+Suppose we wish to have a nametag like
+
+{{{
+[Admin] sgtcazeyt
+}}}
+
+The command would be:
+
+{{{
+/nte prefix sgtcazeyt '[Admin] '
+}}}
+
+The ' character will be automatically removed, and allow you to use spaces
+
+=== Creating/Editing Group Properties
+So we want to create, or edit a group. We can start by creating it:
+*Run /ne groups add MyGroup
+*Assign a permission /ne groups set perm MyGroup my.custom.permission
+*Set the prefix: /ne groups set prefix MyGroup '&a[MyGroup] &e'
+*Set the suffix: /ne groups set suffix MyGroup ' &cMy Suffix'
