@@ -36,11 +36,11 @@ public class NametagEdit extends JavaPlugin {
         }
 
         PluginManager pluginManager = Bukkit.getPluginManager();
-        if (checkShouldRegister(pluginManager, "zPermissions")) {
+        if (checkShouldRegister("zPermissions")) {
             pluginManager.registerEvents(new HookZPermissions(handler), this);
-        } else if (checkShouldRegister(pluginManager, "PermissionsEx")) {
+        } else if (checkShouldRegister("PermissionsEx")) {
             pluginManager.registerEvents(new HookPermissionsEX(handler), this);
-        } else if (checkShouldRegister(pluginManager, "GroupManager")) {
+        } else if (checkShouldRegister("GroupManager")) {
             pluginManager.registerEvents(new HookGroupManager(handler), this);
         }
 
@@ -61,8 +61,8 @@ public class NametagEdit extends JavaPlugin {
         return api;
     }
 
-    private boolean checkShouldRegister(PluginManager pluginManager, String plugin) {
-        if (pluginManager.getPlugin(plugin) == null) {
+    private boolean checkShouldRegister(String plugin) {
+        if (Bukkit.getPluginManager().getPlugin(plugin) == null) {
             return false;
         }
         getLogger().info("Found " + plugin + "! Hooking in.");
