@@ -30,7 +30,11 @@ public class NametagCommand implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            sendUsage(sender);
+            if (handler.isFancyMessageCompatible()) {
+                sendUsage(sender);
+            } else {
+                sendLegacyUsage(sender);
+            }
         } else if (args.length >= 1) {
             switch (args[0].toLowerCase()) {
                 case "reload":
@@ -55,6 +59,24 @@ public class NametagCommand implements CommandExecutor {
             }
         }
         return false;
+    }
+
+    private void sendLegacyUsage(CommandSender sender) {
+        sender.sendMessage(Utils.format("&3&lNametag&f&lEdit &c&lCommand Usage"));
+        sender.sendMessage(Utils.format("&e&lPlayer Usage"));
+        sender.sendMessage(Utils.format("&6/ne reload &fReloads nametags and configs"));
+        sender.sendMessage(Utils.format("&6/ne convert &fConverts data"));
+        sender.sendMessage(Utils.format("&6/ne prefix <Player> <value> &fSets a prefix for a player"));
+        sender.sendMessage(Utils.format("&6/ne suffix <Player> <value> &fSets a suffix for a player"));
+        sender.sendMessage(Utils.format("&6/ne clear <Player> &fClears a player's nametag"));
+        sender.sendMessage(Utils.format("&e&lGroup Usage"));
+        sender.sendMessage(Utils.format("&6/ne groups list &fLists the current loaded groups"));
+        sender.sendMessage(Utils.format("&6/ne groups add <Group> &fCreates a group"));
+        sender.sendMessage(Utils.format("&6/ne groups remove <Group> &fRemoves a group"));
+        sender.sendMessage(Utils.format("&6/ne groups <Group> permission <value> &fChanges the permission"));
+        sender.sendMessage(Utils.format("&6/ne groups <Group> clear <prefix/suffix> &fClears the prefix or suffix"));
+        sender.sendMessage(Utils.format("&6/ne groups <Group> prefix <value> &fChanges the prefix"));
+        sender.sendMessage(Utils.format("&6/ne groups <Group> suffix <value> &fChanges the suffix"));
     }
 
     private void sendUsage(CommandSender sender) {
