@@ -24,11 +24,11 @@ public class PacketAccessor {
 
             PREFIX = getNMS(version.startsWith("v1_8") ? "c" : "c");
             SUFFIX = getNMS(version.startsWith("v1_8") ? "d" : "d");
-            MEMBERS = getNMS(version.startsWith("v1_8") ? "g" : "e");
+            MEMBERS = getNMS(version.startsWith("v1_8") ? "g" : version.startsWith("v1_9") ? "h" : "e");
             TEAM_NAME = getNMS(version.startsWith("v1_8") ? "a" : "a");
-            PARAM_INT = getNMS(version.startsWith("v1_8") ? "h" : "f");
-            PACK_OPTION = getNMS(version.startsWith("v1_8") ? "i" : "g");
-            DISPLAY_NAME = getNMS(version.startsWith("v1_8") ? "b" : "b");
+            PARAM_INT = getNMS(version.startsWith("v1_8") ? "h" : version.startsWith("v1_9") ? "i" : "f");
+            PACK_OPTION = getNMS(version.startsWith("v1_8") ? "i" : version.startsWith("v1_9") ? "j" : "g");
+            DISPLAY_NAME = getNMS(version.startsWith("v1_8") ? "b" : version.startsWith("v1_9") ? "b" : "b");
         } catch (Exception e) {
             e.printStackTrace();
         }
