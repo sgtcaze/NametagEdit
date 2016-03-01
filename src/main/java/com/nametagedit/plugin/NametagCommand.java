@@ -7,6 +7,7 @@ import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import mkremins.fanciful.FancyMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -150,6 +151,7 @@ public class NametagCommand implements CommandExecutor {
             }
 
             handler.clear(sender, targetName);
+            handler.applyTagToPlayer(Bukkit.getPlayerExact(targetName));
         }
     }
 

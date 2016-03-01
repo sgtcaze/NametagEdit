@@ -39,7 +39,8 @@ public class NametagHandler implements Listener {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
         this.tabListDisabled = plugin.getConfig().getBoolean("TabListDisabled");
-        this.fancyMessageCompatible = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].startsWith("v1_8");
+        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        this.fancyMessageCompatible = version.startsWith("v1_8");
         if (plugin.getConfig().getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this);
         } else {
@@ -174,6 +175,7 @@ public class NametagHandler implements Listener {
     }
 
     public void applyTagToPlayer(Player player) {
+        if (player == null) { return; }
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
         if (data != null) {
