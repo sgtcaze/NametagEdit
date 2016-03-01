@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>http://maven.apache.org</url>
@@ -19,6 +19,13 @@
             <version>1.9-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Legacy
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency> -->
         <!-- MCStats -->
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
