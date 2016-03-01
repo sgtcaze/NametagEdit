@@ -6,10 +6,15 @@ import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.storage.data.PlayerData;
 import com.nametagedit.plugin.storage.database.tasks.*;
+import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class DatabaseConfig implements AbstractConfig {
@@ -40,13 +45,13 @@ public class DatabaseConfig implements AbstractConfig {
 
     @Override
     public void reload() {
-        new DataDownloader(handler, hikari).runTask(plugin);
+        new DataDownloader(handler, hikari).runTaskAsynchronously(plugin);
     }
 
     @Override
     public void shutdown() {
         if (hikari != null) {
-            hikari.shutdown();
+            hikari.close();
         }
     }
 
@@ -78,6 +83,17 @@ public class DatabaseConfig implements AbstractConfig {
     @Override
     public void clear(UUID uuid, String targetName) {
         new PlayerDeleter(uuid, hikari).runTaskAsynchronously(plugin);
+    }
+
+    @Override
+    public void orderGroups(CommandSender commandSender, String[] args) {
+        List<String> order = new ArrayList<>(Arrays.asList(args).subList(2, args.length));
+        String formatted = Arrays.toString(order.toArray());
+        formatted = formatted.substring(1, formatted.length() - 1).replace(",", "");
+        commandSender.sendMessage(Utils.format("&c&lNametagEdit Group Order:"));
+        commandSender.sendMessage(formatted);
+        commandSender.sendMessage(Utils.format("&cType /ne reload for these changes to take effect"));
+        new GroupConfigUpdater("order", formatted, hikari).runTaskAsynchronously(handler.getPlugin());
     }
 
 }

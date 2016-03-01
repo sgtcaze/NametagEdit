@@ -86,10 +86,11 @@ public class Utils {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            return YamlConfiguration.loadConfiguration(file);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return YamlConfiguration.loadConfiguration(file);
     }
 
     public static YamlConfiguration getConfig(File file, String resource, Plugin plugin) {

@@ -7,6 +7,7 @@
 | nte | clear [player] | Clears the prefix and suffix for a player |
 | nte | <prefix/suffix> [player] <text> | Sets the prefix or suffix for a player |
 | nte | groups list | Lists all loaded groups |
+| nte | groups order <groups> | Orders the priority of groups. |
 | nte | groups add [group] | Creates a new group |
 | nte | groups remove [group] | Removes a group |
 | nte | groups [group] [perm] <value> | Sets the default permission for a group |
@@ -15,6 +16,16 @@
 | nte | groups [group] clear <prefix/suffix> | Clears the suffix for a group |
 
 == Example Command Usage
+
+=== Ordering Group Priority
+Suppose we have 3 groups: Owner, Admin, Default. The first group looked at is the one with the highest priority. We would use:
+
+{{{
+/ne groups order Owner Admin Default
+}}}
+
+NametagEdit will remember the order so groups always load properly.
+v4.0.1 - Only users who use a database can use this command
 
 === Editing Invidiual Prefixes/Suffixes
 Suppose we wish to have a nametag like

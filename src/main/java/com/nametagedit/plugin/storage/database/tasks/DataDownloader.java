@@ -36,6 +36,7 @@ public class DataDownloader extends BukkitRunnable {
 
     @Override
     public void run() {
+        final HashMap<String, String> settings = new HashMap<>();
         final List<GroupData> groupData = new ArrayList<>();
         final Map<UUID, PlayerData> playerData = new HashMap<>();
 
@@ -56,6 +57,11 @@ public class DataDownloader extends BukkitRunnable {
                 }
             }
 
+            results = connection.prepareStatement("SELECT setting,value FROM nte_config").executeQuery();
+            while (results.next()) {
+                settings.put(results.getString("setting"), results.getString("value"));
+            }
+
             results.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,7 +71,7 @@ public class DataDownloader extends BukkitRunnable {
                 public void run() {
                     handler.setGroupData(groupData);
                     handler.setPlayerData(playerData);
-
+                    handler.loadDatabaseSettings(settings);
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         PlayerData data = playerData.get(player.getUniqueId());
                         if (data != null) {

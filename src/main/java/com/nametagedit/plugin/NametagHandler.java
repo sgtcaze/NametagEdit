@@ -5,6 +5,7 @@ import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.storage.data.PlayerData;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
+import com.nametagedit.plugin.storage.database.tasks.GroupConfigUpdater;
 import com.nametagedit.plugin.storage.flatfile.FlatFileConfig;
 import com.nametagedit.plugin.utils.UUIDFetcher;
 import com.nametagedit.plugin.utils.Utils;
@@ -166,6 +167,28 @@ public class NametagHandler implements Listener {
         abstractConfig.clear(uuid, player);
     }
 
+    public void loadDatabaseSettings(HashMap<String, String> settings) {
+        String orderSetting = settings.get("order");
+        if (orderSetting != null) {
+            String[] order = orderSetting.split(" ");
+            List<GroupData> current = new ArrayList<>();
+            // Determine order for current loaded groups
+            for (String group : order) {
+                Iterator<GroupData> itr = groupData.iterator();
+                while (itr.hasNext()) {
+                    GroupData groupData = itr.next();
+                    if (groupData.getGroupName().equalsIgnoreCase(group)) {
+                        current.add(groupData);
+                        itr.remove();
+                        break;
+                    }
+                }
+            }
+            current.addAll(groupData); // Add remaining entries (bad order, wasn't specified)
+            this.groupData = current;
+        }
+    }
+
     public void applyTags() {
         for (Player online : Utils.getOnline()) {
             if (online != null) {
@@ -175,13 +198,13 @@ public class NametagHandler implements Listener {
     }
 
     public void applyTagToPlayer(Player player) {
-        if (player == null) { return; }
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
         if (data != null) {
             plugin.getManager().updateNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true));
         } else {
             for (GroupData group : groupData) {
+                System.out.println("Group order: " + group.getGroupName());
                 if (player.hasPermission(group.getBukkitPermission())) {
                     plugin.getManager().updateNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
                     break;

@@ -82,27 +82,31 @@ public class ConverterTask extends BukkitRunnable {
         final YamlConfiguration players = Utils.getConfig(playersFile);
 
         PreparedStatement insertOrUpdate = connection.prepareStatement(PLAYER_SAVER);
-        for (String key : players.getConfigurationSection("Players").getKeys(false)) {
-            insertOrUpdate.setString(1, key);
-            insertOrUpdate.setString(2, players.getString("Players." + key + ".Name"));
-            insertOrUpdate.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-            insertOrUpdate.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-            insertOrUpdate.setString(5, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-            insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-            insertOrUpdate.addBatch();
+        if (players != null) {
+            for (String key : players.getConfigurationSection("Players").getKeys(false)) {
+                insertOrUpdate.setString(1, key);
+                insertOrUpdate.setString(2, players.getString("Players." + key + ".Name"));
+                insertOrUpdate.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                insertOrUpdate.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
+                insertOrUpdate.setString(5, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
+                insertOrUpdate.addBatch();
+            }
         }
 
         insertOrUpdate.executeBatch();
         insertOrUpdate = connection.prepareStatement(GROUP_SAVER);
-        for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {
-            insertOrUpdate.setString(1, key);
-            insertOrUpdate.setString(2, groups.getString("Groups." + key + ".Permission"));
-            insertOrUpdate.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-            insertOrUpdate.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-            insertOrUpdate.setString(5, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-            insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-            insertOrUpdate.setString(7, groups.getString("Groups." + key + ".Permission"));
-            insertOrUpdate.addBatch();
+        if (groups != null) {
+            for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {
+                insertOrUpdate.setString(1, key);
+                insertOrUpdate.setString(2, groups.getString("Groups." + key + ".Permission"));
+                insertOrUpdate.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                insertOrUpdate.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                insertOrUpdate.setString(5, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                insertOrUpdate.setString(7, groups.getString("Groups." + key + ".Permission"));
+                insertOrUpdate.addBatch();
+            }
         }
 
         insertOrUpdate.executeBatch();

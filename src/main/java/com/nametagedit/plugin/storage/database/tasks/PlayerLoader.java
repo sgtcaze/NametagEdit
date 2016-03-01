@@ -27,6 +27,7 @@ public class PlayerLoader extends BukkitRunnable {
     public void run() {
         String tempPrefix = null;
         String tempSuffix = null;
+        boolean found = false;
 
         try (Connection connection = hikari.getConnection()) {
             String query = "SELECT prefix,suffix FROM nte_players WHERE uuid=?";
@@ -38,6 +39,7 @@ public class PlayerLoader extends BukkitRunnable {
             if (resultSet.next()) {
                 tempPrefix = resultSet.getString("prefix");
                 tempSuffix = resultSet.getString("suffix");
+                found = true;
             }
 
             resultSet.close();
@@ -46,19 +48,22 @@ public class PlayerLoader extends BukkitRunnable {
         } finally {
             final String prefix = tempPrefix == null ? "" : tempPrefix;
             final String suffix = tempSuffix == null ? "" : tempSuffix;
+            final boolean finalFound = found;
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     Player player = Bukkit.getPlayer(uuid);
                     if (player != null) {
-                        PlayerData data = handler.getPlayerData(player);
-                        if (data == null) {
-                            data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix);
-                            handler.getPlayerData().put(player.getUniqueId(), data);
-                        } else {
-                            data.setPrefix(prefix);
-                            data.setSuffix(suffix);
+                        if (finalFound) {
+                            PlayerData data = handler.getPlayerData(player);
+                            if (data == null) {
+                                data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix);
+                                handler.getPlayerData().put(player.getUniqueId(), data);
+                            } else {
+                                data.setPrefix(prefix);
+                                data.setSuffix(suffix);
+                            }
                         }
 
                         handler.applyTagToPlayer(player);

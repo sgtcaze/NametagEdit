@@ -4,6 +4,7 @@ import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.converter.Converter;
 import com.nametagedit.plugin.converter.ConverterTask;
 import com.nametagedit.plugin.storage.data.GroupData;
+import com.nametagedit.plugin.storage.database.tasks.GroupConfigUpdater;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import mkremins.fanciful.FancyMessage;
@@ -14,6 +15,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @AllArgsConstructor
 public class NametagCommand implements CommandExecutor {
@@ -72,6 +77,7 @@ public class NametagCommand implements CommandExecutor {
         sender.sendMessage(Utils.format("&6/ne clear <Player> &fClears a player's nametag"));
         sender.sendMessage(Utils.format("&e&lGroup Usage"));
         sender.sendMessage(Utils.format("&6/ne groups list &fLists the current loaded groups"));
+        sender.sendMessage(Utils.format("&6/ne groups order <MyTopGroup> <MySecond> ..."));
         sender.sendMessage(Utils.format("&6/ne groups add <Group> &fCreates a group"));
         sender.sendMessage(Utils.format("&6/ne groups remove <Group> &fRemoves a group"));
         sender.sendMessage(Utils.format("&6/ne groups <Group> permission <value> &fChanges the permission"));
@@ -91,6 +97,7 @@ public class NametagCommand implements CommandExecutor {
                 .then("\n/ne clear <Player> ").color(ChatColor.GOLD).suggest("/ne clear ").then("Clears a player's nametag").color(ChatColor.WHITE)
                 .then("\nGroup Usage ").color(ChatColor.YELLOW).style(ChatColor.BOLD).then(" (Click a Command!)").color(ChatColor.GRAY)
                 .then("\n/ne groups list ").color(ChatColor.GOLD).suggest("/ne groups list").then("Lists the current loaded groups").color(ChatColor.WHITE)
+                .then("\n/ne groups order <group> ... ").color(ChatColor.GOLD).suggest("/ne groups order ").then("Orders groups for the database").color(ChatColor.WHITE)
                 .then("\n/ne groups add <Group> ").color(ChatColor.GOLD).suggest("/ne groups add ").then("Creates a group").color(ChatColor.WHITE)
                 .then("\n/ne groups remove <Group> ").color(ChatColor.GOLD).suggest("/ne groups remove ").then("Removes a group").color(ChatColor.WHITE)
                 .then("\n/ne groups <Group> permission <value> ").color(ChatColor.GOLD).suggest("/ne groups Group permission my.permission").then("Changes the permission").color(ChatColor.WHITE)
@@ -193,6 +200,18 @@ public class NametagCommand implements CommandExecutor {
                     sender.sendMessage(Utils.format("&6Group: &f" + groupData.getGroupName() + " &6Permission: &f" + groupData.getPermission()
                             + " &6Formatted: " + groupData.getPrefix() + sender.getName() + groupData.getSuffix()));
                 }
+            } else if (args[1].equalsIgnoreCase("order")) {
+                if (!handler.getPlugin().getConfig().getBoolean("MySQL.Enabled")) {
+                    sender.sendMessage(Utils.format("&cThis option is (temporarily) only available for NametagEdit servers that use a database."));
+                    return;
+                }
+
+                if (args.length <= 2) {
+                    sender.sendMessage(Utils.format("&cBe sure to enter the group order!"));
+                    return;
+                }
+
+                handler.getAbstractConfig().orderGroups(sender, args);
             } else if (args[1].equalsIgnoreCase("remove")) {
                 if (args.length == 3) {
                     String group = args[2];

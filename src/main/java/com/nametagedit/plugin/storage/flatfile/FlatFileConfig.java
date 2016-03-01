@@ -6,6 +6,7 @@ import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.storage.data.PlayerData;
 import com.nametagedit.plugin.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -95,6 +96,11 @@ public class FlatFileConfig implements AbstractConfig {
         playerData.remove(uuid);
         players.set("Players." + uuid.toString(), null);
         save(players, playersFile);
+    }
+
+    @Override
+    public void orderGroups(CommandSender commandSender, String[] args) {
+        // TODO: Not implemented yet
     }
 
     private void save(YamlConfiguration config, File file) {

@@ -2,6 +2,7 @@ package com.nametagedit.plugin.storage;
 
 import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.storage.data.PlayerData;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -25,5 +26,7 @@ public interface AbstractConfig {
     void add(GroupData groupData);
 
     void clear(UUID uuid, String targetName);
+
+    void orderGroups(CommandSender commandSender, String[] args);
 
 }
