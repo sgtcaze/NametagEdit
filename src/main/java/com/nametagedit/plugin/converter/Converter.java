@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Converter {
 
-    public static List<String> getLines(File file) {
+    private List<String> getLines(File file) {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;

@@ -24,8 +24,8 @@ public class NametagEdit extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        handler = new NametagHandler(this);
         manager = new NametagManager();
+        handler = new NametagHandler(this, manager);
 
         if (getConfig().getBoolean("MetricsEnabled")) {
             try {

@@ -4,7 +4,6 @@ import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.converter.Converter;
 import com.nametagedit.plugin.converter.ConverterTask;
 import com.nametagedit.plugin.storage.data.GroupData;
-import com.nametagedit.plugin.storage.database.tasks.GroupConfigUpdater;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import mkremins.fanciful.FancyMessage;
@@ -15,10 +14,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @AllArgsConstructor
 public class NametagCommand implements CommandExecutor {

@@ -34,9 +34,11 @@ public class NametagHandler implements Listener {
     private Map<UUID, PlayerData> playerData = new HashMap<>();
 
     private NametagEdit plugin;
+    private NametagManager nametagManager;
 
-    public NametagHandler(NametagEdit plugin) {
+    public NametagHandler(NametagEdit plugin, NametagManager nametagManager) {
         this.plugin = plugin;
+        this.nametagManager = nametagManager;
         Bukkit.getPluginManager().registerEvents(this, plugin);
         this.tabListDisabled = plugin.getConfig().getBoolean("TabListDisabled");
         String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
@@ -44,23 +46,10 @@ public class NametagHandler implements Listener {
         if (plugin.getConfig().getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this);
         } else {
-            abstractConfig = new FlatFileConfig(plugin, groupData, playerData);
+            abstractConfig = new FlatFileConfig(plugin, groupData, playerData, this);
         }
+
         abstractConfig.load();
-    }
-
-    public void save(GroupData data) {
-        abstractConfig.save(data);
-    }
-
-    public void deleteGroup(GroupData data) {
-        groupData.remove(data);
-        abstractConfig.delete(data);
-    }
-
-    public void addGroup(GroupData data) {
-        groupData.add(data);
-        abstractConfig.add(data);
     }
 
     public PlayerData getPlayerData(Player player) {
@@ -68,14 +57,28 @@ public class NametagHandler implements Listener {
         return playerData.get(player.getUniqueId());
     }
 
-    public void reload() {
+    void save(GroupData data) {
+        abstractConfig.save(data);
+    }
+
+    void deleteGroup(GroupData data) {
+        groupData.remove(data);
+        abstractConfig.delete(data);
+    }
+
+    void addGroup(GroupData data) {
+        groupData.add(data);
+        abstractConfig.add(data);
+    }
+
+    void reload() {
         plugin.reloadConfig();
         this.tabListDisabled = plugin.getConfig().getBoolean("TabListDisabled");
         plugin.getManager().reset();
         abstractConfig.reload();
     }
 
-    public void clear(final CommandSender sender, final String player) {
+    void clear(final CommandSender sender, final String player) {
         Player target = Bukkit.getPlayerExact(player);
         if (target != null) {
             handleClear(target.getUniqueId(), player);
@@ -94,7 +97,7 @@ public class NametagHandler implements Listener {
         });
     }
 
-    public void save(final CommandSender sender, String targetName, NametagEvent.ChangeType changeType, String value) {
+    void save(final CommandSender sender, String targetName, NametagEvent.ChangeType changeType, String value) {
         Player player = Bukkit.getPlayerExact(targetName);
 
         PlayerData data = getPlayerData(player);
@@ -200,11 +203,11 @@ public class NametagHandler implements Listener {
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
         if (data != null) {
-            plugin.getManager().updateNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true));
+            nametagManager.updateNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true));
         } else {
             for (GroupData group : groupData) {
                 if (player.hasPermission(group.getBukkitPermission())) {
-                    plugin.getManager().updateNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
+                    nametagManager.updateNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
                     break;
                 }
             }

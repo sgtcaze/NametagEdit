@@ -1,6 +1,7 @@
 package com.nametagedit.plugin.storage.flatfile;
 
 import com.nametagedit.plugin.NametagEdit;
+import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.storage.data.PlayerData;
@@ -23,12 +24,14 @@ public class FlatFileConfig implements AbstractConfig {
     private YamlConfiguration players;
 
     private NametagEdit plugin;
+    private NametagHandler handler;
 
     private List<GroupData> groupData = new ArrayList<>();
     private Map<UUID, PlayerData> playerData = new HashMap<>();
 
-    public FlatFileConfig(NametagEdit plugin, List<GroupData> groupData, Map<UUID, PlayerData> playerData) {
+    public FlatFileConfig(NametagEdit plugin, List<GroupData> groupData, Map<UUID, PlayerData> playerData, NametagHandler handler) {
         this.plugin = plugin;
+        this.handler = handler;
         this.groupData = groupData;
         this.playerData = playerData;
     }
@@ -41,6 +44,7 @@ public class FlatFileConfig implements AbstractConfig {
         this.players = Utils.getConfig(playersFile, "players.yml", plugin);
         this.loadGroups();
         this.loadPlayers();
+        handler.applyTags();
     }
 
     @Override
@@ -48,7 +52,7 @@ public class FlatFileConfig implements AbstractConfig {
         groupData.clear();
         playerData.clear();
         load();
-        plugin.getHandler().applyTags();
+        handler.applyTags();
     }
 
     @Override

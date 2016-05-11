@@ -31,6 +31,7 @@ public class DatabaseConfig implements AbstractConfig {
     @Override
     public void load() {
         FileConfiguration config = plugin.getConfig();
+        shutdown();
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(10);
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");

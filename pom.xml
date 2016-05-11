@@ -16,16 +16,9 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.9-SNAPSHOT</version>
+            <version>1.9.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Legacy
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
-            <scope>provided</scope>
-        </dependency> -->
         <!-- MCStats -->
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
