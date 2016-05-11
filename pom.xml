@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>http://maven.apache.org</url>
@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <!-- Bukkit -->
+        <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -78,10 +78,10 @@
         </dependency>
     </dependencies>
     <repositories>
-        <!-- Bukkit -->
+        <!-- Spigot -->
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <!-- MCStats -->
         <repository>
