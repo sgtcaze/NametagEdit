@@ -12,6 +12,16 @@ public final class NametagAPI implements INametagApi {
     private NametagManager manager;
 
     @Override
+    public void clearNametag(Player player) {
+        manager.reset(player.getName());
+    }
+
+    @Override
+    public void clearNametag(String player) {
+        manager.reset(player);
+    }
+
+    @Override
     public void setPrefix(Player player, String prefix) {
         setPrefix(player.getName(), prefix);
     }

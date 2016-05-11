@@ -4,6 +4,10 @@ import org.bukkit.entity.Player;
 
 public interface INametagApi {
 
+    void clearNametag(Player player);
+
+    void clearNametag(String player);
+
     void setPrefix(Player player, String prefix);
 
     void setSuffix(Player player, String suffix);
