@@ -123,7 +123,7 @@ public class NametagCommand implements CommandExecutor {
                 boolean sourceIsFile = args[1].equalsIgnoreCase("file");
                 boolean destinationIsSQL = args[2].equalsIgnoreCase("mysql");
                 boolean legacy = args[3].equalsIgnoreCase("true");
-                NametagMessages.CONVERSION.sendMulti(sender, "groups & players", sourceIsFile ? "file" : "mysql", destinationIsSQL ? "file" : "mysql", legacy);
+                NametagMessages.CONVERSION.sendMulti(sender, "groups & players", sourceIsFile ? "file" : "mysql", destinationIsSQL ? "mysql" : "file", legacy);
 
                 if (sourceIsFile && !destinationIsSQL && legacy) {
                     new Converter().legacyConversion(sender, handler.getPlugin());
