@@ -18,7 +18,7 @@ public class TableCreator extends BukkitRunnable {
     private final List<String> QUERIES = new ArrayList<String>() {{
         add("CREATE TABLE IF NOT EXISTS `nte_config` (`setting` varchar(16) NOT NULL, `value` varchar(200) NOT NULL, PRIMARY KEY (`setting`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         add("CREATE TABLE IF NOT EXISTS `nte_players` (`uuid` varchar(64) NOT NULL, `name` varchar(16) NOT NULL, `prefix` varchar(16) NOT NULL, `suffix` varchar(16) NOT NULL, PRIMARY KEY (`uuid`))");
-        add("CREATE TABLE IF NOT EXISTS `nte_groups` (`name` varchar(64) NOT NULL, `permission` varchar(16) NOT NULL, `prefix` varchar(16) NOT NULL, `suffix` varchar(16) NOT NULL, PRIMARY KEY (`name`))");
+        add("CREATE TABLE IF NOT EXISTS `nte_groups` (`name` varchar(64) NOT NULL, `permission` varchar(64) NOT NULL, `prefix` varchar(16) NOT NULL, `suffix` varchar(16) NOT NULL, PRIMARY KEY (`name`))");
     }};
 
     @Override
