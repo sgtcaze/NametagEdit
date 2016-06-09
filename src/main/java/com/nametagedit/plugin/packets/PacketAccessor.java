@@ -22,13 +22,20 @@ public class PacketAccessor {
             String className = version.startsWith("v1_5") ? "Packet209SetScoreboardTeam" : "PacketPlayOutScoreboardTeam";
             packetClass = Class.forName("net.minecraft.server." + version + "." + className);
 
-            PREFIX = getNMS(version.startsWith("v1_8") ? "c" : "c");
-            SUFFIX = getNMS(version.startsWith("v1_8") ? "d" : "d");
-            MEMBERS = getNMS(version.startsWith("v1_8") ? "g" : version.startsWith("v1_9") ? "h" : "e");
-            TEAM_NAME = getNMS(version.startsWith("v1_8") ? "a" : "a");
-            PARAM_INT = getNMS(version.startsWith("v1_8") ? "h" : version.startsWith("v1_9") ? "i" : "f");
-            PACK_OPTION = getNMS(version.startsWith("v1_8") ? "i" : version.startsWith("v1_9") ? "j" : "g");
-            DISPLAY_NAME = getNMS(version.startsWith("v1_8") ? "b" : version.startsWith("v1_9") ? "b" : "b");
+            PacketData currentVersion = null;
+            for (PacketData packetData : PacketData.values()) {
+                if (version.contains(packetData.name())) {
+                    currentVersion = packetData;
+                }
+            }
+
+            PREFIX = getNMS(currentVersion.getPrefix());
+            SUFFIX = getNMS(currentVersion.getSuffix());
+            MEMBERS = getNMS(currentVersion.getMembers());
+            TEAM_NAME = getNMS(currentVersion.getTeamName());
+            PARAM_INT = getNMS(currentVersion.getParamInt());
+            PACK_OPTION = getNMS(currentVersion.getPackOption());
+            DISPLAY_NAME = getNMS(currentVersion.getDisplayName());
         } catch (Exception e) {
             e.printStackTrace();
         }
