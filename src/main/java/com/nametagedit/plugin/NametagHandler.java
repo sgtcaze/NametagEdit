@@ -153,7 +153,6 @@ public class NametagHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         plugin.getManager().sendTeams(player);
-        plugin.getManager().reset(player.getName());
 
         new BukkitRunnable() {
             @Override
