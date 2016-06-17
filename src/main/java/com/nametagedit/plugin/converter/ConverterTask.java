@@ -4,6 +4,7 @@ import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.NametagMessages;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,8 +40,19 @@ public class ConverterTask extends BukkitRunnable {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            NametagMessages.OPERATION_COMPLETED.send(sender, failed ? "failed" : "succeeded");
+            final boolean finalFailed = failed;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    syncTask(sender, finalFailed);
+                }
+            }.runTask(plugin);
         }
+    }
+
+    private void syncTask(CommandSender sender, boolean failed) {
+        NametagMessages.OPERATION_COMPLETED.send(sender, failed ? "failed" : "succeeded");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ne reload");
     }
 
     private boolean convertDatabaseToFile(Connection connection) throws SQLException, IOException {
