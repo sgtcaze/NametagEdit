@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.0.3</version>
+    <version>4.1.0</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>http://maven.apache.org</url>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- MCStats -->
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>mkremins</groupId>
             <artifactId>fanciful</artifactId>
-            <version>0.3.3-SNAPSHOT</version>
+            <version>0.3.5-SNAPSHOT</version>
         </dependency>
         <!-- HikariCP -->
         <dependency>
@@ -88,9 +88,15 @@
             <id>Plugin Metrics</id>
             <url>http://repo.mcstats.org/content/repositories/public</url>
         </repository>
+        <!-- Jenkins -->
         <repository>
             <id>upstream</id>
             <url>http://ci.playmc.cc/plugin/repository/everything/</url>
+        </repository>
+        <!-- Stealthyone Repo -->
+        <repository>
+            <id>stealthyone-repo</id>
+            <url>http://repo.stealthyone.com/content/groups/public</url>
         </repository>
     </repositories>
     <!-- Builds NametagEdit -->
