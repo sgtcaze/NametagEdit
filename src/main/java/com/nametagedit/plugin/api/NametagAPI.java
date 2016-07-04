@@ -36,7 +36,7 @@ public final class NametagAPI implements INametagApi {
         NametagEvent event = new NametagEvent(player, prefix, NametagEvent.ChangeType.PREFIX, NametagEvent.ChangeReason.API);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            manager.updateNametag(player, prefix, null);
+            manager.setNametag(player, prefix, null);
         }
     }
 
@@ -45,18 +45,18 @@ public final class NametagAPI implements INametagApi {
         NametagEvent event = new NametagEvent(player, suffix, NametagEvent.ChangeType.SUFFIX, NametagEvent.ChangeReason.API);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            manager.updateNametag(player, null, suffix);
+            manager.setNametag(player, null, suffix);
         }
     }
 
     @Override
     public void setNametag(Player player, String prefix, String suffix) {
-        manager.overlapNametag(player.getName(), prefix, suffix);
+        manager.setNametag(player.getName(), prefix, suffix);
     }
 
     @Override
     public void setNametag(String player, String prefix, String suffix) {
-        manager.overlapNametag(player, prefix, suffix);
+        manager.setNametag(player, prefix, suffix);
     }
 
 }

@@ -70,7 +70,6 @@ public class Utils {
         return limitChars && colored.length() > 16 ? colored.substring(0, 16) : colored;
     }
 
-    // Workaround for the deprecated getOnlinePlayers()
     public static List<Player> getOnline() {
         List<Player> list = new ArrayList<>();
 

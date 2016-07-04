@@ -27,6 +27,7 @@ import java.util.*;
 public class NametagHandler implements Listener {
 
     private AbstractConfig abstractConfig;
+    private boolean debug;
     private boolean tabListDisabled;
 
     private List<GroupData> groupData = new ArrayList<>();
@@ -39,6 +40,7 @@ public class NametagHandler implements Listener {
         this.plugin = plugin;
         this.nametagManager = nametagManager;
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        this.debug = plugin.getConfig().getBoolean("Debug");
         this.tabListDisabled = plugin.getConfig().getBoolean("TabListDisabled");
         if (plugin.getConfig().getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this);
@@ -47,6 +49,16 @@ public class NametagHandler implements Listener {
         }
 
         abstractConfig.load();
+    }
+
+    boolean debug() {
+        return debug;
+    }
+
+    void toggleDebug() {
+        debug = !debug;
+        plugin.getConfig().set("Debug", debug);
+        plugin.saveConfig();
     }
 
     public PlayerData getPlayerData(Player player) {
@@ -70,8 +82,9 @@ public class NametagHandler implements Listener {
 
     void reload() {
         plugin.reloadConfig();
+        this.debug = plugin.getConfig().getBoolean("Debug");
         this.tabListDisabled = plugin.getConfig().getBoolean("TabListDisabled");
-        plugin.getManager().reset();
+        nametagManager.reset();
         abstractConfig.reload();
     }
 
@@ -107,10 +120,10 @@ public class NametagHandler implements Listener {
 
         if (changeType == NametagEvent.ChangeType.PREFIX) {
             data.setPrefix(value);
-            plugin.getManager().overlapNametag(targetName, Utils.format(value, true), Utils.format(data.getSuffix(), true));
+            nametagManager.setNametag(targetName, Utils.format(value, true), Utils.format(data.getSuffix(), true));
         } else {
             data.setSuffix(value);
-            plugin.getManager().overlapNametag(targetName, Utils.format(data.getPrefix(), true), Utils.format(value, true));
+            nametagManager.setNametag(targetName, Utils.format(data.getPrefix(), true), Utils.format(value, true));
         }
 
         if (player != null) {
@@ -139,8 +152,7 @@ public class NametagHandler implements Listener {
      */
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        plugin.getManager().reset(event.getPlayer().getName());
-        plugin.getManager().clearFromCache(event.getPlayer());
+        nametagManager.reset(event.getPlayer().getName());
     }
 
     /**
@@ -149,7 +161,7 @@ public class NametagHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        plugin.getManager().sendTeams(player);
+        nametagManager.sendTeams(player);
 
         new BukkitRunnable() {
             @Override
@@ -161,7 +173,7 @@ public class NametagHandler implements Listener {
 
     private void handleClear(UUID uuid, String player) {
         playerData.remove(uuid);
-        plugin.getManager().reset(player);
+        nametagManager.reset(player);
         abstractConfig.clear(uuid, player);
     }
 
@@ -193,17 +205,21 @@ public class NametagHandler implements Listener {
                 applyTagToPlayer(online);
             }
         }
+
+        plugin.debug("Applied tags to all online players.");
     }
 
     public void applyTagToPlayer(Player player) {
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
         if (data != null) {
-            nametagManager.updateNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true));
+            nametagManager.setNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true));
+            plugin.debug("Applying PlayerTag to " + player.getName());
         } else {
             for (GroupData group : groupData) {
                 if (player.hasPermission(group.getBukkitPermission())) {
-                    nametagManager.updateNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
+                    nametagManager.setNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
+                    plugin.debug("Applying GroupTag '" + group.getGroupName() + "' to " + player.getName());
                     break;
                 }
             }

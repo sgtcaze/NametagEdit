@@ -29,7 +29,7 @@ public class DataDownloader extends BukkitRunnable {
     public DataDownloader(NametagHandler handler, HikariDataSource hikari) {
         this.handler = handler;
         this.hikari = hikari;
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Utils.getOnline()) {
             players.add(player.getUniqueId());
         }
     }
@@ -72,7 +72,7 @@ public class DataDownloader extends BukkitRunnable {
                     handler.setGroupData(groupData);
                     handler.setPlayerData(playerData);
                     handler.loadDatabaseSettings(settings);
-                    for (Player player : Bukkit.getOnlinePlayers()) {
+                    for (Player player : Utils.getOnline()) {
                         PlayerData data = playerData.get(player.getUniqueId());
                         if (data != null) {
                             data.setName(player.getName());

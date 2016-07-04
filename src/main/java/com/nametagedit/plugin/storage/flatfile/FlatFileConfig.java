@@ -124,7 +124,7 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     private void loadPlayers() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Utils.getOnline()) {
             storeData(player);
         }
     }

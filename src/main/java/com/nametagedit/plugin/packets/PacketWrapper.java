@@ -9,6 +9,7 @@ import java.util.List;
 
 public class PacketWrapper {
 
+    public String error;
     private Object packet = PacketAccessor.createPacket();
 
     public PacketWrapper(String name, int param, List<String> members) {
@@ -32,7 +33,8 @@ public class PacketWrapper {
                     ((Collection) PacketAccessor.MEMBERS.get(packet)).addAll(players);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
+                error = e.getMessage();
             }
         }
     }
@@ -42,7 +44,8 @@ public class PacketWrapper {
             players = players == null || players.isEmpty() ? new ArrayList<>() : players;
             ((Collection) PacketAccessor.MEMBERS.get(packet)).addAll(players);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            error = e.getMessage();
         }
     }
 
@@ -51,7 +54,8 @@ public class PacketWrapper {
             PacketAccessor.TEAM_NAME.set(packet, name);
             PacketAccessor.PARAM_INT.set(packet, param);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            error = e.getMessage();
         }
     }
 

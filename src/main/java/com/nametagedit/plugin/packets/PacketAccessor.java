@@ -19,8 +19,7 @@ public class PacketAccessor {
     static {
         try {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-            String className = version.startsWith("v1_5") ? "Packet209SetScoreboardTeam" : "PacketPlayOutScoreboardTeam";
-            packetClass = Class.forName("net.minecraft.server." + version + "." + className);
+            packetClass = Class.forName("net.minecraft.server." + version + ".PacketPlayOutScoreboardTeam");
 
             PacketData currentVersion = null;
             for (PacketData packetData : PacketData.values()) {
@@ -29,13 +28,15 @@ public class PacketAccessor {
                 }
             }
 
-            PREFIX = getNMS(currentVersion.getPrefix());
-            SUFFIX = getNMS(currentVersion.getSuffix());
-            MEMBERS = getNMS(currentVersion.getMembers());
-            TEAM_NAME = getNMS(currentVersion.getTeamName());
-            PARAM_INT = getNMS(currentVersion.getParamInt());
-            PACK_OPTION = getNMS(currentVersion.getPackOption());
-            DISPLAY_NAME = getNMS(currentVersion.getDisplayName());
+            if (currentVersion != null) {
+                PREFIX = getNMS(currentVersion.getPrefix());
+                SUFFIX = getNMS(currentVersion.getSuffix());
+                MEMBERS = getNMS(currentVersion.getMembers());
+                TEAM_NAME = getNMS(currentVersion.getTeamName());
+                PARAM_INT = getNMS(currentVersion.getParamInt());
+                PACK_OPTION = getNMS(currentVersion.getPackOption());
+                DISPLAY_NAME = getNMS(currentVersion.getDisplayName());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

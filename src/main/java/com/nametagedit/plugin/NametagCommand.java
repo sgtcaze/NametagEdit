@@ -37,6 +37,10 @@ public class NametagCommand implements CommandExecutor {
                 case "reload":
                     cmdReload(sender);
                     break;
+                case "debug":
+                    handler.toggleDebug();
+                    sender.sendMessage(Utils.format("&3NametagEdit debug has been " + (handler.debug() ? "&aENABLED" : "&cDISABLED")));
+                    break;
                 case "convert":
                     cmdConvert(sender, args);
                     break;
@@ -62,6 +66,7 @@ public class NametagCommand implements CommandExecutor {
         new FancyMessage("Nametag").color(ChatColor.DARK_AQUA).style(ChatColor.BOLD).then("Edit ").color(ChatColor.WHITE).style(ChatColor.BOLD)
                 .then("Command Usage").color(ChatColor.RED).style(ChatColor.BOLD)
                 .then("\nPlayer Usage ").color(ChatColor.YELLOW).style(ChatColor.BOLD).then(" (Click a Command!)").color(ChatColor.GRAY)
+                .then("\n/ne debug ").color(ChatColor.GOLD).suggest("/ne debug").then("Toggles the debug feature").color(ChatColor.WHITE)
                 .then("\n/ne reload ").color(ChatColor.GOLD).suggest("/ne reload").then("Reloads nametags and configs").color(ChatColor.WHITE)
                 .then("\n/ne convert ").tooltip(Utils.format("&e/ne convert  <file/mysql> <file/mysql> (legacy: true/false)")).color(ChatColor.GOLD).suggest("/ne convert ").then("Converts data").color(ChatColor.WHITE)
                 .then("\n/ne prefix <Player> <value> ").color(ChatColor.GOLD).suggest("/ne prefix ").then("Sets a prefix for a player").color(ChatColor.WHITE)
