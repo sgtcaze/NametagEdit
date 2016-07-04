@@ -1,0 +1,3 @@
+# Incompatible Plugins
+
+Soon

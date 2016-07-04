@@ -49,6 +49,7 @@ public class NametagManager {
         FakeTeam joining = getFakeTeam(prefix, suffix);
         if (joining != null) {
             joining.getMembers().add(player);
+            plugin.debug("Using existing team for " + player);
         } else {
             joining = new FakeTeam(prefix, suffix);
             joining.getMembers().add(player);
