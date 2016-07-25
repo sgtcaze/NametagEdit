@@ -22,7 +22,7 @@ public class NametagManager {
      * If there is no team similar to this, then a new
      * team is created.
      */
-    private FakeTeam getFakeTeam(String prefix, String suffix) {
+    public FakeTeam getFakeTeam(String prefix, String suffix) {
         for (FakeTeam fakeTeam : TEAMS) {
             if (fakeTeam.isSimilar(prefix, suffix)) {
                 return fakeTeam;

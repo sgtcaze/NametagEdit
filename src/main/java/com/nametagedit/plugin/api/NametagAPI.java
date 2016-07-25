@@ -2,6 +2,7 @@ package com.nametagedit.plugin.api;
 
 import com.nametagedit.plugin.NametagManager;
 import com.nametagedit.plugin.api.events.NametagEvent;
+import com.nametagedit.plugin.storage.data.FakeTeam;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,7 +37,8 @@ public final class NametagAPI implements INametagApi {
         NametagEvent event = new NametagEvent(player, prefix, NametagEvent.ChangeType.PREFIX, NametagEvent.ChangeReason.API);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            manager.setNametag(player, prefix, null);
+            FakeTeam fakeTeam = manager.getFakeTeam(player);
+            manager.setNametag(player, prefix, fakeTeam == null ? null : fakeTeam.getSuffix());
         }
     }
 
@@ -45,7 +47,8 @@ public final class NametagAPI implements INametagApi {
         NametagEvent event = new NametagEvent(player, suffix, NametagEvent.ChangeType.SUFFIX, NametagEvent.ChangeReason.API);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            manager.setNametag(player, null, suffix);
+            FakeTeam fakeTeam = manager.getFakeTeam(player);
+            manager.setNametag(player, fakeTeam == null ? null : fakeTeam.getPrefix(), suffix);
         }
     }
 
