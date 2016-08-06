@@ -17,11 +17,7 @@ public class FakeTeam {
     private final ArrayList<String> members = new ArrayList<>();
 
     public FakeTeam(String prefix, String suffix) {
-        this(prefix, suffix, -1);
-    }
-
-    public FakeTeam(String prefix, String suffix, int sortPriority) {
-        this.name = (sortPriority == -1 ? ++ID : sortPriority) + "-NTE";
+        this.name = "NTE-" + ++ID;
         this.prefix = prefix;
         this.suffix = suffix;
     }

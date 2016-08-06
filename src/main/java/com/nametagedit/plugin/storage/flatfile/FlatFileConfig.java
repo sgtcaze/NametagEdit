@@ -2,9 +2,9 @@ package com.nametagedit.plugin.storage.flatfile;
 
 import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.NametagHandler;
-import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.utils.Utils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -135,12 +135,7 @@ public class FlatFileConfig implements AbstractConfig {
             data.setPermission(groups.getString("Groups." + groupName + ".Permission", "nte.default"));
             data.setPrefix(groups.getString("Groups." + groupName + ".Prefix", ""));
             data.setSuffix(groups.getString("Groups." + groupName + ".Suffix", ""));
-            data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
-
-            if (data.getSortPriority() < 1) {
-                data.setSortPriority(-1); // Quick protection
-            }
-
+            // data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
             data.refresh();
             groupData.add(data);
         }

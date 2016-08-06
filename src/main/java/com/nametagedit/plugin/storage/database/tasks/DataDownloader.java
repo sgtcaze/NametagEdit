@@ -44,7 +44,7 @@ public class DataDownloader extends BukkitRunnable {
 
             while (results.next()) {
                 groupData.add(new GroupData(results.getString("name"), results.getString("prefix"), results.getString("suffix"),
-                        results.getString("permission"), new Permission(results.getString("permission"), PermissionDefault.FALSE), -1));
+                        results.getString("permission"), new Permission(results.getString("permission"), PermissionDefault.FALSE)));
             }
 
             for (UUID uuid : players) {
