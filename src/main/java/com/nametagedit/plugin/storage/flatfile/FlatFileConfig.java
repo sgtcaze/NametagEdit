@@ -6,7 +6,6 @@ import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.data.GroupData;
 import com.nametagedit.plugin.storage.data.PlayerData;
 import com.nametagedit.plugin.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -129,15 +128,13 @@ public class FlatFileConfig implements AbstractConfig {
         }
     }
 
-    public void loadGroups() {
+    private void loadGroups() {
         for (String groupName : groups.getConfigurationSection("Groups").getKeys(false)) {
             GroupData data = new GroupData();
             data.setGroupName(groupName);
-            data.setPermission(groups.getString("Groups." + groupName + ".Permission"));
-            data.setPrefix(groups.getString("Groups." + groupName + ".Prefix"));
-            data.setSuffix(groups.getString("Groups." + groupName + ".Suffix"));
-            data.setPrefix(data.getPrefix() == null || data.getPrefix().isEmpty() ? "&f" : data.getPrefix());
-            data.setSuffix(data.getSuffix() == null || data.getSuffix().isEmpty() ? "&f" : data.getSuffix());
+            data.setPermission(groups.getString("Groups." + groupName + ".Permission", "nte.default"));
+            data.setPrefix(groups.getString("Groups." + groupName + ".Prefix", ""));
+            data.setSuffix(groups.getString("Groups." + groupName + ".Suffix", ""));
             data.refresh();
             groupData.add(data);
         }
