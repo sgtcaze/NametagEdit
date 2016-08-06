@@ -28,3 +28,46 @@ Players:
      Prefix: '&b' # Both Prefix/Suffix are REQUIRED, even if they are blank. String length will be automatically appended
      Suffix: '&c'
 }}}
+
+== Sorting Nametags [BETA]
+*This is a BETA feature at the moment. READ with CAUTION!
+
+Some server owners might want to order the tab list so certain nametags ranks display first, or so they follow a certain order. You can accomplish this with a new setting:
+{{{
+SortPriority: 1
+}}}
+
+SortPriority represents the Team ID. As Minecraft sorts the tab list by the name of the Team, we use numbers in descending order to determine priority. The higher the number, the higher priority it will get.
+
+Suppose you have 2 ranks:
+{{{
+Groups:
+  Admin:
+    Permission: nte.admin
+    Prefix: '&c'
+    Suffix: '&f'
+  Moderator:
+    Permission: nte.moderator
+    Prefix: '&2'
+    Suffix: '&f'
+}}}
+
+And you want to display Admin first. You might do something like:
+{{{
+Groups:
+  Admin:
+    Permission: nte.admin
+    Prefix: '&c'
+    Suffix: '&f'
+    SortPriority: 10000 # Some absurdly high number
+  Moderator:
+    Permission: nte.moderator
+    Prefix: '&2'
+    Suffix: '&f'
+    SortPriority: 9999 # Notice how this number is lower than the sort priority for Admin
+}}}
+
+To make the Moderator tag display first, we would simply reverse the sort priority. If there is no sort priority specified, then that tags will randomly format in the tab.
+
+==== WARNING
+//We recommend you do NOT set the SortPriority below 1000. The reason is that NametagEdit might create different Team IDs (e.g. if someone uses the developer API). Remember the SortPriority represents the Team name, so if this clashes with another team name - things will explode. Please make note of this when using a BETA feature!//

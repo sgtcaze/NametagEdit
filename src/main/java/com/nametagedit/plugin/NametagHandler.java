@@ -218,7 +218,7 @@ public class NametagHandler implements Listener {
         } else {
             for (GroupData group : groupData) {
                 if (player.hasPermission(group.getBukkitPermission())) {
-                    nametagManager.setNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
+                    nametagManager.setNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true), group.getSortPriority());
                     plugin.debug("Applying GroupTag '" + group.getGroupName() + "' to " + player.getName());
                     break;
                 }

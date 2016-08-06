@@ -218,7 +218,7 @@ public class NametagCommand implements CommandExecutor {
                         }
                     }
 
-                    handler.addGroup(new GroupData(group, "", "", "", new Permission("my.perm", PermissionDefault.FALSE)));
+                    handler.addGroup(new GroupData(group, "", "", "", new Permission("my.perm", PermissionDefault.FALSE), -1));
                     NametagMessages.CREATED_GROUP.send(sender, group);
                 }
             } else {

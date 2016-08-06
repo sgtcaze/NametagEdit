@@ -19,6 +19,9 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 #### Q: My client crashes with the reason "Cannot remove from ID#". Why is this?
 **A:** Due to how scoreboards were implemented in Minecraft, a player cannot belong to two teams. Any two scoreboard plugins, whether through packets or the bukkit scoreboard api - which are basically the same thing, that alter team prefixes/suffixes, will have conflicts. There is currently no way around this.
 
+#### Q: Can I sort nametags in the tab list?
+**A:** Yes. Read up on how to use it [here](documentation/Configuration.creole)
+
 ## HELP! My nametags are not displaying!
 ### If you are using **ViaVersion**:
 If you're using ViaVersion on 1.8.x and having issues with tags showing up in the tab list. Edit the file plugins/ViaVersion/config.yml

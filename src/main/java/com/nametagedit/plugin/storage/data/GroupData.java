@@ -16,6 +16,7 @@ public class GroupData {
     private String suffix;
     private String permission;
     private Permission bukkitPermission;
+    private int sortPriority;
 
     public GroupData() {
 
