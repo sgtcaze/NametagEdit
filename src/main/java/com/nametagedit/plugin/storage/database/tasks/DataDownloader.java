@@ -1,11 +1,10 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
 import com.nametagedit.plugin.NametagHandler;
-import com.nametagedit.plugin.storage.data.GroupData;
-import com.nametagedit.plugin.storage.data.PlayerData;
+import com.nametagedit.plugin.api.data.GroupData;
+import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;

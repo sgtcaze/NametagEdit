@@ -1,4 +1,4 @@
-package com.nametagedit.plugin.storage.data;
+package com.nametagedit.plugin.api.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

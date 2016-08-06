@@ -1,7 +1,7 @@
 package com.nametagedit.plugin.storage;
 
-import com.nametagedit.plugin.storage.data.GroupData;
-import com.nametagedit.plugin.storage.data.PlayerData;
+import com.nametagedit.plugin.api.data.GroupData;
+import com.nametagedit.plugin.api.data.PlayerData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

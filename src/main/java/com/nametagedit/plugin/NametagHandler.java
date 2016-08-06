@@ -2,8 +2,8 @@ package com.nametagedit.plugin;
 
 import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.storage.AbstractConfig;
-import com.nametagedit.plugin.storage.data.GroupData;
-import com.nametagedit.plugin.storage.data.PlayerData;
+import com.nametagedit.plugin.api.data.GroupData;
+import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.storage.flatfile.FlatFileConfig;
 import com.nametagedit.plugin.utils.UUIDFetcher;

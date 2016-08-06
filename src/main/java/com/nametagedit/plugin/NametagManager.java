@@ -1,7 +1,7 @@
 package com.nametagedit.plugin;
 
 import com.nametagedit.plugin.packets.PacketWrapper;
-import com.nametagedit.plugin.storage.data.FakeTeam;
+import com.nametagedit.plugin.api.data.FakeTeam;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

@@ -1,6 +1,6 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
-import com.nametagedit.plugin.storage.data.GroupData;
+import com.nametagedit.plugin.api.data.GroupData;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -1,4 +1,4 @@
-package com.nametagedit.plugin.storage.data;
+package com.nametagedit.plugin.api.data;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +17,11 @@ public class FakeTeam {
     private final ArrayList<String> members = new ArrayList<>();
 
     public FakeTeam(String prefix, String suffix) {
-        this(prefix, suffix, ++ID);
+        this(prefix, suffix, -1);
     }
 
     public FakeTeam(String prefix, String suffix, int sortPriority) {
-        this.name = "0" + (sortPriority == -1 ? ++ID : sortPriority);
+        this.name = sortPriority == -1 ? "ID" + ++ID : "0" + sortPriority;
         this.prefix = prefix;
         this.suffix = suffix;
     }

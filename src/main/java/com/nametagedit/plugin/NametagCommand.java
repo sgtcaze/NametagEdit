@@ -3,7 +3,7 @@ package com.nametagedit.plugin;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.converter.Converter;
 import com.nametagedit.plugin.converter.ConverterTask;
-import com.nametagedit.plugin.storage.data.GroupData;
+import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import mkremins.fanciful.FancyMessage;

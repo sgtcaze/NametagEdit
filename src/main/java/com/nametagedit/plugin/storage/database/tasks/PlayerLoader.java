@@ -1,7 +1,7 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
 import com.nametagedit.plugin.NametagHandler;
-import com.nametagedit.plugin.storage.data.PlayerData;
+import com.nametagedit.plugin.api.data.PlayerData;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
