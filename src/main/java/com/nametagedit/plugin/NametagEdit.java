@@ -23,6 +23,10 @@ public class NametagEdit extends JavaPlugin {
     private NametagHandler handler;
     private NametagManager manager;
 
+    public static INametagApi getApi() {
+        return api;
+    }
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
@@ -59,10 +63,6 @@ public class NametagEdit extends JavaPlugin {
     public void onDisable() {
         manager.reset();
         handler.getAbstractConfig().shutdown();
-    }
-
-    public static INametagApi getApi() {
-        return api;
     }
 
     public void debug(String message) {

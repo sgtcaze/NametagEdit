@@ -135,7 +135,7 @@ public class FlatFileConfig implements AbstractConfig {
             data.setPermission(groups.getString("Groups." + groupName + ".Permission", "nte.default"));
             data.setPrefix(groups.getString("Groups." + groupName + ".Prefix", ""));
             data.setSuffix(groups.getString("Groups." + groupName + ".Suffix", ""));
-            // data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
+            data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
             data.refresh();
             groupData.add(data);
         }

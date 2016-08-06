@@ -1,9 +1,9 @@
 package com.nametagedit.plugin;
 
-import com.nametagedit.plugin.api.events.NametagEvent;
-import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.api.events.NametagEvent;
+import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.storage.flatfile.FlatFileConfig;
 import com.nametagedit.plugin.utils.UUIDFetcher;
@@ -218,7 +218,7 @@ public class NametagHandler implements Listener {
         } else {
             for (GroupData group : groupData) {
                 if (player.hasPermission(group.getBukkitPermission())) {
-                    nametagManager.setNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true));
+                    nametagManager.setNametag(player.getName(), Utils.format(group.getPrefix(), true), Utils.format(group.getSuffix(), true), group.getSortPriority());
                     plugin.debug("Applying GroupTag '" + group.getGroupName() + "' to " + player.getName());
                     break;
                 }

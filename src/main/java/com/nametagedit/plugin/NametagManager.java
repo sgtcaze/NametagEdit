@@ -1,8 +1,9 @@
 package com.nametagedit.plugin;
 
-import com.nametagedit.plugin.packets.PacketWrapper;
 import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.packets.PacketWrapper;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -12,17 +13,32 @@ import java.util.*;
 @AllArgsConstructor
 public class NametagManager {
 
-    private NametagEdit plugin;
-
     private final HashSet<FakeTeam> TEAMS = new HashSet<>();
     private final HashMap<String, FakeTeam> CACHED_FAKE_TEAMS = new HashMap<>();
+    private NametagEdit plugin;
+
+    /**
+     * This is a special method to sort nametags in
+     * the tablist. It takes a priority and converts
+     * it to an alphabetic representation to force a
+     * specific sort.
+     *
+     * @param input the sort priority
+     * @return the team name
+     */
+    private String getNameFromInput(int input) {
+        if (input <= 0) return null;
+        String letter = String.valueOf((char) ((input / 16) + 65));
+        int repeat = input % 16 + 1;
+        return StringUtils.repeat(letter, repeat);
+    }
 
     /**
      * Gets the current team given a prefix and suffix
      * If there is no team similar to this, then a new
      * team is created.
      */
-    public FakeTeam getFakeTeam(String prefix, String suffix) {
+    private FakeTeam getFakeTeam(String prefix, String suffix) {
         for (FakeTeam fakeTeam : TEAMS) {
             if (fakeTeam.isSimilar(prefix, suffix)) {
                 return fakeTeam;
@@ -36,7 +52,7 @@ public class NametagManager {
      * Adds a player to a FakeTeam. If they are already on this team,
      * we do NOT change that.
      */
-    private void addPlayerToTeam(String player, String prefix, String suffix) {
+    private void addPlayerToTeam(String player, String prefix, String suffix, int sortPriority) {
         FakeTeam previous = getFakeTeam(player);
 
         if (previous != null && previous.isSimilar(prefix, suffix)) {
@@ -51,7 +67,7 @@ public class NametagManager {
             joining.getMembers().add(player);
             plugin.debug("Using existing team for " + player);
         } else {
-            joining = new FakeTeam(prefix, suffix);
+            joining = new FakeTeam(prefix, suffix, getNameFromInput(sortPriority));
             joining.getMembers().add(player);
             TEAMS.add(joining);
             addTeamPackets(joining);
@@ -116,7 +132,11 @@ public class NametagManager {
     // Below are public methods to modify certain data
     // ==============================================================
     public void setNametag(String player, String prefix, String suffix) {
-        addPlayerToTeam(player, prefix != null ? prefix : "", suffix != null ? suffix : "");
+        setNametag(player, prefix, suffix, -1);
+    }
+
+    public void setNametag(String player, String prefix, String suffix, int sortPriority) {
+        addPlayerToTeam(player, prefix != null ? prefix : "", suffix != null ? suffix : "", sortPriority);
     }
 
     public void sendTeams(Player player) {

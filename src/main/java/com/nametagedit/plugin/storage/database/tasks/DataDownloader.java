@@ -18,12 +18,11 @@ import java.util.*;
 
 public class DataDownloader extends BukkitRunnable {
 
-    private NametagHandler handler;
-    private HikariDataSource hikari;
-    private final List<UUID> players = new ArrayList<>();
-
     private static final String GROUP_QUERY = "SELECT name, prefix, suffix, permission FROM nte_groups";
     private static final String PLAYER_QUERY = "SELECT uuid, prefix, suffix FROM nte_players WHERE uuid=?";
+    private final List<UUID> players = new ArrayList<>();
+    private NametagHandler handler;
+    private HikariDataSource hikari;
 
     public DataDownloader(NametagHandler handler, HikariDataSource hikari) {
         this.handler = handler;
@@ -44,7 +43,7 @@ public class DataDownloader extends BukkitRunnable {
 
             while (results.next()) {
                 groupData.add(new GroupData(results.getString("name"), results.getString("prefix"), results.getString("suffix"),
-                        results.getString("permission"), new Permission(results.getString("permission"), PermissionDefault.FALSE)));
+                        results.getString("permission"), new Permission(results.getString("permission"), PermissionDefault.FALSE), -1));
             }
 
             for (UUID uuid : players) {

@@ -1,8 +1,8 @@
 package com.nametagedit.plugin.api;
 
 import com.nametagedit.plugin.NametagManager;
-import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.api.events.NametagEvent;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

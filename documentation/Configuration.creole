@@ -30,4 +30,45 @@ Players:
 }}}
 
 == Sorting Nametags [BETA]
-Coming soon!
+
+Some server owners might want to order the tab list so nametags follow a certain order. You can accomplish this with a new setting in your Groups.yml:
+{{{
+SortPriority: 1
+}}}
+
+SortPriority represents the Team Name. As Minecraft sorts the tab list by the name of the Scoreboard Team, we use series of letters to force a sort.
+
+Suppose you have 2 ranks:
+{{{
+Groups:
+  Admin:
+    Permission: nte.admin
+    Prefix: '&c'
+    Suffix: '&f'
+  Moderator:
+    Permission: nte.moderator
+    Prefix: '&2'
+    Suffix: '&f'
+}}}
+
+And you want to display Admin first. You might do something like:
+{{{
+Groups:
+  Admin:
+    Permission: nte.admin
+    Prefix: '&c'
+    Suffix: '&f'
+    SortPriority: 1 # 1 means it will display first
+  Moderator:
+    Permission: nte.moderator
+    Prefix: '&2'
+    Suffix: '&f'
+    SortPriority: 2 # Means this will display second
+}}}
+
+To make the Moderator tag display first, we would simply reverse the sort priority. If there is no sort priority specified, then tags will randomly format in the tab. 
+Scoreboard Team names are limited to 16 characters each. You can have up to 16 * 26 (416) distinct sort priorities before there is overlap.
+
+=== Possible Conflicts
+//In order for this to work we name the teams uppercase letters from the alphabet. So some teams might be AAA and others might be BBB. If you have a scoreboard plugin that creates a team
+with a similar name, nametags will overlap. However, this is a very rare situation, and for a majority of scoreboard plugins this will work fine.//

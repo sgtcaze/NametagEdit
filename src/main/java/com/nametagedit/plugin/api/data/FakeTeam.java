@@ -9,15 +9,18 @@ import java.util.ArrayList;
 @Setter
 public class FakeTeam {
 
+    private static int ID = 0;
+    private final ArrayList<String> members = new ArrayList<>();
     private String name;
     private String prefix = "";
     private String suffix = "";
 
-    private static int ID = 0;
-    private final ArrayList<String> members = new ArrayList<>();
-
     public FakeTeam(String prefix, String suffix) {
-        this.name = "NTE-" + ++ID;
+        this(prefix, suffix, "NTE-" + ++ID);
+    }
+
+    public FakeTeam(String prefix, String suffix, String name) {
+        this.name = name == null ? "NTE-" + ++ID : name;
         this.prefix = prefix;
         this.suffix = suffix;
     }

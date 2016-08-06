@@ -1,9 +1,9 @@
 package com.nametagedit.plugin;
 
+import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.converter.Converter;
 import com.nametagedit.plugin.converter.ConverterTask;
-import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import mkremins.fanciful.FancyMessage;
@@ -218,7 +218,7 @@ public class NametagCommand implements CommandExecutor {
                         }
                     }
 
-                    handler.addGroup(new GroupData(group, "", "", "", new Permission("my.perm", PermissionDefault.FALSE)));
+                    handler.addGroup(new GroupData(group, "", "", "", new Permission("my.perm", PermissionDefault.FALSE), -1));
                     NametagMessages.CREATED_GROUP.send(sender, group);
                 }
             } else {

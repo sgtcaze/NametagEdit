@@ -2,9 +2,9 @@ package com.nametagedit.plugin.storage.database;
 
 import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.NametagHandler;
-import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.tasks.*;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
