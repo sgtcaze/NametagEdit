@@ -21,7 +21,7 @@ public class FakeTeam {
     }
 
     public FakeTeam(String prefix, String suffix, int sortPriority) {
-        this.name = sortPriority == -1 ? "ID" + ++ID : "0" + sortPriority;
+        this.name = (sortPriority == -1 ? ++ID : sortPriority) + "-NTE";
         this.prefix = prefix;
         this.suffix = suffix;
     }
