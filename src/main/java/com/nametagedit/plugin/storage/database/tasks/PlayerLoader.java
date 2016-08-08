@@ -58,7 +58,7 @@ public class PlayerLoader extends BukkitRunnable {
                         if (finalFound) {
                             PlayerData data = handler.getPlayerData(player);
                             if (data == null) {
-                                data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix);
+                                data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix, -1); // TODO: Sort priority
                                 handler.getPlayerData().put(player.getUniqueId(), data);
                             } else {
                                 data.setPrefix(prefix);

@@ -16,6 +16,7 @@ public class PlayerData {
     private UUID uuid;
     private String prefix;
     private String suffix;
+    private int sortPriority;
 
     public PlayerData() {
 
@@ -28,6 +29,7 @@ public class PlayerData {
         data.setName(file.getString("Players." + key + ".Name"));
         data.setPrefix(file.getString("Players." + key + ".Prefix", ""));
         data.setSuffix(file.getString("Players." + key + ".Suffix", ""));
+        data.setSortPriority(file.getInt("Players." + key + ".SortPriority", -1));
         return data;
     }
 

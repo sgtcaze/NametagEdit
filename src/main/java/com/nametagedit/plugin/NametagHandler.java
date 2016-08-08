@@ -112,7 +112,7 @@ public class NametagHandler implements Listener {
 
         PlayerData data = getPlayerData(player);
         if (data == null) {
-            data = new PlayerData(targetName, null, "", "");
+            data = new PlayerData(targetName, null, "", "", -1);
             if (player != null) {
                 playerData.put(player.getUniqueId(), data);
             }
@@ -213,7 +213,7 @@ public class NametagHandler implements Listener {
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
         if (data != null) {
-            nametagManager.setNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true));
+            nametagManager.setNametag(player.getName(), Utils.format(data.getPrefix(), true), Utils.format(data.getSuffix(), true), data.getSortPriority());
             plugin.debug("Applying PlayerTag to " + player.getName());
         } else {
             for (GroupData group : groupData) {

@@ -91,7 +91,7 @@ public class NametagManager {
         return reset(player, decache(player));
     }
 
-    public FakeTeam reset(String player, FakeTeam fakeTeam) {
+    private FakeTeam reset(String player, FakeTeam fakeTeam) {
         if (fakeTeam != null && fakeTeam.getMembers().remove(player)) {
             boolean delete;
             Player removing = Bukkit.getPlayerExact(player);
@@ -135,17 +135,17 @@ public class NametagManager {
         setNametag(player, prefix, suffix, -1);
     }
 
-    public void setNametag(String player, String prefix, String suffix, int sortPriority) {
+    void setNametag(String player, String prefix, String suffix, int sortPriority) {
         addPlayerToTeam(player, prefix != null ? prefix : "", suffix != null ? suffix : "", sortPriority);
     }
 
-    public void sendTeams(Player player) {
+    void sendTeams(Player player) {
         for (FakeTeam fakeTeam : TEAMS) {
             new PacketWrapper(fakeTeam.getName(), fakeTeam.getPrefix(), fakeTeam.getSuffix(), 0, fakeTeam.getMembers()).send(player);
         }
     }
 
-    public void reset() {
+    void reset() {
         for (FakeTeam fakeTeam : TEAMS) {
             removePlayerFromTeamPackets(fakeTeam, fakeTeam.getMembers());
             removeTeamPackets(fakeTeam);

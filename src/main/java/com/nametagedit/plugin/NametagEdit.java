@@ -29,6 +29,9 @@ public class NametagEdit extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        testCompat();
+        if (!isEnabled()) return;
+
         saveDefaultConfig();
         manager = new NametagManager(this);
         handler = new NametagHandler(this, manager);
@@ -55,8 +58,6 @@ public class NametagEdit extends JavaPlugin {
         if (api == null) {
             api = new NametagAPI(manager);
         }
-
-        testCompat();
     }
 
     @Override
@@ -72,9 +73,7 @@ public class NametagEdit extends JavaPlugin {
     }
 
     private boolean checkShouldRegister(String plugin) {
-        if (Bukkit.getPluginManager().getPlugin(plugin) == null) {
-            return false;
-        }
+        if (Bukkit.getPluginManager().getPlugin(plugin) == null) return false;
         getLogger().info("Found " + plugin + "! Hooking in.");
         return true;
     }

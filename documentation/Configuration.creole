@@ -31,7 +31,7 @@ Players:
 
 == Sorting Nametags [BETA]
 
-Some server owners might want to order the tab list so nametags follow a certain order. You can accomplish this with a new setting in your Groups.yml:
+Some server owners might want to order the tab list so nametags follow a certain order. You can accomplish this with a new setting in your Groups/Players files:
 {{{
 SortPriority: 1
 }}}
@@ -68,6 +68,10 @@ Groups:
 
 To make the Moderator tag display first, we would simply reverse the sort priority. If there is no sort priority specified, then tags will randomly format in the tab. 
 Scoreboard Team names are limited to 16 characters each. You can have up to 16 * 26 (416) distinct sort priorities before there is overlap.
+
+=== Players and Groups conflict
+The sort priority MUST be UNIQUE. For example, if you have SortPriority: 1 in both your Groups/Players files, then nametags will clash. For example, if we have a rank
+such as "Server Owner", we could set the SortPriority to 1, and then below that an "Admin" groups can have a SortPriority of 2.
 
 === Possible Conflicts
 //In order for this to work we name the teams uppercase letters from the alphabet. So some teams might be AAA and others might be BBB. If you have a scoreboard plugin that creates a team

@@ -51,7 +51,7 @@ public class DataDownloader extends BukkitRunnable {
                 preparedStatement.setString(1, uuid.toString());
                 results = preparedStatement.executeQuery();
                 if (results.next()) {
-                    playerData.put(uuid, new PlayerData("", uuid, Utils.format(results.getString("prefix"), true), Utils.format(results.getString("suffix"), true)));
+                    playerData.put(uuid, new PlayerData("", uuid, Utils.format(results.getString("prefix"), true), Utils.format(results.getString("suffix"), true), -1)); // TODO: Sort priority
                 }
             }
 
