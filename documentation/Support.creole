@@ -1,21 +1,21 @@
 == Support
 Are your nametags not displaying, or you are receiving strange bugs? Please read below carefully before asking for support!
 
-### If you are using **ViaVersion**:
+=== If you are using **ViaVersion**:
 If you're using ViaVersion on 1.8.x and having issues with tags showing up in the tab list. Edit the file plugins/ViaVersion/config.yml
 
 Replace:
-```
+{{{
 auto-team: true
-```
+}}}
 
 With:
-```
+{{{
 auto-team: false
-```
+}}}
 
-### If you are using a minigame or scoreboards plugin
+=== If you are using a minigame or scoreboards plugin
 Please send us the name, or check if it is incompatible [here](IncompatiblePlugins.md)
 
-### Are your configs correct?
+=== Are your configs correct?
 Enable debug mode with /ne debug, and send us the output you receive in console.
