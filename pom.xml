@@ -19,13 +19,14 @@
             <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- MCStats -->
+        <!-- MCStats
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
             <artifactId>metrics</artifactId>
             <version>R8-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Metrics-R8.jar</systemPath>
+        </dependency> -->
         <!-- zPermissions -->
         <dependency>
             <groupId>ninja.leaping.permissionsex</groupId>
@@ -70,11 +71,13 @@
             <version>1.14.8</version>
             <scope>provided</scope>
         </dependency>
+        <!-- MDvW Placeholder API -->
         <dependency>
             <groupId>be.maximvdw</groupId>
             <artifactId>MVdWPlaceholderAPI</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
+        <!-- Clip Placeholder API -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
@@ -88,11 +91,11 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-        <!-- MCStats -->
+        <!-- MCStats
         <repository>
             <id>Plugin Metrics</id>
             <url>http://repo.mcstats.org/content/repositories/public</url>
-        </repository>
+        </repository> -->
         <!-- Jenkins -->
         <repository>
             <id>upstream</id>
@@ -103,11 +106,13 @@
             <id>stealthyone-repo</id>
             <url>http://repo.stealthyone.com/content/groups/public</url>
         </repository>
+        <!-- MDvW Repo -->
         <repository>
             <id>mvdw-software</id>
             <name>MVdW Public Repositories</name>
             <url>http://repo.mvdw-software.be/content/groups/public/</url>
         </repository>
+        <!-- Clip Repo -->
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
@@ -145,7 +150,7 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>org.mcstats.bukkit</include>
+                                    <!--<include>org.mcstats.bukkit:*</include>-->
                                     <include>org.slf4j:*</include>
                                     <include>com.zaxxer:*</include>
                                 </includes>

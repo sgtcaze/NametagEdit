@@ -5,13 +5,13 @@ import com.nametagedit.plugin.api.NametagAPI;
 import com.nametagedit.plugin.hooks.HookGroupManager;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
 import com.nametagedit.plugin.hooks.HookZPermissions;
+import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.packets.PacketWrapper;
 import com.nametagedit.plugin.utils.Configuration;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
