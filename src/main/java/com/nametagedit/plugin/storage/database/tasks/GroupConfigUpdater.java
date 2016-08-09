@@ -18,8 +18,8 @@ public class GroupConfigUpdater extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            String query = "INSERT INTO nte_config VALUES(?, ?) ON DUPLICATE KEY UPDATE value=?";
-            PreparedStatement update = connection.prepareStatement(query);
+            final String QUERY = "INSERT INTO `nte_config` VALUES(?, ?) ON DUPLICATE KEY UPDATE `value`=?";
+            PreparedStatement update = connection.prepareStatement(QUERY);
             update.setString(1, setting);
             update.setString(2, value);
             update.setString(3, value);

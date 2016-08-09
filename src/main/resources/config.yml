@@ -1,21 +1,23 @@
 #---------------------------------------------------------
-# NametagEdit
+# NametagEdit by sgtcaze and Cory
 #---------------------------------------------------------
 # Development Builds: http://ci.playmc.cc/job/NametagEdit
 # Source Code: http://www.github.com/sgtcaze/NametagEdit
 #---------------------------------------------------------
-
+#
+# Do NOT change this setting. Bad things will happen if you do!!
+DatabaseVersion: 2
 # If enabled, this will remove any formatting created in the tab list by prefixes / suffixes
 # Do not set this to true if you already have a plugin that changes the tab list
 TabListDisabled: false
-
+#
 # If enabled, this plugin will send small data MCStats.org.
 MetricsEnabled: true
-
+#
 # If enabled, NametagEdit will turn your console into spam
 # heaven. Useful for reporting issues!
 Debug: false
-
+#
 # If enabled, NametagEdit will use database support
 MySQL:
   Enabled: false

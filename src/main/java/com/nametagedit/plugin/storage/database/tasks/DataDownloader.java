@@ -18,11 +18,10 @@ import java.util.*;
 
 public class DataDownloader extends BukkitRunnable {
 
-    private static final String GROUP_QUERY = "SELECT name, prefix, suffix, permission FROM nte_groups";
-    private static final String PLAYER_QUERY = "SELECT uuid, prefix, suffix FROM nte_players WHERE uuid=?";
-    private final List<UUID> players = new ArrayList<>();
     private NametagHandler handler;
     private HikariDataSource hikari;
+
+    private final List<UUID> players = new ArrayList<>();
 
     public DataDownloader(NametagHandler handler, HikariDataSource hikari) {
         this.handler = handler;
@@ -39,27 +38,40 @@ public class DataDownloader extends BukkitRunnable {
         final Map<UUID, PlayerData> playerData = new HashMap<>();
 
         try (Connection connection = hikari.getConnection()) {
-            ResultSet results = connection.prepareStatement(GROUP_QUERY).executeQuery();
+            ResultSet results = connection.prepareStatement("SELECT `name`, `prefix`, `suffix`, `permission`, `priority` FROM `nte_groups`").executeQuery();
 
             while (results.next()) {
-                groupData.add(new GroupData(results.getString("name"), results.getString("prefix"), results.getString("suffix"),
-                        results.getString("permission"), new Permission(results.getString("permission"), PermissionDefault.FALSE), -1));
+                groupData.add(new GroupData(
+                        results.getString("name"),
+                        results.getString("prefix"),
+                        results.getString("suffix"),
+                        results.getString("permission"),
+                        new Permission(results.getString("permission"), PermissionDefault.FALSE),
+                        results.getInt("priority")
+                ));
             }
 
+            PreparedStatement select = connection.prepareStatement("SELECT `uuid`, `prefix`, `suffix`, `priority` FROM `nte_players` WHERE uuid=?");
             for (UUID uuid : players) {
-                PreparedStatement preparedStatement = connection.prepareStatement(PLAYER_QUERY);
-                preparedStatement.setString(1, uuid.toString());
-                results = preparedStatement.executeQuery();
+                select.setString(1, uuid.toString());
+                results = select.executeQuery();
                 if (results.next()) {
-                    playerData.put(uuid, new PlayerData("", uuid, Utils.format(results.getString("prefix"), true), Utils.format(results.getString("suffix"), true), -1)); // TODO: Sort priority
+                    playerData.put(uuid, new PlayerData(
+                            "",
+                            uuid,
+                            Utils.format(results.getString("prefix"), true),
+                            Utils.format(results.getString("suffix"), true),
+                            results.getInt("priority")
+                    ));
                 }
             }
 
-            results = connection.prepareStatement("SELECT setting,value FROM nte_config").executeQuery();
+            results = connection.prepareStatement("SELECT `setting`,`value` FROM `nte_config`").executeQuery();
             while (results.next()) {
                 settings.put(results.getString("setting"), results.getString("value"));
             }
 
+            select.close();
             results.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,7 +81,7 @@ public class DataDownloader extends BukkitRunnable {
                 public void run() {
                     handler.setGroupData(groupData);
                     handler.setPlayerData(playerData);
-                    handler.loadDatabaseSettings(settings);
+                    loadDatabaseSettings(handler, settings);
                     for (Player player : Utils.getOnline()) {
                         PlayerData data = playerData.get(player.getUniqueId());
                         if (data != null) {
@@ -80,6 +92,29 @@ public class DataDownloader extends BukkitRunnable {
                     handler.applyTags();
                 }
             }.runTask(handler.getPlugin());
+        }
+    }
+
+    private void loadDatabaseSettings(NametagHandler handler, HashMap<String, String> settings) {
+        String orderSetting = settings.get("order");
+        if (orderSetting != null) {
+            String[] order = orderSetting.split(" ");
+            List<GroupData> current = new ArrayList<>();
+            // Determine order for current loaded groups
+            for (String group : order) {
+                Iterator<GroupData> itr = handler.getGroupData().iterator();
+                while (itr.hasNext()) {
+                    GroupData groupData = itr.next();
+                    if (groupData.getGroupName().equalsIgnoreCase(group)) {
+                        current.add(groupData);
+                        itr.remove();
+                        break;
+                    }
+                }
+            }
+
+            current.addAll(handler.getGroupData()); // Add remaining entries (bad order, wasn't specified)
+            handler.setGroupData(current);
         }
     }
 

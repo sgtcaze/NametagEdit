@@ -1,13 +1,15 @@
 package com.nametagedit.plugin.api.data;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-@Getter
-@Setter
+/**
+ * This class represents a group nametag. There
+ * are several properties available.
+ */
+@Data
 @AllArgsConstructor
 public class GroupData {
 
@@ -22,7 +24,8 @@ public class GroupData {
 
     }
 
-    public void refresh() {
+    public void setPermission(String permission) {
+        this.permission = permission;
         bukkitPermission = new Permission(permission, PermissionDefault.FALSE);
     }
 

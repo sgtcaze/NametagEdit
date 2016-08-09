@@ -27,18 +27,20 @@ public class PlayerLoader extends BukkitRunnable {
     public void run() {
         String tempPrefix = null;
         String tempSuffix = null;
+        int priority = -1;
         boolean found = false;
 
         try (Connection connection = hikari.getConnection()) {
-            String query = "SELECT prefix,suffix FROM nte_players WHERE uuid=?";
+            final String QUERY = "SELECT `prefix`, `suffix`, `priority` FROM `nte_players` WHERE `uuid`=?";
 
-            PreparedStatement select = connection.prepareStatement(query);
+            PreparedStatement select = connection.prepareStatement(QUERY);
             select.setString(1, uuid.toString());
 
             ResultSet resultSet = select.executeQuery();
             if (resultSet.next()) {
                 tempPrefix = resultSet.getString("prefix");
                 tempSuffix = resultSet.getString("suffix");
+                priority = resultSet.getInt("priority");
                 found = true;
             }
 
@@ -50,6 +52,7 @@ public class PlayerLoader extends BukkitRunnable {
             final String suffix = tempSuffix == null ? "" : tempSuffix;
             final boolean finalFound = found;
 
+            final int finalPriority = priority;
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -58,7 +61,7 @@ public class PlayerLoader extends BukkitRunnable {
                         if (finalFound) {
                             PlayerData data = handler.getPlayerData(player);
                             if (data == null) {
-                                data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix, -1); // TODO: Sort priority
+                                data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix, finalPriority);
                                 handler.getPlayerData().put(player.getUniqueId(), data);
                             } else {
                                 data.setPrefix(prefix);

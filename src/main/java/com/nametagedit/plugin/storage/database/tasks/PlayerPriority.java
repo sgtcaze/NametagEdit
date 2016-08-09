@@ -7,21 +7,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 @AllArgsConstructor
-public class GroupDeleter extends BukkitRunnable {
+public class PlayerPriority extends BukkitRunnable {
 
-    private String groupName;
+    private UUID player;
+    private int priority;
     private HikariDataSource hikari;
 
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            final String QUERY = "DELETE FROM `nte_groups` WHERE `name`=?";
-            PreparedStatement delete = connection.prepareStatement(QUERY);
-            delete.setString(1, groupName);
-            delete.execute();
-            delete.close();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE `nte_players` SET `priority`=? WHERE `uuid`=?");
+            preparedStatement.setInt(1, priority);
+            preparedStatement.setString(2, player.toString());
+            preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

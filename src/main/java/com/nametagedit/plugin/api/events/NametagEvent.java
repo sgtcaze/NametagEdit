@@ -6,6 +6,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * This class represents an Event that is fired when a
+ * nametag is changed.
+ */
 public class NametagEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

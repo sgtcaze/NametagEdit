@@ -4,16 +4,16 @@
 | nte | N/A | Displays all available command arguments |
 | nte | debug | Displays debug information |
 | nte | reload | Reloads configuration and nametags |
-| nte | clear [player] | Clears the prefix and suffix for a player |
-| nte | <prefix/suffix> [player] <text> | Sets the prefix or suffix for a player |
-| nte | groups list | Lists all loaded groups |
-| nte | groups order <groups> | Orders the priority of groups. |
-| nte | groups add [group] | Creates a new group |
-| nte | groups remove [group] | Removes a group |
-| nte | groups [group] [perm] <value> | Sets the default permission for a group |
-| nte | groups [group] [prefix] <value> | Sets the prefix for a group |
-| nte | groups [group] [suffix] <value> | Sets the suffix for a group |
-| nte | groups [group] clear <prefix/suffix> | Clears the suffix for a group |
+| nte | player [player] clear | Clears the prefix and suffix for a player |
+| nte | player [player] <prefix/suffix> <text> | Sets the prefix or suffix for a player |
+| nte | group list | Lists all loaded groups |
+| nte | group order <groups> | Orders the priority of groups. |
+| nte | group add [group] | Creates a new group |
+| nte | group remove [group] | Removes a group |
+| nte | group [group] [perm] <value> | Sets the default permission for a group |
+| nte | group [group] [prefix] <value> | Sets the prefix for a group |
+| nte | group [group] [suffix] <value> | Sets the suffix for a group |
+| nte | group [group] clear <prefix/suffix> | Clears the suffix for a group |
 
 == Example Command Usage
 
@@ -21,7 +21,7 @@
 Suppose we have 3 groups: Owner, Admin, Default. The first group looked at is the one with the highest priority. We would use:
 
 {{{
-/ne groups order Owner Admin Default
+/ne group order Owner Admin Default
 }}}
 
 NametagEdit will remember the order so groups always load properly.
@@ -37,7 +37,7 @@ Suppose we wish to have a nametag like
 The command would be:
 
 {{{
-/nte prefix sgtcazeyt '[Admin] '
+/nte player sgtcazeyt prefix '[Admin] '
 }}}
 
 The ' character will be automatically removed, and allow you to use spaces

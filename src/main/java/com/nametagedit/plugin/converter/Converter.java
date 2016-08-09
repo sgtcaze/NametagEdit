@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Converts from v2.4 of NametagEdit to
+ * use the new storage method introduced
+ * in v3.0.
+ */
 public class Converter {
 
     private List<String> getLines(File file) {
@@ -45,6 +50,7 @@ public class Converter {
         try {
             File groupsFile = new File(plugin.getDataFolder(), "groups.yml");
             File playersFile = new File(plugin.getDataFolder(), "players.yml");
+
             YamlConfiguration groups = Utils.getConfig(groupsFile);
             YamlConfiguration players = Utils.getConfig(playersFile);
 
@@ -76,6 +82,7 @@ public class Converter {
         String value = line.substring(line.indexOf("\"") + 1);
         value = value.substring(0, value.indexOf("\""));
         config.set("Groups." + group + ".Permission", permission);
+        config.set("Groups." + group + ".SortPriority", -1);
         if (type.equals("prefix")) {
             config.set("Groups." + group + ".Prefix", value);
         } else {
@@ -93,6 +100,7 @@ public class Converter {
         String uuid = op.getUniqueId().toString();
         config.set("Players." + uuid + ".Name", playername);
         config.set("Players." + uuid + "." + type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase(), prefix);
+        config.set("Players." + uuid + ".SortPriority", -1);
     }
 
 }

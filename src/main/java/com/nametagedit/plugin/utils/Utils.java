@@ -18,41 +18,6 @@ import java.util.List;
 
 public class Utils {
 
-    private static Method getHandle;
-    private static Method sendPacket;
-    private static Field playerConnection;
-
-    static {
-        try {
-            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-            Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
-            Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-            Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + version + ".PlayerConnection");
-            getHandle = typeCraftPlayer.getMethod("getHandle");
-            playerConnection = typeNMSPlayer.getField("playerConnection");
-            sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + version + ".Packet"));
-        } catch (Exception e) {
-            Bukkit.getLogger().severe("NametagEdit could not setup reflection! What happened???");
-            e.printStackTrace();
-        }
-    }
-
-    public static void sendPacket(Collection<? extends Player> players, Object packet) {
-        for (Player player : players) {
-            sendPacket(player, packet);
-        }
-    }
-
-    public static void sendPacket(Player player, Object packet) {
-        try {
-            Object nmsPlayer = getHandle.invoke(player);
-            Object connection = playerConnection.get(nmsPlayer);
-            sendPacket.invoke(connection, packet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static String format(String[] text, int to, int from) {
         return StringUtils.join(text, ' ', to, from).replace("'", "");
     }

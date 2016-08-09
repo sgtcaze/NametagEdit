@@ -9,19 +9,20 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @AllArgsConstructor
-public class GroupDeleter extends BukkitRunnable {
+public class GroupPriority extends BukkitRunnable {
 
-    private String groupName;
+    private String group;
+    private int priority;
     private HikariDataSource hikari;
 
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            final String QUERY = "DELETE FROM `nte_groups` WHERE `name`=?";
-            PreparedStatement delete = connection.prepareStatement(QUERY);
-            delete.setString(1, groupName);
-            delete.execute();
-            delete.close();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE `nte_groups` SET `priority`=? WHERE `name`=?");
+            preparedStatement.setInt(1, priority);
+            preparedStatement.setString(2, group);
+            preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

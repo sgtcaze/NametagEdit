@@ -6,6 +6,7 @@ import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.tasks.*;
+import com.nametagedit.plugin.utils.UUIDFetcher;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.command.CommandSender;
@@ -30,18 +31,22 @@ public class DatabaseConfig implements AbstractConfig {
 
     @Override
     public void load() {
-        FileConfiguration config = plugin.getConfig();
+        FileConfiguration config = handler.getConfig();
         shutdown();
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(10);
+        hikari.setPoolName("NametagEdit Pool");
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", config.getString("MySQL.Hostname"));
         hikari.addDataSourceProperty("port", "3306");
         hikari.addDataSourceProperty("databaseName", config.getString("MySQL.Database"));
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
-        new TableCreator(hikari).runTask(plugin);
-        new DataDownloader(handler, hikari).runTask(plugin);
+        if (handler.getConfig().getInt("DatabaseVersion", 1) < handler.getDatabaseVersion()) {
+            new DatabaseUpdater(handler.getConfig().getInt("DatabaseVersion", 1), handler, hikari, plugin).runTaskAsynchronously(plugin);
+        } else {
+            new DataDownloader(handler, hikari).runTaskAsynchronously(plugin);
+        }
     }
 
     @Override
@@ -69,6 +74,24 @@ public class DatabaseConfig implements AbstractConfig {
     @Override
     public void save(GroupData groupData) {
         new GroupSaver(groupData, hikari).runTaskAsynchronously(plugin);
+    }
+
+    @Override
+    public void savePriority(boolean playerTag, String key, final int priority) {
+        if (playerTag) {
+            UUIDFetcher.lookupUUID(key, plugin, new UUIDFetcher.UUIDLookup() {
+                @Override
+                public void response(UUID uuid) {
+                    if (uuid != null) {
+                        new PlayerPriority(uuid, priority, hikari).runTaskAsynchronously(plugin);
+                    } else {
+                        // TODO: Send error
+                    }
+                }
+            });
+        } else {
+            new GroupPriority(key, priority, hikari).runTaskAsynchronously(plugin);
+        }
     }
 
     @Override

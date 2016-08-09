@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * This is responsible for abstracting
+ * a database/flat file storage
+ */
 public interface AbstractConfig {
 
     void load();
@@ -20,6 +24,8 @@ public interface AbstractConfig {
     void save(PlayerData playerData);
 
     void save(GroupData groupData);
+
+    void savePriority(boolean playerTag, String key, int priority);
 
     void delete(GroupData groupData);
 

@@ -27,13 +27,17 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private final List<String> names;
     private final boolean rateLimiting;
 
-    public UUIDFetcher(List<String> names, boolean rateLimiting) {
+    private UUIDFetcher(List<String> names, boolean rateLimiting) {
         this.names = ImmutableList.copyOf(names);
         this.rateLimiting = rateLimiting;
     }
 
-    public UUIDFetcher(List<String> names) {
+    private UUIDFetcher(List<String> names) {
         this(names, true);
+    }
+
+    public interface UUIDLookup {
+        void response(UUID uuid);
     }
 
     public static void lookupUUID(final String name, final Plugin plugin, final UUIDLookup uuidLookup) {
@@ -81,8 +85,8 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                 + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
     }
 
-    public static UUID getUUIDOf(String name) throws Exception {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name);
+    private static UUID getUUIDOf(String name) throws Exception {
+        return new UUIDFetcher(Collections.singletonList(name)).call().get(name);
     }
 
     @Override
@@ -108,10 +112,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             }
         }
         return uuidMap;
-    }
-
-    public interface UUIDLookup {
-        void response(UUID uuid);
     }
 
 }

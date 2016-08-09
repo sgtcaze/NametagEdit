@@ -19,12 +19,13 @@ public class GroupSaver extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            String query = "UPDATE nte_groups SET prefix=?, suffix=?, permission=? WHERE name=?";
-            PreparedStatement update = connection.prepareStatement(query);
+            final String QUERY = "UPDATE `nte_groups` SET `prefix`=?, `suffix`=?, `permission`=?, `priority`=? WHERE `name`=?";
+            PreparedStatement update = connection.prepareStatement(QUERY);
             update.setString(1, Utils.deformat(groupData.getPrefix()));
             update.setString(2, Utils.deformat(groupData.getSuffix()));
             update.setString(3, groupData.getPermission());
-            update.setString(4, groupData.getGroupName());
+            update.setInt(4, groupData.getSortPriority());
+            update.setString(5, groupData.getGroupName());
             update.execute();
             update.close();
         } catch (SQLException e) {

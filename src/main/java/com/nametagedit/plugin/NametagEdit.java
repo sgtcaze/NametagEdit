@@ -6,12 +6,14 @@ import com.nametagedit.plugin.hooks.HookGroupManager;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
 import com.nametagedit.plugin.hooks.HookZPermissions;
 import com.nametagedit.plugin.packets.PacketWrapper;
+import com.nametagedit.plugin.utils.Configuration;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,11 +34,11 @@ public class NametagEdit extends JavaPlugin {
         testCompat();
         if (!isEnabled()) return;
 
-        saveDefaultConfig();
+        Configuration config = loadConfig();
         manager = new NametagManager(this);
-        handler = new NametagHandler(this, manager);
+        handler = new NametagHandler(config, this, manager);
 
-        if (getConfig().getBoolean("MetricsEnabled")) {
+        if (config.getBoolean("MetricsEnabled")) {
             try {
                 new Metrics(this).start();
             } catch (IOException e) {
@@ -56,7 +58,7 @@ public class NametagEdit extends JavaPlugin {
         getCommand("ne").setExecutor(new NametagCommand(handler));
 
         if (api == null) {
-            api = new NametagAPI(manager);
+            api = new NametagAPI(handler, manager);
         }
     }
 
@@ -66,7 +68,7 @@ public class NametagEdit extends JavaPlugin {
         handler.getAbstractConfig().shutdown();
     }
 
-    public void debug(String message) {
+    void debug(String message) {
         if (handler != null && handler.debug()) {
             getLogger().info("[DEBUG] " + message);
         }
@@ -82,13 +84,44 @@ public class NametagEdit extends JavaPlugin {
         PacketWrapper wrapper = new PacketWrapper("TEST", "&f", "", 0, new ArrayList<>());
         wrapper.send();
         if (wrapper.error == null) return;
-        getLogger().severe("\n------------------------------------------------------\n" +
-                "[WARNING] NametagEdit v" + getDescription().getVersion() + " Failed to load! [WARNING]" +
-                "\n------------------------------------------------------" +
-                "\nThis might be an issue with reflection. REPORT this:" +
-                "\n> " + wrapper.error +
-                "\nThe plugin will now self destruct.\n------------------------------------------------------");
         Bukkit.getPluginManager().disablePlugin(this);
+        getLogger().severe(new StringBuilder()
+                .append("\n------------------------------------------------------\n")
+                .append("[WARNING] NametagEdit v").append(getDescription().getVersion()).append(" Failed to load! [WARNING]")
+                .append("\n------------------------------------------------------")
+                .append("\nThis might be an issue with reflection. REPORT this:\n> ")
+                .append(wrapper.error)
+                .append("\nThe plugin will now self destruct.\n------------------------------------------------------")
+                .toString());
+    }
+
+    private Configuration loadConfig() {
+        File file = new File(getDataFolder(), "config.yml");
+        if (!file.exists()) {
+            saveDefaultConfig();
+
+            Configuration newConfig = new Configuration(file);
+            newConfig.reload(true);
+            return newConfig;
+        } else {
+            Configuration oldConfig = new Configuration(file);
+            oldConfig.reload(false);
+
+            file.delete();
+            saveDefaultConfig();
+
+            Configuration newConfig = new Configuration(file);
+            newConfig.reload(true);
+
+            for (String key : oldConfig.getKeys(false)) {
+                if (newConfig.contains(key)) {
+                    newConfig.set(key, oldConfig.get(key));
+                }
+            }
+
+            newConfig.save();
+            return newConfig;
+        }
     }
 
 }

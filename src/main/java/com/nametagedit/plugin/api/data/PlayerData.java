@@ -7,6 +7,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.UUID;
 
+/**
+ * This class represents a player nametag. There
+ * are several properties available.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

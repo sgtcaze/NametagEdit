@@ -13,7 +13,7 @@ import java.util.*;
 @AllArgsConstructor
 public class NametagManager {
 
-    private final HashSet<FakeTeam> TEAMS = new HashSet<>();
+    private final HashMap<String, FakeTeam> TEAMS = new HashMap<>();
     private final HashMap<String, FakeTeam> CACHED_FAKE_TEAMS = new HashMap<>();
     private NametagEdit plugin;
 
@@ -27,9 +27,9 @@ public class NametagManager {
      * @return the team name
      */
     private String getNameFromInput(int input) {
-        if (input <= 0) return null;
-        String letter = String.valueOf((char) ((input / 16) + 65));
-        int repeat = input % 16 + 1;
+        if (input < 0) return null;
+        String letter = String.valueOf((char) ((input / 13) + 65));
+        int repeat = input % 13 + 1;
         return StringUtils.repeat(letter, repeat);
     }
 
@@ -39,7 +39,7 @@ public class NametagManager {
      * team is created.
      */
     private FakeTeam getFakeTeam(String prefix, String suffix) {
-        for (FakeTeam fakeTeam : TEAMS) {
+        for (FakeTeam fakeTeam : TEAMS.values()) {
             if (fakeTeam.isSimilar(prefix, suffix)) {
                 return fakeTeam;
             }
@@ -64,14 +64,14 @@ public class NametagManager {
 
         FakeTeam joining = getFakeTeam(prefix, suffix);
         if (joining != null) {
-            joining.getMembers().add(player);
+            joining.addMember(player);
             plugin.debug("Using existing team for " + player);
         } else {
             joining = new FakeTeam(prefix, suffix, getNameFromInput(sortPriority));
-            joining.getMembers().add(player);
-            TEAMS.add(joining);
+            joining.addMember(player);
+            TEAMS.put(joining.getName(), joining);
             addTeamPackets(joining);
-            plugin.debug("Created FakeTeam " + joining.getName());
+            plugin.debug("Created FakeTeam " + joining.getName() + ". Size: " + TEAMS.size());
         }
 
         Player adding = Bukkit.getPlayerExact(player);
@@ -105,8 +105,8 @@ public class NametagManager {
             plugin.debug(player + " was removed from " + fakeTeam.getName());
             if (delete) {
                 removeTeamPackets(fakeTeam);
-                TEAMS.remove(fakeTeam);
-                plugin.debug("FakeTeam " + fakeTeam.getName() + " has been deleted");
+                TEAMS.remove(fakeTeam.getName());
+                plugin.debug("FakeTeam " + fakeTeam.getName() + " has been deleted. Size: " + TEAMS.size());
             }
         }
 
@@ -116,7 +116,7 @@ public class NametagManager {
     // ==============================================================
     // Below are public methods to modify the cache
     // ==============================================================
-    public FakeTeam decache(String player) {
+    private FakeTeam decache(String player) {
         return CACHED_FAKE_TEAMS.remove(player);
     }
 
@@ -140,13 +140,13 @@ public class NametagManager {
     }
 
     void sendTeams(Player player) {
-        for (FakeTeam fakeTeam : TEAMS) {
+        for (FakeTeam fakeTeam : TEAMS.values()) {
             new PacketWrapper(fakeTeam.getName(), fakeTeam.getPrefix(), fakeTeam.getSuffix(), 0, fakeTeam.getMembers()).send(player);
         }
     }
 
     void reset() {
-        for (FakeTeam fakeTeam : TEAMS) {
+        for (FakeTeam fakeTeam : TEAMS.values()) {
             removePlayerFromTeamPackets(fakeTeam, fakeTeam.getMembers());
             removeTeamPackets(fakeTeam);
         }

@@ -3,7 +3,9 @@ Groups:
     Permission: nte.admin
     Prefix: '&c'
     Suffix: '&f'
+    SortPriority: 1
   Moderator:
     Permission: nte.moderator
     Prefix: '&2'
     Suffix: '&f'
+    SortPriority: 2

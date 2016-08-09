@@ -20,6 +20,7 @@ public class PacketWrapper {
         setupMembers(members);
     }
 
+    @SuppressWarnings("unchecked")
     public PacketWrapper(String name, String prefix, String suffix, int param, Collection<?> players) {
         setupDefaults(name, param);
         if (param == 0 || param == 2) {
@@ -33,18 +34,17 @@ public class PacketWrapper {
                     ((Collection) PacketAccessor.MEMBERS.get(packet)).addAll(players);
                 }
             } catch (Exception e) {
-                // e.printStackTrace();
                 error = e.getMessage();
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void setupMembers(Collection<?> players) {
         try {
             players = players == null || players.isEmpty() ? new ArrayList<>() : players;
             ((Collection) PacketAccessor.MEMBERS.get(packet)).addAll(players);
         } catch (Exception e) {
-            // e.printStackTrace();
             error = e.getMessage();
         }
     }
@@ -54,17 +54,16 @@ public class PacketWrapper {
             PacketAccessor.TEAM_NAME.set(packet, name);
             PacketAccessor.PARAM_INT.set(packet, param);
         } catch (Exception e) {
-            // e.printStackTrace();
             error = e.getMessage();
         }
     }
 
     public void send() {
-        Utils.sendPacket(Utils.getOnline(), packet);
+        PacketAccessor.sendPacket(Utils.getOnline(), packet);
     }
 
     public void send(Player player) {
-        Utils.sendPacket(player, packet);
+        PacketAccessor.sendPacket(player, packet);
     }
 
 }

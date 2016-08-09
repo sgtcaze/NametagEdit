@@ -5,7 +5,9 @@ import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.storage.AbstractConfig;
+import com.nametagedit.plugin.utils.UUIDFetcher;
 import com.nametagedit.plugin.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -72,15 +74,38 @@ public class FlatFileConfig implements AbstractConfig {
         players.set("Players." + uuid + ".Name", name);
         players.set("Players." + uuid + ".Prefix", Utils.deformat(playerData.getPrefix()));
         players.set("Players." + uuid + ".Suffix", Utils.deformat(playerData.getSuffix()));
+        players.set("Players." + uuid + ".Priority", playerData.getSortPriority());
         save(players, playersFile);
     }
 
     @Override
     public void save(GroupData groupData) {
-        groups.set("Groups." + groupData.getGroupName() + ".Permission", groupData.getPermission());
-        groups.set("Groups." + groupData.getGroupName() + ".Prefix", Utils.deformat(groupData.getPrefix()));
-        groups.set("Groups." + groupData.getGroupName() + ".Suffix", Utils.deformat(groupData.getSuffix()));
+        storeGroup(groupData);
         save(groups, groupsFile);
+    }
+
+    @Override
+    public void savePriority(boolean playerTag, String key, final int priority) {
+        if (playerTag) {
+            final Player target = Bukkit.getPlayerExact(key);
+            if (target != null) {
+                if (players.contains("Players." + target.getUniqueId().toString())) {
+                    players.set("Players." + target.getUniqueId().toString(), priority);
+                    save(players, playersFile);
+                }
+                return;
+            }
+
+            UUIDFetcher.lookupUUID(key, plugin, new UUIDFetcher.UUIDLookup() {
+                @Override
+                public void response(UUID uuid) {
+                    if (players.contains("Players." + uuid.toString())) {
+                        players.set("Players." + uuid.toString(), priority);
+                        save(players, playersFile);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -103,7 +128,22 @@ public class FlatFileConfig implements AbstractConfig {
 
     @Override
     public void orderGroups(CommandSender commandSender, String[] args) {
-        // TODO: Not implemented yet
+        List<String> order = new ArrayList<>(Arrays.asList(args).subList(2, args.length));
+        groups.set("Groups", null);
+        for (String set : order) {
+            GroupData groupData = handler.getGroupData(set);
+            if (groupData != null) {
+                storeGroup(groupData);
+            }
+        }
+
+        for (GroupData groupData : handler.getGroupData()) {
+            if (!groups.contains("Groups." + groupData.getGroupName())) {
+                storeGroup(groupData);
+            }
+        }
+
+        save(groups, groupsFile);
     }
 
     private void save(YamlConfiguration config, File file) {
@@ -136,9 +176,15 @@ public class FlatFileConfig implements AbstractConfig {
             data.setPrefix(groups.getString("Groups." + groupName + ".Prefix", ""));
             data.setSuffix(groups.getString("Groups." + groupName + ".Suffix", ""));
             data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
-            data.refresh();
             groupData.add(data);
         }
+    }
+
+    private void storeGroup(GroupData groupData) {
+        groups.set("Groups." + groupData.getGroupName() + ".Permission", groupData.getPermission());
+        groups.set("Groups." + groupData.getGroupName() + ".Prefix", Utils.deformat(groupData.getPrefix()));
+        groups.set("Groups." + groupData.getGroupName() + ".Suffix", Utils.deformat(groupData.getSuffix()));
+        groups.set("Groups." + groupData.getGroupName() + ".Priority", groupData.getSortPriority());
     }
 
 }

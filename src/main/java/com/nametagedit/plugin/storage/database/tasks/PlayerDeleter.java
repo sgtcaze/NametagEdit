@@ -18,8 +18,8 @@ public class PlayerDeleter extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            String query = "DELETE FROM nte_players WHERE uuid=?";
-            PreparedStatement delete = connection.prepareStatement(query);
+            final String QUERY = "DELETE FROM `nte_players` WHERE `uuid`=?";
+            PreparedStatement delete = connection.prepareStatement(QUERY);
             delete.setString(1, uuid.toString());
             delete.execute();
             delete.close();
