@@ -38,7 +38,7 @@ public class DatabaseConfig implements AbstractConfig {
         hikari.setPoolName("NametagEdit Pool");
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", config.getString("MySQL.Hostname"));
-        hikari.addDataSourceProperty("port", "3306");
+        hikari.addDataSourceProperty("port", config.getString("MySQL.Port"));
         hikari.addDataSourceProperty("databaseName", config.getString("MySQL.Database"));
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
