@@ -42,11 +42,8 @@ public class DatabaseConfig implements AbstractConfig {
         hikari.addDataSourceProperty("databaseName", config.getString("MySQL.Database"));
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
-        if (config.getInt("DatabaseVersion", 1) < handler.getDatabaseVersion()) {
-            new DatabaseUpdater(handler.getConfig().getInt("DatabaseVersion", 1), handler, hikari, plugin).runTaskAsynchronously(plugin);
-        } else {
-            new DatabaseUpdater(handler.getDatabaseVersion(), handler, hikari, plugin).runTaskAsynchronously(plugin);
-        }
+
+        new DatabaseUpdater(config.getInt("DatabaseVersion", 1), handler, hikari, plugin).runTaskAsynchronously(plugin);
     }
 
     @Override
