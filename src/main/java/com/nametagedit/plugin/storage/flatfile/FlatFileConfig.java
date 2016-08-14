@@ -74,7 +74,7 @@ public class FlatFileConfig implements AbstractConfig {
         players.set("Players." + uuid + ".Name", name);
         players.set("Players." + uuid + ".Prefix", Utils.deformat(playerData.getPrefix()));
         players.set("Players." + uuid + ".Suffix", Utils.deformat(playerData.getSuffix()));
-        players.set("Players." + uuid + ".Priority", playerData.getSortPriority());
+        players.set("Players." + uuid + ".SortPriority", playerData.getSortPriority());
         save(players, playersFile);
     }
 
@@ -184,7 +184,7 @@ public class FlatFileConfig implements AbstractConfig {
         groups.set("Groups." + groupData.getGroupName() + ".Permission", groupData.getPermission());
         groups.set("Groups." + groupData.getGroupName() + ".Prefix", Utils.deformat(groupData.getPrefix()));
         groups.set("Groups." + groupData.getGroupName() + ".Suffix", Utils.deformat(groupData.getSuffix()));
-        groups.set("Groups." + groupData.getGroupName() + ".Priority", groupData.getSortPriority());
+        groups.set("Groups." + groupData.getGroupName() + ".SortPriority", groupData.getSortPriority());
     }
 
 }
