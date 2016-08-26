@@ -2,7 +2,6 @@ package com.nametagedit.plugin.converter;
 
 import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.NametagMessages;
-import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -94,32 +93,32 @@ public class ConverterTask extends BukkitRunnable {
         final YamlConfiguration groups = Utils.getConfig(groupsFile);
         final YamlConfiguration players = Utils.getConfig(playersFile);
 
-        PreparedStatement insertOrUpdate = connection.prepareStatement("SELECT `uuid`, `prefix`, `suffix`, `priority` FROM `nte_players");
+        PreparedStatement insertOrUpdate = connection.prepareStatement("INSERT INTO `nte_players` (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?");
         if (players != null) {
             for (String key : players.getConfigurationSection("Players").getKeys(false)) {
                 insertOrUpdate.setString(1, key);
                 insertOrUpdate.setString(2, players.getString("Players." + key + ".Name"));
                 insertOrUpdate.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
                 insertOrUpdate.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-                insertOrUpdate.setString(5, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-                insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-                insertOrUpdate.setString(7, players.getString("Players." + key + ".SortPriority"));
+                insertOrUpdate.setString(5, players.getString("Players." + key + ".SortPriority"));
+                insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                insertOrUpdate.setString(7, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
                 insertOrUpdate.addBatch();
             }
         }
 
         insertOrUpdate.executeBatch();
-        insertOrUpdate = connection.prepareStatement("SELECT `name`, `prefix`, `suffix`, `permission`, `priority` FROM `nte_groups`");
+        insertOrUpdate = connection.prepareStatement("INSERT INTO `nte_groups` (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?, permission=?");
         if (groups != null) {
             for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {
                 insertOrUpdate.setString(1, key);
                 insertOrUpdate.setString(2, groups.getString("Groups." + key + ".Permission"));
                 insertOrUpdate.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
                 insertOrUpdate.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-                insertOrUpdate.setString(5, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-                insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-                insertOrUpdate.setString(7, groups.getString("Groups." + key + ".Permission"));
-                insertOrUpdate.setString(8, groups.getString("Groups." + key + ".SortPriority"));
+                insertOrUpdate.setString(5, groups.getString("Groups." + key + ".SortPriority"));
+                insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                insertOrUpdate.setString(7, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                insertOrUpdate.setString(8, groups.getString("Groups." + key + ".Permission"));
                 insertOrUpdate.addBatch();
             }
         }
