@@ -2,7 +2,7 @@ name: NametagEdit
 main: com.nametagedit.plugin.NametagEdit
 version: 4.1.2
 authors: [sgtcaze, Cory]
-soft-depend: [zPermissions, PermissionsEX, GroupManager]
+soft-depend: [zPermissions, PermissionsEX, GroupManager, LibsDisguises]
 commands:
   ne:
     description: NametagEdit commands
