@@ -189,11 +189,7 @@ public class NametagHandler implements Listener {
             }
         }
 
-        if (tabListDisabled) {
-            player.setPlayerListName(Utils.format("&f" + player.getName(), true));
-        } else {
-            player.setPlayerListName(null);
-        }
+        player.setPlayerListName(tabListDisabled ? player.getPlayerListName() : null);
     }
 
     void clear(final CommandSender sender, final String player) {
