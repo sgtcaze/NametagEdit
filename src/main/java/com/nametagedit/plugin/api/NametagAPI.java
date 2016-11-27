@@ -24,6 +24,11 @@ public final class NametagAPI implements INametagApi {
     }
 
     @Override
+    public void reloadNametag(Player player) {
+        handler.applyTagToPlayer(player);
+    }
+
+    @Override
     public void clearNametag(String player) {
         manager.reset(player);
     }

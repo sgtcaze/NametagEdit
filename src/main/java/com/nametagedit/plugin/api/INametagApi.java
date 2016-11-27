@@ -16,6 +16,16 @@ public interface INametagApi {
     void clearNametag(Player player);
 
     /**
+     * Reloads a nametag if the player has a
+     * custom nametag via the Players or Groups
+     * configurations.
+     * <p></p>
+     *
+     * @param player whose nametag to reload
+     */
+    void reloadNametag(Player player);
+
+    /**
      * Removes a player's nametag in memory
      * only.
      * <p>
