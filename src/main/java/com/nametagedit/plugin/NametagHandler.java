@@ -87,7 +87,7 @@ public class NametagHandler implements Listener {
             public void run() {
                 abstractConfig.load(player);
             }
-        }.runTaskLater(plugin, 1);
+        }.runTaskLaterAsynchronously(plugin, 1);
     }
 
     private void handleClear(UUID uuid, String player) {
