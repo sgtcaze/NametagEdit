@@ -58,7 +58,12 @@ public class NametagHandler implements Listener {
             abstractConfig = new FlatFileConfig(plugin, groupData, playerData, this);
         }
 
-        abstractConfig.load();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                abstractConfig.load();
+            }
+        }.runTaskAsynchronously(plugin);
     }
 
     /**

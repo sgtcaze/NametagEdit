@@ -71,13 +71,13 @@ class PacketAccessor {
         }
     }
 
-    public static void sendPacket(Collection<? extends Player> players, Object packet) {
+    static void sendPacket(Collection<? extends Player> players, Object packet) {
         for (Player player : players) {
             sendPacket(player, packet);
         }
     }
 
-    public static void sendPacket(Player player, Object packet) {
+    static void sendPacket(Player player, Object packet) {
         try {
             Object nmsPlayer = getHandle.invoke(player);
             Object connection = playerConnection.get(nmsPlayer);

@@ -19,7 +19,7 @@ public interface INametagApi {
      * Reloads a nametag if the player has a
      * custom nametag via the Players or Groups
      * configurations.
-     * <p></p>
+     * <p>
      *
      * @param player whose nametag to reload
      */

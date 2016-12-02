@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,21 +40,32 @@ public class FlatFileConfig implements AbstractConfig {
 
     @Override
     public void load() {
-        this.groupsFile = new File(plugin.getDataFolder(), "groups.yml");
-        this.groups = Utils.getConfig(groupsFile, "groups.yml", plugin);
-        this.playersFile = new File(plugin.getDataFolder(), "players.yml");
-        this.players = Utils.getConfig(playersFile, "players.yml", plugin);
-        this.loadGroups();
-        this.loadPlayers();
-        handler.applyTags();
+        groupsFile = new File(plugin.getDataFolder(), "groups.yml");
+        groups = Utils.getConfig(groupsFile, "groups.yml", plugin);
+        playersFile = new File(plugin.getDataFolder(), "players.yml");
+        players = Utils.getConfig(playersFile, "players.yml", plugin);
+        loadGroups();
+        loadPlayers();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                handler.applyTags();
+            }
+        }.runTask(plugin);
     }
 
     @Override
     public void reload() {
         groupData.clear();
         playerData.clear();
-        load();
-        handler.applyTags();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                load();
+            }
+        }.runTaskAsynchronously(plugin);
     }
 
     @Override
@@ -63,7 +75,7 @@ public class FlatFileConfig implements AbstractConfig {
 
     @Override
     public void load(Player player) {
-        storeData(player);
+        loadPlayerTag(player);
         plugin.getHandler().applyTagToPlayer(player);
     }
 
@@ -154,7 +166,7 @@ public class FlatFileConfig implements AbstractConfig {
         }
     }
 
-    private void storeData(Player player) {
+    private void loadPlayerTag(Player player) {
         PlayerData data = PlayerData.fromFile(player.getUniqueId().toString(), players);
         if (data != null) {
             data.setName(player.getName());
@@ -164,7 +176,7 @@ public class FlatFileConfig implements AbstractConfig {
 
     private void loadPlayers() {
         for (Player player : Utils.getOnline()) {
-            storeData(player);
+            loadPlayerTag(player);
         }
     }
 
