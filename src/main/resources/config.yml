@@ -14,6 +14,9 @@ TabListDisabled: false
 # If enabled, this plugin will send small data MCStats.org.
 MetricsEnabled: true
 #
+# If enabled, players with NametagEdit nametags will not be able to push each other (1.9+)
+DisablePush: false
+#
 # If enabled, NametagEdit will turn your console into spam
 # heaven. Useful for reporting issues!
 Debug: false

@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.packets;
 
+import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.utils.Utils;
 import org.bukkit.entity.Player;
 
@@ -53,6 +54,10 @@ public class PacketWrapper {
         try {
             PacketAccessor.TEAM_NAME.set(packet, name);
             PacketAccessor.PARAM_INT.set(packet, param);
+
+            if (NametagHandler.DISABLE_PUSH_ALL_TAGS && PacketAccessor.PUSH != null) {
+                PacketAccessor.PUSH.set(packet, "never");
+            }
         } catch (Exception e) {
             error = e.getMessage();
         }

@@ -31,6 +31,8 @@ public class NametagHandler implements Listener {
     private boolean debug;
     private boolean tabListDisabled;
 
+    public static boolean DISABLE_PUSH_ALL_TAGS = false;
+
     // This should only be changed in the code
     private int databaseVersion = 2;
 
@@ -51,6 +53,7 @@ public class NametagHandler implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
+        DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
 
         if (config.getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this);
@@ -164,6 +167,7 @@ public class NametagHandler implements Listener {
         config.reload(true);
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
+        DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
         nametagManager.reset();
         abstractConfig.reload();
     }

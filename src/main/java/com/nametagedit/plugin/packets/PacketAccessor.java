@@ -16,6 +16,7 @@ class PacketAccessor {
     static Field PARAM_INT;
     static Field PACK_OPTION;
     static Field DISPLAY_NAME;
+    static Field PUSH;
 
     private static Method getHandle;
     private static Method sendPacket;
@@ -50,9 +51,24 @@ class PacketAccessor {
                 PARAM_INT = getNMS(currentVersion.getParamInt());
                 PACK_OPTION = getNMS(currentVersion.getPackOption());
                 DISPLAY_NAME = getNMS(currentVersion.getDisplayName());
+
+                if (isPushVersion(version)) {
+                    PUSH = getNMS(currentVersion.getPush());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static boolean isPushVersion(String version) {
+        switch (version.substring(0, 4)) {
+            case "v1_9":
+            case "v1_10":
+            case "v1_11":
+                return true;
+            default:
+                return false;
         }
     }
 
