@@ -62,14 +62,7 @@ class PacketAccessor {
     }
 
     private static boolean isPushVersion(String version) {
-        switch (version.substring(0, 4)) {
-            case "v1_9":
-            case "v1_10":
-            case "v1_11":
-                return true;
-            default:
-                return false;
-        }
+        return Integer.parseInt(version.split("_")[1]) >= 9;
     }
 
     private static Field getNMS(String path) throws Exception {
