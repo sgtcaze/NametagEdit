@@ -95,37 +95,50 @@ public class ConverterTask extends BukkitRunnable {
 
         PreparedStatement insertOrUpdate = connection.prepareStatement("INSERT INTO `nte_players` (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?");
         if (players != null) {
-            for (String key : players.getConfigurationSection("Players").getKeys(false)) {
-                insertOrUpdate.setString(1, key);
-                insertOrUpdate.setString(2, players.getString("Players." + key + ".Name"));
-                insertOrUpdate.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-                insertOrUpdate.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-                insertOrUpdate.setString(5, players.getString("Players." + key + ".SortPriority"));
-                insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-                insertOrUpdate.setString(7, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-                insertOrUpdate.addBatch();
+            if (checkValid(groups, "Players")) {
+                for (String key : players.getConfigurationSection("Players").getKeys(false)) {
+                    insertOrUpdate.setString(1, key);
+                    insertOrUpdate.setString(2, players.getString("Players." + key + ".Name"));
+                    insertOrUpdate.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                    insertOrUpdate.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
+                    insertOrUpdate.setString(5, players.getString("Players." + key + ".SortPriority"));
+                    insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                    insertOrUpdate.setString(7, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
+                    insertOrUpdate.addBatch();
+                }
             }
         }
 
         insertOrUpdate.executeBatch();
         insertOrUpdate = connection.prepareStatement("INSERT INTO `nte_groups` (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?, permission=?");
         if (groups != null) {
-            for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {
-                insertOrUpdate.setString(1, key);
-                insertOrUpdate.setString(2, groups.getString("Groups." + key + ".Permission"));
-                insertOrUpdate.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-                insertOrUpdate.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-                insertOrUpdate.setString(5, groups.getString("Groups." + key + ".SortPriority"));
-                insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-                insertOrUpdate.setString(7, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-                insertOrUpdate.setString(8, groups.getString("Groups." + key + ".Permission"));
-                insertOrUpdate.addBatch();
+            if (checkValid(groups, "Groups")) {
+                for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {
+                    insertOrUpdate.setString(1, key);
+                    insertOrUpdate.setString(2, groups.getString("Groups." + key + ".Permission"));
+                    insertOrUpdate.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                    insertOrUpdate.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                    insertOrUpdate.setString(5, groups.getString("Groups." + key + ".SortPriority"));
+                    insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                    insertOrUpdate.setString(7, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                    insertOrUpdate.setString(8, groups.getString("Groups." + key + ".Permission"));
+                    insertOrUpdate.addBatch();
+                }
             }
         }
 
         insertOrUpdate.executeBatch();
         insertOrUpdate.close();
         return false;
+    }
+
+    private boolean checkValid(FileConfiguration configuration, String section) {
+        if (!configuration.contains(section)) {
+            NametagMessages.FILE_MISCONFIGURED.send(sender, section + ".yml");
+            return false;
+        }
+
+        return true;
     }
 
 }
