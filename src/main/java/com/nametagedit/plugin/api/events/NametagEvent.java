@@ -56,6 +56,10 @@ public class NametagEvent extends Event implements Cancellable {
         this.changeReason = changeReason;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -68,10 +72,6 @@ public class NametagEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 

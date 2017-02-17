@@ -137,6 +137,121 @@ public class Metrics {
     }
 
     /**
+     * GZip compress a string of bytes
+     *
+     * @param input
+     * @return
+     */
+    public static byte[] gzip(String input) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        GZIPOutputStream gzos = null;
+
+        try {
+            gzos = new GZIPOutputStream(baos);
+            gzos.write(input.getBytes("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (gzos != null) try {
+                gzos.close();
+            } catch (IOException ignore) {
+            }
+        }
+
+        return baos.toByteArray();
+    }
+
+    /**
+     * Appends a json encoded key/value pair to the given string builder.
+     *
+     * @param json
+     * @param key
+     * @param value
+     * @throws UnsupportedEncodingException
+     */
+    private static void appendJSONPair(StringBuilder json, String key, String value) throws UnsupportedEncodingException {
+        boolean isValueNumeric = false;
+
+        try {
+            if (value.equals("0") || !value.endsWith("0")) {
+                Double.parseDouble(value);
+                isValueNumeric = true;
+            }
+        } catch (NumberFormatException e) {
+            isValueNumeric = false;
+        }
+
+        if (json.charAt(json.length() - 1) != '{') {
+            json.append(',');
+        }
+
+        json.append(escapeJSON(key));
+        json.append(':');
+
+        if (isValueNumeric) {
+            json.append(value);
+        } else {
+            json.append(escapeJSON(value));
+        }
+    }
+
+    /**
+     * Escape a string to create a valid JSON string
+     *
+     * @param text
+     * @return
+     */
+    private static String escapeJSON(String text) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append('"');
+        for (int index = 0; index < text.length(); index++) {
+            char chr = text.charAt(index);
+
+            switch (chr) {
+                case '"':
+                case '\\':
+                    builder.append('\\');
+                    builder.append(chr);
+                    break;
+                case '\b':
+                    builder.append("\\b");
+                    break;
+                case '\t':
+                    builder.append("\\t");
+                    break;
+                case '\n':
+                    builder.append("\\n");
+                    break;
+                case '\r':
+                    builder.append("\\r");
+                    break;
+                default:
+                    if (chr < ' ') {
+                        String t = "000" + Integer.toHexString(chr);
+                        builder.append("\\u" + t.substring(t.length() - 4));
+                    } else {
+                        builder.append(chr);
+                    }
+                    break;
+            }
+        }
+        builder.append('"');
+
+        return builder.toString();
+    }
+
+    /**
+     * Encode text as UTF-8
+     *
+     * @param text the text to encode
+     * @return the encoded text, as UTF-8
+     */
+    private static String urlEncode(final String text) throws UnsupportedEncodingException {
+        return URLEncoder.encode(text, "UTF-8");
+    }
+
+    /**
      * Construct and create a Graph that can be used to separate specific plotters to their own graphs on the metrics
      * website. Plotters can be added to the graph object returned.
      *
@@ -500,31 +615,6 @@ public class Metrics {
     }
 
     /**
-     * GZip compress a string of bytes
-     *
-     * @param input
-     * @return
-     */
-    public static byte[] gzip(String input) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        GZIPOutputStream gzos = null;
-
-        try {
-            gzos = new GZIPOutputStream(baos);
-            gzos.write(input.getBytes("UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (gzos != null) try {
-                gzos.close();
-            } catch (IOException ignore) {
-            }
-        }
-
-        return baos.toByteArray();
-    }
-
-    /**
      * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
      *
      * @return true if mineshafter is installed on the server
@@ -536,96 +626,6 @@ public class Metrics {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    /**
-     * Appends a json encoded key/value pair to the given string builder.
-     *
-     * @param json
-     * @param key
-     * @param value
-     * @throws UnsupportedEncodingException
-     */
-    private static void appendJSONPair(StringBuilder json, String key, String value) throws UnsupportedEncodingException {
-        boolean isValueNumeric = false;
-
-        try {
-            if (value.equals("0") || !value.endsWith("0")) {
-                Double.parseDouble(value);
-                isValueNumeric = true;
-            }
-        } catch (NumberFormatException e) {
-            isValueNumeric = false;
-        }
-
-        if (json.charAt(json.length() - 1) != '{') {
-            json.append(',');
-        }
-
-        json.append(escapeJSON(key));
-        json.append(':');
-
-        if (isValueNumeric) {
-            json.append(value);
-        } else {
-            json.append(escapeJSON(value));
-        }
-    }
-
-    /**
-     * Escape a string to create a valid JSON string
-     *
-     * @param text
-     * @return
-     */
-    private static String escapeJSON(String text) {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append('"');
-        for (int index = 0; index < text.length(); index++) {
-            char chr = text.charAt(index);
-
-            switch (chr) {
-                case '"':
-                case '\\':
-                    builder.append('\\');
-                    builder.append(chr);
-                    break;
-                case '\b':
-                    builder.append("\\b");
-                    break;
-                case '\t':
-                    builder.append("\\t");
-                    break;
-                case '\n':
-                    builder.append("\\n");
-                    break;
-                case '\r':
-                    builder.append("\\r");
-                    break;
-                default:
-                    if (chr < ' ') {
-                        String t = "000" + Integer.toHexString(chr);
-                        builder.append("\\u" + t.substring(t.length() - 4));
-                    } else {
-                        builder.append(chr);
-                    }
-                    break;
-            }
-        }
-        builder.append('"');
-
-        return builder.toString();
-    }
-
-    /**
-     * Encode text as UTF-8
-     *
-     * @param text the text to encode
-     * @return the encoded text, as UTF-8
-     */
-    private static String urlEncode(final String text) throws UnsupportedEncodingException {
-        return URLEncoder.encode(text, "UTF-8");
     }
 
     /**

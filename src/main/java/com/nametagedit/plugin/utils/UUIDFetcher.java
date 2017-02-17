@@ -36,10 +36,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         this(names, true);
     }
 
-    public interface UUIDLookup {
-        void response(UUID uuid);
-    }
-
     public static void lookupUUID(final String name, final Plugin plugin, final UUIDLookup uuidLookup) {
         new BukkitRunnable() {
             @Override
@@ -112,6 +108,10 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             }
         }
         return uuidMap;
+    }
+
+    public interface UUIDLookup {
+        void response(UUID uuid);
     }
 
 }

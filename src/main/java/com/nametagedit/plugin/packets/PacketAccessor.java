@@ -17,6 +17,7 @@ class PacketAccessor {
     static Field PACK_OPTION;
     static Field DISPLAY_NAME;
     static Field PUSH;
+    static Field VISIBILITY;
 
     private static Method getHandle;
     private static Method sendPacket;
@@ -55,6 +56,10 @@ class PacketAccessor {
                 if (isPushVersion(version)) {
                     PUSH = getNMS(currentVersion.getPush());
                 }
+
+                if (isVisibilityVersion(version)) {
+                    VISIBILITY = getNMS(currentVersion.getVisibility());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,6 +68,10 @@ class PacketAccessor {
 
     private static boolean isPushVersion(String version) {
         return Integer.parseInt(version.split("_")[1]) >= 9;
+    }
+
+    private static boolean isVisibilityVersion(String version) {
+        return Integer.parseInt(version.split("_")[1]) >= 8;
     }
 
     private static Field getNMS(String path) throws Exception {

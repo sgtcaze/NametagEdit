@@ -28,11 +28,9 @@ import java.util.*;
 @Setter
 public class NametagHandler implements Listener {
 
+    public static boolean DISABLE_PUSH_ALL_TAGS = false;
     private boolean debug;
     private boolean tabListDisabled;
-
-    public static boolean DISABLE_PUSH_ALL_TAGS = false;
-
     // This should only be changed in the code
     private int databaseVersion = 2;
 
