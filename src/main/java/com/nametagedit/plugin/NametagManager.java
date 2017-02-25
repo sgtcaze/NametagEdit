@@ -18,22 +18,6 @@ public class NametagManager {
     private NametagEdit plugin;
 
     /**
-     * This is a special method to sort nametags in
-     * the tablist. It takes a priority and converts
-     * it to an alphabetic representation to force a
-     * specific sort.
-     *
-     * @param input the sort priority
-     * @return the team name
-     */
-    private String getNameFromInput(int input) {
-        if (input < 0) return null;
-        String letter = String.valueOf((char) ((input / 13) + 65));
-        int repeat = input % 13 + 1;
-        return StringUtils.repeat(letter, repeat);
-    }
-
-    /**
      * Gets the current team given a prefix and suffix
      * If there is no team similar to this, then a new
      * team is created.
@@ -67,7 +51,7 @@ public class NametagManager {
             joining.addMember(player);
             plugin.debug("Using existing team for " + player);
         } else {
-            joining = new FakeTeam(prefix, suffix, getNameFromInput(sortPriority));
+            joining = new FakeTeam(prefix, suffix, sortPriority);
             joining.addMember(player);
             TEAMS.put(joining.getName(), joining);
             addTeamPackets(joining);
