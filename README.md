@@ -44,7 +44,7 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 **A:** Yes. Read up on how to use it [here](documentation/Configuration.creole)
 
 # Incompatible Plugins
-✖ Coming Soon
+✖ Any plugin that creates NPCs that share the same username as players who have 'NametagEdit' nametags
 
 ## HELP! My nametags are not displaying!
 Click [here](documentation/Support.creole) for common mistakes and proposed fixes.
