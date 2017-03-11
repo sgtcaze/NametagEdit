@@ -16,17 +16,9 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- MCStats
-        <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics</artifactId>
-            <version>R8-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Metrics-R8.jar</systemPath>
-        </dependency> -->
         <!-- zPermissions -->
         <dependency>
             <groupId>ninja.leaping.permissionsex</groupId>
@@ -55,13 +47,13 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.4.3</version>
+            <version>2.6.0</version>
         </dependency>
         <!-- SL4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.10</version>
+            <version>1.7.24</version>
             <scope>compile</scope>
         </dependency>
         <!-- Lombok -->
@@ -97,11 +89,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-        <!-- MCStats
-        <repository>
-            <id>Plugin Metrics</id>
-            <url>http://repo.mcstats.org/content/repositories/public</url>
-        </repository> -->
         <!-- Jenkins -->
         <repository>
             <id>upstream</id>
