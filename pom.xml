@@ -123,6 +123,13 @@
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>Codehaus repository</id>
+            <name>codehaus-mule-repo</name>
+            <url>https://repository-master.mulesoft.org/nexus/content/groups/public/
+            </url>
+            <layout>default</layout>
+        </repository>
     </repositories>
     <!-- Builds NametagEdit -->
     <build>
