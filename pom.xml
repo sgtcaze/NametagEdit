@@ -110,13 +110,6 @@
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
-        <repository>
-            <id>Codehaus repository</id>
-            <name>codehaus-mule-repo</name>
-            <url>https://repository-master.mulesoft.org/nexus/content/groups/public/
-            </url>
-            <layout>default</layout>
-        </repository>
     </repositories>
     <!-- Builds NametagEdit -->
     <build>
@@ -138,7 +131,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -162,7 +155,7 @@
             <!-- Make a Jar -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -171,7 +164,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>3.0.2</version>
             </plugin>
         </plugins>
     </build>
