@@ -81,6 +81,8 @@
             <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
             <version>9.0.7</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/LibsDisguises-9.0.9.jar</systemPath>
         </dependency>
     </dependencies>
     <repositories>
