@@ -180,7 +180,17 @@ public class NametagHandler implements Listener {
         plugin.debug("Applied tags to all online players.");
     }
 
-    public void applyTagToPlayer(Player player) {
+    public void applyTagToPlayer(final Player player) {
+        if (!Bukkit.isPrimaryThread()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    applyTagToPlayer(player);
+                }
+            }.runTask(plugin);
+            return;
+        }
+
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
         if (data != null) {
