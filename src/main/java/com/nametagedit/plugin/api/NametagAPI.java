@@ -3,6 +3,7 @@ package com.nametagedit.plugin.api;
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.NametagManager;
 import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.api.data.Nametag;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -17,6 +18,13 @@ public final class NametagAPI implements INametagApi {
 
     private NametagHandler handler;
     private NametagManager manager;
+
+    @Override
+    public Nametag getNametag(Player player) {
+        FakeTeam team = manager.getFakeTeam(player.getName());
+        boolean nullTeam = team == null;
+        return new Nametag(nullTeam ? "" : team.getPrefix(), nullTeam ? "" : team.getSuffix());
+    }
 
     @Override
     public void clearNametag(Player player) {

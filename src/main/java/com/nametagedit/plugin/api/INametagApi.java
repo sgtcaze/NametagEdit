@@ -1,8 +1,18 @@
 package com.nametagedit.plugin.api;
 
+import com.nametagedit.plugin.api.data.Nametag;
 import org.bukkit.entity.Player;
 
 public interface INametagApi {
+
+    /**
+     * Function gets the nametag for a player if
+     * it exists. This will never return a null.
+     *
+     * @param player the player to check
+     * @return the nametag for the player
+     */
+    Nametag getNametag(Player player);
 
     /**
      * Removes a player's nametag in memory
