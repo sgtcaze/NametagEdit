@@ -28,6 +28,9 @@ public class DatabaseUpdater extends BukkitRunnable {
                     case 1:
                         handleUpdate1(connection);
                         break;
+                    case 2:
+                        handleUpdate2(connection);
+                        break;
                 }
             }
         } catch (SQLException e) {
@@ -39,14 +42,24 @@ public class DatabaseUpdater extends BukkitRunnable {
 
     private void createTablesIfNotExists(Connection connection) {
         execute(connection, "CREATE TABLE IF NOT EXISTS `nte_config` (`setting` varchar(16) NOT NULL, `value` varchar(200) NOT NULL, PRIMARY KEY (`setting`)) ENGINE=InnoDB DEFAULT CHARSET=latin1");
-        execute(connection, "CREATE TABLE IF NOT EXISTS `nte_groups` (`name` varchar(64) NOT NULL, `permission` varchar(64) DEFAULT NULL, `prefix` varchar(16) NOT NULL, `suffix` varchar(16) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`name`)) ENGINE=MyISAM DEFAULT CHARSET=latin1");
-        execute(connection, "CREATE TABLE IF NOT EXISTS `nte_players` (`uuid` varchar(64) NOT NULL, `name` varchar(16) NOT NULL, `prefix` varchar(16) NOT NULL, `suffix` varchar(16) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`uuid`)) ENGINE=MyISAM DEFAULT CHARSET=latin1");
+        execute(connection, "CREATE TABLE IF NOT EXISTS `nte_groups` (`name` varchar(64) NOT NULL, `permission` varchar(64) DEFAULT NULL, `prefix` varchar(64) NOT NULL, `suffix` varchar(64) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`name`)) ENGINE=MyISAM DEFAULT CHARSET=latin1");
+        execute(connection, "CREATE TABLE IF NOT EXISTS `nte_players` (`uuid` varchar(64) NOT NULL, `name` varchar(16) NOT NULL, `prefix` varchar(64) NOT NULL, `suffix` varchar(64) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`uuid`)) ENGINE=MyISAM DEFAULT CHARSET=latin1");
     }
 
     private void handleUpdate1(Connection connection) {
         execute(connection, "ALTER TABLE `nte_players` ADD `priority` INT NOT NULL");
         execute(connection, "ALTER TABLE `nte_groups` ADD `priority` INT NOT NULL");
         execute(connection, "ALTER TABLE `nte_groups` MODIFY `permission` VARCHAR(64)");
+        currentVersion++;
+        handler.getConfig().set("DatabaseVersion", currentVersion);
+        handler.getConfig().save();
+    }
+
+    private void handleUpdate2(Connection connection) {
+        execute(connection, "ALTER TABLE `nte_groups` CHANGE `prefix` `prefix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
+        execute(connection, "ALTER TABLE `nte_groups` CHANGE `suffix` `suffix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
+        execute(connection, "ALTER TABLE `nte_players` CHANGE `prefix` `prefix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
+        execute(connection, "ALTER TABLE `nte_players` CHANGE `suffix` `suffix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
         currentVersion++;
         handler.getConfig().set("DatabaseVersion", currentVersion);
         handler.getConfig().save();

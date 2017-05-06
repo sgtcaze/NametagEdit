@@ -32,7 +32,7 @@ public class NametagHandler implements Listener {
     private boolean debug;
     private boolean tabListDisabled;
     // This should only be changed in the code
-    private int databaseVersion = 2;
+    private int databaseVersion = 3;
 
     private AbstractConfig abstractConfig;
 
