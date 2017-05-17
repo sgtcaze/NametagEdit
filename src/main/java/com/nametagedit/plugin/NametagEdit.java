@@ -4,6 +4,7 @@ import com.nametagedit.plugin.api.INametagApi;
 import com.nametagedit.plugin.api.NametagAPI;
 import com.nametagedit.plugin.hooks.HookGroupManager;
 import com.nametagedit.plugin.hooks.HookLibsDisguise;
+import com.nametagedit.plugin.hooks.HookLuckPerms;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
 import com.nametagedit.plugin.hooks.HookZPermissions;
 import com.nametagedit.plugin.metrics.Metrics;
@@ -54,6 +55,8 @@ public class NametagEdit extends JavaPlugin {
             pluginManager.registerEvents(new HookPermissionsEX(handler), this);
         } else if (checkShouldRegister("GroupManager")) {
             pluginManager.registerEvents(new HookGroupManager(handler), this);
+        } else if (checkShouldRegister("LuckPerms")) {
+            new HookLuckPerms(handler).register();
         }
 
         if (pluginManager.getPlugin("LibsDisguises") != null) {

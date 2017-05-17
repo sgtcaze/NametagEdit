@@ -43,6 +43,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/EssentialsGroupManager.jar</systemPath>
         </dependency>
+        <!-- LuckPerms -->
+        <dependency>
+            <groupId>me.lucko.luckperms</groupId>
+            <artifactId>luckperms-api</artifactId>
+            <version>3.2</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- HikariCP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -67,7 +74,7 @@
         <dependency>
             <groupId>be.maximvdw</groupId>
             <artifactId>MVdWPlaceholderAPI</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <!-- Clip Placeholder API -->
         <dependency>
@@ -111,6 +118,11 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <!-- Luck Repo -->
+        <repository>
+            <id>luck-repo</id>
+            <url>https://repo.lucko.me/</url>
         </repository>
     </repositories>
     <!-- Builds NametagEdit -->
@@ -159,8 +171,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
