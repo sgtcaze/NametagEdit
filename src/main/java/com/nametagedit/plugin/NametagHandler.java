@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -34,6 +35,7 @@ public class NametagHandler implements Listener {
     // This should only be changed in the code
     private int databaseVersion = 3;
 
+    private BukkitTask clearEmptyTeamTask;
     private AbstractConfig abstractConfig;
 
     private Configuration config;
@@ -52,6 +54,7 @@ public class NametagHandler implements Listener {
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
+        clearEmptyTeamTask = clearTeamInterval();
 
         if (config.getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this);
@@ -161,6 +164,19 @@ public class NametagHandler implements Listener {
         abstractConfig.delete(data);
     }
 
+    private BukkitTask clearTeamInterval() {
+        int clearInterval = config.getInt("ClearEmptyTeamsInterval", -1);
+        if (clearInterval > 0) {
+            return Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nte teams clear");
+                }
+            }, 0, 20 * clearInterval);
+        }
+        return null;
+    }
+
     void reload() {
         config.reload(true);
         this.debug = config.getBoolean("Debug");
@@ -168,6 +184,12 @@ public class NametagHandler implements Listener {
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
         nametagManager.reset();
         abstractConfig.reload();
+
+        if (clearEmptyTeamTask != null) {
+            clearEmptyTeamTask.cancel();
+        }
+
+        clearEmptyTeamTask = clearTeamInterval();
     }
 
     public void applyTags() {

@@ -4,6 +4,7 @@
 | nte | N/A | Displays all available command arguments |
 | nte | debug | Displays debug information |
 | nte | reload | Reloads configuration and nametags |
+| nte | teams <clear> | Debug feature to clear empty teams |
 | nte | player [player] clear | Clears the prefix and suffix for a player |
 | nte | player [player] <prefix/suffix> <text> | Sets the prefix or suffix for a player |
 | nte | player [player] priority <#> | Sets the nametag priority |

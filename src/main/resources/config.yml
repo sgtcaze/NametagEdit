@@ -17,6 +17,13 @@ MetricsEnabled: true
 # If enabled, players with NametagEdit nametags will not be able to push each other (1.9+)
 DisablePush: false
 #
+# Do you have strange, unexplained lag emanating from NametagEdit? Likely it's a few plugins
+# manipulating the primary scoreboard, and not clearing the resources. This setting will
+# clear empty teams on a timer. You can also clear it with /nte teams clear. This setting
+# will be in seconds. e.g. every 300 seconds clear empty teams (5 minutes). Set this to < 1
+# to disable this feature.
+ClearEmptyTeamsInterval: -1
+#
 # If enabled, NametagEdit will turn your console into spam
 # heaven. Useful for reporting issues!
 Debug: false

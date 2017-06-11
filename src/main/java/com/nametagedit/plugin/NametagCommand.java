@@ -14,6 +14,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,20 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
                     break;
                 case "group":
                     cmdGroups(sender, args);
+                    break;
+                case "teams":
+                    int emptyTeams = 0;
+                    boolean unregister = args.length > 1 && args[1].equalsIgnoreCase("clear");
+                    for (Team team : Bukkit.getScoreboardManager().getMainScoreboard().getTeams()) {
+                        if (team.getEntries().isEmpty()) {
+                            if (unregister) {
+                                team.unregister();
+                            }
+                            emptyTeams++;
+                        }
+                    }
+
+                    NametagMessages.CLEARED_TEAMS.send(sender, emptyTeams, unregister);
                     break;
                 default:
                     sendUsage(sender);

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 public enum NametagMessages {
 
     SET_PRIORITY("Set sort priority to %s for %s"),
+    CLEARED_TEAMS("Empty teams: %s. Purge: %s."),
     INVALID_SORT_PRIORITY("Sort priority cannot be less than -1 or equal to 0."),
     DEBUG_TOGGLED("NametagEdit debug has been %s"),
     GROUP_EXISTS("The group %s already exists"),
