@@ -70,7 +70,12 @@ public class DatabaseUpdater extends BukkitRunnable {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (handler.isDebug()) {
+                e.printStackTrace();
+            } else {
+                plugin.getLogger().severe("NametagEdit Query Failed - Reason: " + e.getMessage());
+                plugin.getLogger().severe("If this is not a connection error, please enable debug with /nte debug and post the error on our GitHub Issue Tracker.");
+            }
         }
     }
 
