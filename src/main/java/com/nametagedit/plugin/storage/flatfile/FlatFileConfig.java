@@ -156,6 +156,12 @@ public class FlatFileConfig implements AbstractConfig {
         }
 
         save(groups, groupsFile);
+
+        String formatted = Arrays.toString(order.toArray());
+        formatted = formatted.substring(1, formatted.length() - 1).replace(",", "");
+        commandSender.sendMessage(Utils.format("&c&lNametagEdit Group Order:"));
+        commandSender.sendMessage(formatted);
+        commandSender.sendMessage(Utils.format("&cType /ne reload for these changes to take effect"));
     }
 
     private void save(YamlConfiguration config, File file) {
