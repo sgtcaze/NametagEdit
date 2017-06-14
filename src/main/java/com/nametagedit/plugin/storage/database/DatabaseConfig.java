@@ -6,6 +6,7 @@ import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.tasks.*;
+import com.nametagedit.plugin.utils.Configuration;
 import com.nametagedit.plugin.utils.UUIDFetcher;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
@@ -24,9 +25,18 @@ public class DatabaseConfig implements AbstractConfig {
     private NametagHandler handler;
     private HikariDataSource hikari;
 
-    public DatabaseConfig(NametagEdit plugin, NametagHandler handler) {
+    // These are used if the user wants to customize the
+    // schema structure. Perhaps more cosmetic.
+    public static String TABLE_GROUPS;
+    public static String TABLE_PLAYERS;
+    public static String TABLE_CONFIG;
+
+    public DatabaseConfig(NametagEdit plugin, NametagHandler handler, Configuration config) {
         this.plugin = plugin;
         this.handler = handler;
+        TABLE_GROUPS = "`" + config.getString("MySQL.GroupsTable", "nte_groups") + "`";
+        TABLE_PLAYERS = "`" + config.getString("MySQL.PlayersTable", "nte_players") + "`";
+        TABLE_CONFIG = "`" + config.getString("MySQL.ConfigTable", "nte_config") + "`";
     }
 
     @Override

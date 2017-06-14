@@ -1,6 +1,7 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
 import com.nametagedit.plugin.api.data.GroupData;
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class GroupSaver extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            final String QUERY = "UPDATE `nte_groups` SET `prefix`=?, `suffix`=?, `permission`=?, `priority`=? WHERE `name`=?";
+            final String QUERY = "UPDATE " + DatabaseConfig.TABLE_GROUPS + " SET `prefix`=?, `suffix`=?, `permission`=?, `priority`=? WHERE `name`=?";
             PreparedStatement update = connection.prepareStatement(QUERY);
             update.setString(1, Utils.deformat(groupData.getPrefix()));
             update.setString(2, Utils.deformat(groupData.getSuffix()));

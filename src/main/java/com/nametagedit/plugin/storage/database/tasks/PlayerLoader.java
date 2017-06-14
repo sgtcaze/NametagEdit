@@ -2,6 +2,7 @@ package com.nametagedit.plugin.storage.database.tasks;
 
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -31,7 +32,7 @@ public class PlayerLoader extends BukkitRunnable {
         boolean found = false;
 
         try (Connection connection = hikari.getConnection()) {
-            final String QUERY = "SELECT `prefix`, `suffix`, `priority` FROM `nte_players` WHERE `uuid`=?";
+            final String QUERY = "SELECT `prefix`, `suffix`, `priority` FROM " + DatabaseConfig.TABLE_PLAYERS + " WHERE `uuid`=?";
 
             PreparedStatement select = connection.prepareStatement(QUERY);
             select.setString(1, uuid.toString());

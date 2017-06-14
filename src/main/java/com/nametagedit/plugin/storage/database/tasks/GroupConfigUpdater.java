@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,7 +19,7 @@ public class GroupConfigUpdater extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            final String QUERY = "INSERT INTO `nte_config` VALUES(?, ?) ON DUPLICATE KEY UPDATE `value`=?";
+            final String QUERY = "INSERT INTO " + DatabaseConfig.TABLE_GROUPS + " VALUES(?, ?) ON DUPLICATE KEY UPDATE `value`=?";
             PreparedStatement update = connection.prepareStatement(QUERY);
             update.setString(1, setting);
             update.setString(2, value);

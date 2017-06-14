@@ -36,3 +36,8 @@ MySQL:
   Username: myUsername
   Password: myPassword
   Database: myDatabase
+  # WARNING: If you do not know what this is for, do not change it!
+  # This allows users to customize their schema to their liking.
+  GroupsTable: nte_groups
+  PlayersTable: nte_players
+  ConfigTable: nte_config

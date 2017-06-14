@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,7 +20,7 @@ public class PlayerPriority extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE `nte_players` SET `priority`=? WHERE `uuid`=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + DatabaseConfig.TABLE_PLAYERS + " SET `priority`=? WHERE `uuid`=?");
             preparedStatement.setInt(1, priority);
             preparedStatement.setString(2, player.toString());
             preparedStatement.execute();

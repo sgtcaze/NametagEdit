@@ -2,6 +2,7 @@ package com.nametagedit.plugin.converter;
 
 import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.NametagMessages;
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -55,8 +56,8 @@ public class ConverterTask extends BukkitRunnable {
     }
 
     private boolean convertDatabaseToFile(Connection connection) throws SQLException, IOException {
-        final String GROUP_QUERY = "SELECT name, prefix, suffix, permission, priority FROM nte_groups";
-        final String PLAYER_QUERY = "SELECT name, uuid, prefix, suffix, priority FROM nte_players";
+        final String GROUP_QUERY = "SELECT name, prefix, suffix, permission, priority FROM " + DatabaseConfig.TABLE_GROUPS;
+        final String PLAYER_QUERY = "SELECT name, uuid, prefix, suffix, priority FROM " + DatabaseConfig.TABLE_PLAYERS;
 
         final File groupsFile = new File(plugin.getDataFolder(), "groups_CONVERTED.yml");
         final File playersFile = new File(plugin.getDataFolder(), "players_CONVERTED.yml");
@@ -93,7 +94,7 @@ public class ConverterTask extends BukkitRunnable {
         final YamlConfiguration groups = Utils.getConfig(groupsFile);
         final YamlConfiguration players = Utils.getConfig(playersFile);
 
-        PreparedStatement insertOrUpdate = connection.prepareStatement("INSERT INTO `nte_players` (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?");
+        PreparedStatement insertOrUpdate = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_PLAYERS + " (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?");
         if (players != null) {
             if (checkValid(groups, "Players")) {
                 for (String key : players.getConfigurationSection("Players").getKeys(false)) {
@@ -110,7 +111,7 @@ public class ConverterTask extends BukkitRunnable {
         }
 
         insertOrUpdate.executeBatch();
-        insertOrUpdate = connection.prepareStatement("INSERT INTO `nte_groups` (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?, permission=?");
+        insertOrUpdate = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_GROUPS + " (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?, permission=?");
         if (groups != null) {
             if (checkValid(groups, "Groups")) {
                 for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {

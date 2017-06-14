@@ -1,6 +1,7 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class PlayerSaver extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            final String QUERY = "INSERT INTO `nte_players` VALUES(?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `prefix`=?, `suffix`=?, `priority`=?";
+            final String QUERY = "INSERT INTO " + DatabaseConfig.TABLE_PLAYERS + " VALUES(?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `prefix`=?, `suffix`=?, `priority`=?";
             PreparedStatement insertOrUpdate = connection.prepareStatement(QUERY);
             insertOrUpdate.setString(1, playerData.getUuid().toString());
             insertOrUpdate.setString(2, playerData.getName());

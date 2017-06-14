@@ -3,6 +3,7 @@ package com.nametagedit.plugin.storage.database.tasks;
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.utils.Utils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.entity.Player;
@@ -37,7 +38,7 @@ public class DataDownloader extends BukkitRunnable {
         final Map<UUID, PlayerData> playerData = new HashMap<>();
 
         try (Connection connection = hikari.getConnection()) {
-            ResultSet results = connection.prepareStatement("SELECT `name`, `prefix`, `suffix`, `permission`, `priority` FROM `nte_groups`").executeQuery();
+            ResultSet results = connection.prepareStatement("SELECT `name`, `prefix`, `suffix`, `permission`, `priority` FROM " + DatabaseConfig.TABLE_GROUPS).executeQuery();
 
             while (results.next()) {
                 groupData.add(new GroupData(
@@ -50,7 +51,7 @@ public class DataDownloader extends BukkitRunnable {
                 ));
             }
 
-            PreparedStatement select = connection.prepareStatement("SELECT `uuid`, `prefix`, `suffix`, `priority` FROM `nte_players` WHERE uuid=?");
+            PreparedStatement select = connection.prepareStatement("SELECT `uuid`, `prefix`, `suffix`, `priority` FROM " + DatabaseConfig.TABLE_PLAYERS + " WHERE uuid=?");
             for (UUID uuid : players) {
                 select.setString(1, uuid.toString());
                 results = select.executeQuery();
@@ -65,7 +66,7 @@ public class DataDownloader extends BukkitRunnable {
                 }
             }
 
-            results = connection.prepareStatement("SELECT `setting`,`value` FROM `nte_config`").executeQuery();
+            results = connection.prepareStatement("SELECT `setting`,`value` FROM " + DatabaseConfig.TABLE_CONFIG).executeQuery();
             while (results.next()) {
                 settings.put(results.getString("setting"), results.getString("value"));
             }

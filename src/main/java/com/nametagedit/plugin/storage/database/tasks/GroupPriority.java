@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.storage.database.tasks;
 
+import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,7 +19,7 @@ public class GroupPriority extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE `nte_groups` SET `priority`=? WHERE `name`=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + DatabaseConfig.TABLE_GROUPS + " SET `priority`=? WHERE `name`=?");
             preparedStatement.setInt(1, priority);
             preparedStatement.setString(2, group);
             preparedStatement.execute();

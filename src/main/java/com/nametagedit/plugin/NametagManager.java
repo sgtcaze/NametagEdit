@@ -3,7 +3,6 @@ package com.nametagedit.plugin;
 import com.nametagedit.plugin.api.data.FakeTeam;
 import com.nametagedit.plugin.packets.PacketWrapper;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

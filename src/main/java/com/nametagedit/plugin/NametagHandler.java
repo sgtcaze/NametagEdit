@@ -57,7 +57,7 @@ public class NametagHandler implements Listener {
         clearEmptyTeamTask = clearTeamInterval();
 
         if (config.getBoolean("MySQL.Enabled")) {
-            abstractConfig = new DatabaseConfig(plugin, this);
+            abstractConfig = new DatabaseConfig(plugin, this, config);
         } else {
             abstractConfig = new FlatFileConfig(plugin, groupData, playerData, this);
         }
