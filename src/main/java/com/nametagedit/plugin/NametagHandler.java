@@ -215,20 +215,41 @@ public class NametagHandler implements Listener {
 
         UUID uuid = player.getUniqueId();
         PlayerData data = playerData.get(uuid);
+
         if (data != null) {
             nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, data.getPrefix()), formatWithPlaceholders(player, data.getSuffix()), data.getSortPriority());
             plugin.debug("Applying PlayerTag to " + player.getName());
         } else {
-            for (GroupData group : groupData) {
-                if (player.hasPermission(group.getBukkitPermission())) {
-                    nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, group.getPrefix()), formatWithPlaceholders(player, group.getSuffix()), group.getSortPriority());
-                    plugin.debug("Applying GroupTag '" + group.getGroupName() + "' to " + player.getName());
-                    break;
+            // This may seem strange, but the hasPermission operation can cause major
+            // slowdown depending on server version and plugins. This will select the
+            // group async, and apply the nametag sync. Perhaps in the future we will
+            // consider using Locks in order to prevent any concurrency issues.
+            //
+            // TODO: Cleanup this context switching and use locks + reduce clutter
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (GroupData group : groupData) {
+                        if (player.hasPermission(group.getBukkitPermission())) {
+                            handleSync(player, group);
+                            break;
+                        }
+                    }
                 }
-            }
+            }.runTaskAsynchronously(plugin);
         }
 
         player.setPlayerListName(tabListDisabled ? player.getPlayerListName() : null);
+    }
+
+    private void handleSync(final Player player, final GroupData group) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, group.getPrefix()), formatWithPlaceholders(player, group.getSuffix()), group.getSortPriority());
+                plugin.debug("Applying GroupTag '" + group.getGroupName() + "' to " + player.getName());
+            }
+        }.runTask(plugin);
     }
 
     void clear(final CommandSender sender, final String player) {
