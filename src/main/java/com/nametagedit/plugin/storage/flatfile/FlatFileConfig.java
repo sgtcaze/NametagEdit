@@ -144,8 +144,7 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     @Override
-    public void orderGroups(CommandSender commandSender, String[] args) {
-        List<String> order = new ArrayList<>(Arrays.asList(args).subList(2, args.length));
+    public void orderGroups(CommandSender commandSender, List<String> order) {
         groups.set("Groups", null);
         for (String set : order) {
             GroupData groupData = handler.getGroupData(set);
@@ -161,12 +160,6 @@ public class FlatFileConfig implements AbstractConfig {
         }
 
         save(groups, groupsFile);
-
-        String formatted = Arrays.toString(order.toArray());
-        formatted = formatted.substring(1, formatted.length() - 1).replace(",", "");
-        commandSender.sendMessage(Utils.format("&c&lNametagEdit Group Order:"));
-        commandSender.sendMessage(formatted);
-        commandSender.sendMessage(Utils.format("&cType /ne reload for these changes to take effect"));
     }
 
     private void save(YamlConfiguration config, File file) {

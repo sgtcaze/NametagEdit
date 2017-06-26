@@ -17,6 +17,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -280,7 +281,14 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
                     return;
                 }
 
-                handler.getAbstractConfig().orderGroups(sender, args);
+                List<String> order = new ArrayList<>(Arrays.asList(args).subList(2, args.length));
+                handler.getAbstractConfig().orderGroups(sender, order);
+
+                String formatted = Arrays.toString(order.toArray());
+                formatted = formatted.substring(1, formatted.length() - 1).replace(",", "");
+                sender.sendMessage(Utils.format("&c&lNametagEdit Group Order:"));
+                sender.sendMessage(formatted);
+                sender.sendMessage(Utils.format("&cType /ne reload for these changes to take effect"));
             } else if (args[1].equalsIgnoreCase("remove")) {
                 if (args.length == 3) {
                     String group = args[2];

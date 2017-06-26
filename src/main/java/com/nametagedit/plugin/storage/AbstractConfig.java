@@ -5,6 +5,7 @@ import com.nametagedit.plugin.api.data.PlayerData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,6 +34,6 @@ public interface AbstractConfig {
 
     void clear(UUID uuid, String targetName);
 
-    void orderGroups(CommandSender commandSender, String[] args);
+    void orderGroups(CommandSender commandSender, List<String> order);
 
 }
