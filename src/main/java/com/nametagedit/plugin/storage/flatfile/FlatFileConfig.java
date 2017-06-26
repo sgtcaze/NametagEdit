@@ -91,9 +91,14 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     @Override
-    public void save(GroupData groupData) {
-        storeGroup(groupData);
-        save(groups, groupsFile);
+    public void save(final GroupData groupData) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                storeGroup(groupData);
+                save(groups, groupsFile);
+            }
+        }.runTaskAsynchronously(plugin);
     }
 
     @Override
@@ -196,6 +201,8 @@ public class FlatFileConfig implements AbstractConfig {
             data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
             groupData.add(data);
         }
+
+        handler.adjustSortPriority();
     }
 
     private void storeGroup(GroupData groupData) {

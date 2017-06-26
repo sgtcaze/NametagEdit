@@ -192,6 +192,32 @@ public class NametagHandler implements Listener {
         clearEmptyTeamTask = clearTeamInterval();
     }
 
+    /**
+     * This method normalizes the SortPriority defined by the user.
+     * By adjusting the SortPriority, we can control for abnormal
+     * input that would affect the Team Names (which allows us to
+     * sort nametags in the tab to begin with)
+     */
+    public void adjustSortPriority() {
+        List<GroupData> copyOfGroups = new ArrayList<>(groupData);
+        Collections.sort(copyOfGroups, new Comparator<GroupData>() {
+            @Override
+            public int compare(GroupData group1, GroupData group2) {
+                return group1.getSortPriority() - group2.getSortPriority();
+            }
+        });
+
+        int adjustedSortPriority = 1;
+
+        for (GroupData groupData : copyOfGroups) {
+            groupData.setSortPriority(groupData.getSortPriority() < 1 ? -1 : adjustedSortPriority++);
+        }
+
+        for (GroupData groupData : copyOfGroups) {
+            save(groupData);
+        }
+    }
+
     public void applyTags() {
         for (Player online : Utils.getOnline()) {
             if (online != null) {
@@ -217,7 +243,7 @@ public class NametagHandler implements Listener {
         PlayerData data = playerData.get(uuid);
 
         if (data != null) {
-            nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, data.getPrefix()), formatWithPlaceholders(player, data.getSuffix()), data.getSortPriority());
+            nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, data.getPrefix()), formatWithPlaceholders(player, data.getSuffix()), data.getSortPriority(), true);
             plugin.debug("Applying PlayerTag to " + player.getName());
         } else {
             // This may seem strange, but the hasPermission operation can cause major

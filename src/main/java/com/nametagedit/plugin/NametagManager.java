@@ -36,6 +36,10 @@ public class NametagManager {
      * we do NOT change that.
      */
     private void addPlayerToTeam(String player, String prefix, String suffix, int sortPriority) {
+        addPlayerToTeam(player, prefix, suffix, sortPriority, false);
+    }
+
+    private void addPlayerToTeam(String player, String prefix, String suffix, int sortPriority, boolean playerTag) {
         FakeTeam previous = getFakeTeam(player);
 
         if (previous != null && previous.isSimilar(prefix, suffix)) {
@@ -50,7 +54,7 @@ public class NametagManager {
             joining.addMember(player);
             plugin.debug("Using existing team for " + player);
         } else {
-            joining = new FakeTeam(prefix, suffix, sortPriority);
+            joining = new FakeTeam(prefix, suffix, sortPriority, playerTag);
             joining.addMember(player);
             TEAMS.put(joining.getName(), joining);
             addTeamPackets(joining);
@@ -119,7 +123,11 @@ public class NametagManager {
     }
 
     void setNametag(String player, String prefix, String suffix, int sortPriority) {
-        addPlayerToTeam(player, prefix != null ? prefix : "", suffix != null ? suffix : "", sortPriority);
+        setNametag(player, prefix, suffix, sortPriority, false);
+    }
+
+    void setNametag(String player, String prefix, String suffix, int sortPriority, boolean playerTag) {
+        addPlayerToTeam(player, prefix != null ? prefix : "", suffix != null ? suffix : "", sortPriority, playerTag);
     }
 
     void sendTeams(Player player) {

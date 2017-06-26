@@ -81,6 +81,7 @@ public class DataDownloader extends BukkitRunnable {
                 public void run() {
                     handler.setGroupData(groupData);
                     handler.setPlayerData(playerData);
+                    handler.adjustSortPriority();
                     loadDatabaseSettings(handler, settings);
                     for (Player player : Utils.getOnline()) {
                         PlayerData data = playerData.get(player.getUniqueId());
