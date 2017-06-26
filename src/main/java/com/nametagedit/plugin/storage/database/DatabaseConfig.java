@@ -72,12 +72,12 @@ public class DatabaseConfig implements AbstractConfig {
     }
 
     @Override
-    public void save(PlayerData playerData) {
+    public void save(PlayerData... playerData) {
         new PlayerSaver(playerData, hikari).runTaskAsynchronously(plugin);
     }
 
     @Override
-    public void save(GroupData groupData) {
+    public void save(GroupData... groupData) {
         new GroupSaver(groupData, hikari).runTaskAsynchronously(plugin);
     }
 

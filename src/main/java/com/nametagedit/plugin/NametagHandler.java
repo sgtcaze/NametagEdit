@@ -151,10 +151,6 @@ public class NametagHandler implements Listener {
         return null;
     }
 
-    void save(GroupData data) {
-        abstractConfig.save(data);
-    }
-
     void addGroup(GroupData data) {
         groupData.add(data);
         abstractConfig.add(data);
@@ -232,9 +228,7 @@ public class NametagHandler implements Listener {
             groupData.setSortPriority(groupData.getSortPriority() < 1 ? -1 : adjustedSortPriority++);
         }
 
-        for (GroupData groupData : copyOfGroups) {
-            save(groupData);
-        }
+        abstractConfig.save(groupData.toArray(new GroupData[groupData.size()]));
     }
 
     public void applyTags() {

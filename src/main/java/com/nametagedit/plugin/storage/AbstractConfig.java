@@ -22,9 +22,9 @@ public interface AbstractConfig {
 
     void load(Player player);
 
-    void save(PlayerData playerData);
+    void save(PlayerData... playerData);
 
-    void save(GroupData groupData);
+    void save(GroupData... groupData);
 
     void savePriority(boolean playerTag, String key, int priority);
 

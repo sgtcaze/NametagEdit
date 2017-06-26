@@ -24,10 +24,6 @@ public class FakeTeam {
     private String prefix = "";
     private String suffix = "";
 
-    public FakeTeam(String prefix, String suffix, int sortPriority) {
-        this(prefix, suffix, sortPriority, false);
-    }
-
     public FakeTeam(String prefix, String suffix, int sortPriority, boolean playerTag) {
         this.name = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
         // It is possible the names of the Team exceeded the length of 16 in the past,

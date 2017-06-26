@@ -14,7 +14,7 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class GroupSaver extends BukkitRunnable {
 
-    private GroupData groupData;
+    private GroupData[] groupData;
     private HikariDataSource hikari;
 
     @Override
@@ -22,12 +22,17 @@ public class GroupSaver extends BukkitRunnable {
         try (Connection connection = hikari.getConnection()) {
             final String QUERY = "UPDATE " + DatabaseConfig.TABLE_GROUPS + " SET `prefix`=?, `suffix`=?, `permission`=?, `priority`=? WHERE `name`=?";
             PreparedStatement update = connection.prepareStatement(QUERY);
-            update.setString(1, Utils.deformat(groupData.getPrefix()));
-            update.setString(2, Utils.deformat(groupData.getSuffix()));
-            update.setString(3, groupData.getPermission());
-            update.setInt(4, groupData.getSortPriority());
-            update.setString(5, groupData.getGroupName());
-            update.execute();
+
+            for (GroupData groupData : this.groupData) {
+                update.setString(1, Utils.deformat(groupData.getPrefix()));
+                update.setString(2, Utils.deformat(groupData.getSuffix()));
+                update.setString(3, groupData.getPermission());
+                update.setInt(4, groupData.getSortPriority());
+                update.setString(5, groupData.getGroupName());
+                update.addBatch();
+            }
+
+            update.executeBatch();
             update.close();
         } catch (SQLException e) {
             e.printStackTrace();

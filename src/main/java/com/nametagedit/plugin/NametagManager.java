@@ -35,10 +35,6 @@ public class NametagManager {
      * Adds a player to a FakeTeam. If they are already on this team,
      * we do NOT change that.
      */
-    private void addPlayerToTeam(String player, String prefix, String suffix, int sortPriority) {
-        addPlayerToTeam(player, prefix, suffix, sortPriority, false);
-    }
-
     private void addPlayerToTeam(String player, String prefix, String suffix, int sortPriority, boolean playerTag) {
         FakeTeam previous = getFakeTeam(player);
 

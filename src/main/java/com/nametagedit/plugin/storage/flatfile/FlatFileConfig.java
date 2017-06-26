@@ -80,22 +80,28 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     @Override
-    public void save(PlayerData playerData) {
-        UUID uuid = playerData.getUuid();
-        String name = playerData.getName();
-        players.set("Players." + uuid + ".Name", name);
-        players.set("Players." + uuid + ".Prefix", Utils.deformat(playerData.getPrefix()));
-        players.set("Players." + uuid + ".Suffix", Utils.deformat(playerData.getSuffix()));
-        players.set("Players." + uuid + ".SortPriority", playerData.getSortPriority());
+    public void save(PlayerData... data) {
+        for (PlayerData playerData : data) {
+            UUID uuid = playerData.getUuid();
+            String name = playerData.getName();
+            players.set("Players." + uuid + ".Name", name);
+            players.set("Players." + uuid + ".Prefix", Utils.deformat(playerData.getPrefix()));
+            players.set("Players." + uuid + ".Suffix", Utils.deformat(playerData.getSuffix()));
+            players.set("Players." + uuid + ".SortPriority", playerData.getSortPriority());
+        }
+
         save(players, playersFile);
     }
 
     @Override
-    public void save(final GroupData groupData) {
+    public void save(final GroupData... data) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                storeGroup(groupData);
+                for (GroupData groupData : data) {
+                    storeGroup(groupData);
+                }
+
                 save(groups, groupsFile);
             }
         }.runTaskAsynchronously(plugin);

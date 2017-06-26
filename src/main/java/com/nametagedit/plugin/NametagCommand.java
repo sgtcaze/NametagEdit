@@ -340,19 +340,19 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
 
                     if (args[2].equalsIgnoreCase("permission")) {
                         groupData.setPermission(args[3]);
-                        handler.save(groupData);
+                        handler.getAbstractConfig().save(groupData);
                         NametagMessages.GROUP_VALUE.send(sender, group, "permission", args[3]);
                     } else if (args[2].equalsIgnoreCase("prefix")) {
                         String value = Utils.format(args, 3, args.length).replace("\"", "");
                         groupData.setPrefix(Utils.format(value));
                         handler.applyTags();
-                        handler.save(groupData);
+                        handler.getAbstractConfig().save(groupData);
                         NametagMessages.GROUP_VALUE.send(sender, group, "prefix", Utils.format(value));
                     } else if (args[2].equalsIgnoreCase("suffix")) {
                         String value = Utils.format(args, 3, args.length).replace("\"", "");
                         groupData.setSuffix(Utils.format(value));
                         handler.applyTags();
-                        handler.save(groupData);
+                        handler.getAbstractConfig().save(groupData);
                         NametagMessages.GROUP_VALUE.send(sender, group, "suffix", Utils.format(value));
                     } else if (args[2].equalsIgnoreCase("clear")) {
                         boolean prefix = args[3].equalsIgnoreCase("prefix");
@@ -362,7 +362,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
                             groupData.setSuffix("&f");
                         }
                         handler.applyTags();
-                        handler.save(groupData);
+                        handler.getAbstractConfig().save(groupData);
                         NametagMessages.GROUP_VALUE_CLEARED.send(sender, prefix ? "prefix" : "suffix", group);
                     } else if (args[2].equalsIgnoreCase("priority")) {
                         setupPriority(sender, false, group, args[3]);
