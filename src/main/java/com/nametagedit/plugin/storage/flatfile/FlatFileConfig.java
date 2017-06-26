@@ -200,8 +200,6 @@ public class FlatFileConfig implements AbstractConfig {
             data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
             groupData.add(data);
         }
-
-        handler.adjustSortPriority();
     }
 
     private void storeGroup(GroupData groupData) {
