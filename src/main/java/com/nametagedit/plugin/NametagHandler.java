@@ -36,6 +36,7 @@ public class NametagHandler implements Listener {
     private int databaseVersion = 3;
 
     private BukkitTask clearEmptyTeamTask;
+    private BukkitTask refreshNametagTask;
     private AbstractConfig abstractConfig;
 
     private Configuration config;
@@ -177,6 +178,19 @@ public class NametagHandler implements Listener {
         return null;
     }
 
+    private BukkitTask refreshNametagTask() {
+        int refreshInterval = config.getInt("RefreshInterval", -1);
+        if (refreshInterval > 0) {
+            return Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    applyTags();
+                }
+            }, 0, 20 * refreshInterval);
+        }
+        return null;
+    }
+
     void reload() {
         config.reload(true);
         this.debug = config.getBoolean("Debug");
@@ -189,7 +203,12 @@ public class NametagHandler implements Listener {
             clearEmptyTeamTask.cancel();
         }
 
+        if (refreshNametagTask != null) {
+            refreshNametagTask.cancel();
+        }
+
         clearEmptyTeamTask = clearTeamInterval();
+        refreshNametagTask = refreshNametagTask();
     }
 
     /**

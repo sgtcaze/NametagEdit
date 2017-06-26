@@ -28,6 +28,12 @@ ClearEmptyTeamsInterval: -1
 # heaven. Useful for reporting issues!
 Debug: false
 #
+# If enabled, NametagEdit will refresh nametags on an interval. Note: this does NOT do any
+# reloading. This will not pickup changes made from the file or database. Instead, it will
+# take any changes made by commands and/or placeholder changes. Set this to < 1 to disable
+# this feature. This feature is in seconds. NOTE: We do not recommend this.
+RefreshInterval: 0
+#
 # If enabled, NametagEdit will use database support
 MySQL:
   Enabled: false
