@@ -207,30 +207,6 @@ public class NametagHandler implements Listener {
         refreshNametagTask = refreshNametagTask();
     }
 
-    /**
-     * This method normalizes the SortPriority defined by the user.
-     * By adjusting the SortPriority, we can control for abnormal
-     * input that would affect the Team Names (which allows us to
-     * sort nametags in the tab to begin with)
-     */
-    public void adjustSortPriority() {
-        List<GroupData> copyOfGroups = new ArrayList<>(groupData);
-        Collections.sort(copyOfGroups, new Comparator<GroupData>() {
-            @Override
-            public int compare(GroupData group1, GroupData group2) {
-                return group1.getSortPriority() - group2.getSortPriority();
-            }
-        });
-
-        int adjustedSortPriority = 1;
-
-        for (GroupData groupData : copyOfGroups) {
-            groupData.setSortPriority(groupData.getSortPriority() < 1 ? -1 : adjustedSortPriority++);
-        }
-
-        abstractConfig.save(groupData.toArray(new GroupData[groupData.size()]));
-    }
-
     public void applyTags() {
         for (Player online : Utils.getOnline()) {
             if (online != null) {

@@ -117,6 +117,9 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
 
                     NametagMessages.CLEARED_TEAMS.send(sender, emptyTeams, unregister);
                     break;
+                case "priority":
+                    cmdPriority(sender, args);
+                    break;
                 default:
                     sendUsage(sender);
                     break;
@@ -171,6 +174,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         sender.sendMessage(Utils.format("&8» &a/nte convert"));
         sender.sendMessage(Utils.format("&8» &a/nte player"));
         sender.sendMessage(Utils.format("&8» &a/nte group"));
+        sender.sendMessage(Utils.format("&8» &a/nte priority"));
     }
 
     /**
@@ -202,6 +206,33 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
                 new ConverterTask(!destinationIsSQL, sender, handler.getPlugin()).runTaskAsynchronously(handler.getPlugin());
             }
         }
+    }
+
+    /**
+     * Handles /nte priority
+     */
+    private void cmdPriority(CommandSender sender, String[] args) {
+        if (isNotPermissed(sender, "nametagedit.priority")) return;
+//        if (args.length == 0) {
+//            sender.sendMessage(Utils.format("&a&lNametagEdit &7Sort Priority"));
+//            sender.sendMessage(Utils.format("&7This feature allows you to position Nametags in tab."));
+//            sender.sendMessage(Utils.format("&a/nte priority view &7view advanced info"));
+//        }
+//        List<GroupData> copyOfGroups = new ArrayList<>(groupData);
+//        Collections.sort(copyOfGroups, new Comparator<GroupData>() {
+//            @Override
+//            public int compare(GroupData group1, GroupData group2) {
+//                return group1.getSortPriority() - group2.getSortPriority();
+//            }
+//        });
+//
+//        int adjustedSortPriority = 1;
+//
+//        for (GroupData groupData : copyOfGroups) {
+//            groupData.setSortPriority(groupData.getSortPriority() < 1 ? -1 : adjustedSortPriority++);
+//        }
+//
+//        abstractConfig.save(groupData.toArray(new GroupData[groupData.size()]));
     }
 
     /**
