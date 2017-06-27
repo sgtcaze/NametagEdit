@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,6 +33,7 @@ public class NametagHandler implements Listener {
     public static boolean DISABLE_PUSH_ALL_TAGS = false;
     private boolean debug;
     private boolean tabListDisabled;
+    private boolean refreshTagOnWorldChange;
     // This should only be changed in the code
     private int databaseVersion = 3;
 
@@ -54,6 +56,7 @@ public class NametagHandler implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
+        this.refreshTagOnWorldChange = config.getBoolean("RefreshTagOnWorldChange");
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
         clearEmptyTeamTask = clearTeamInterval();
 
@@ -93,6 +96,22 @@ public class NametagHandler implements Listener {
                 abstractConfig.load(player);
             }
         }.runTaskLaterAsynchronously(plugin, 1);
+    }
+
+    /**
+     * Some users may have different permissions per world.
+     * If this is enabled, their tag will be reloaded on TP.
+     */
+    @EventHandler
+    public void onTeleport(final PlayerChangedWorldEvent event) {
+        if (!refreshTagOnWorldChange) return;
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                applyTagToPlayer(event.getPlayer());
+            }
+        }.runTaskLater(plugin, 3);
     }
 
     private void handleClear(UUID uuid, String player) {
@@ -191,6 +210,7 @@ public class NametagHandler implements Listener {
         config.reload(true);
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
+        this.refreshTagOnWorldChange = config.getBoolean("RefreshTagOnWorldChange");
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
         nametagManager.reset();
         abstractConfig.reload();
