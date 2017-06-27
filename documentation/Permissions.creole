@@ -3,6 +3,7 @@
 | Permission | Description |
 | nametagedit.use | Allows a player to use the NametagEdit plugin |
 | nametagedit.reload | Allows a user to reload the plugin's data |
+| nametagedit.priority | Allows a user to view SortPriority information |
 | nametagedit.clear.others | Allows a player to clear ANYONE's prefix/suffix |
 | nametagedit.clear.self | Allows a player to only clear their own prefix/suffix |
 | nametagedit.edit.others | Allows a player to edit ANYONE's prefix/suffix |

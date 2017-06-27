@@ -91,11 +91,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-        <!-- Jenkins -->
-        <repository>
-            <id>upstream</id>
-            <url>http://ci.playmc.cc/plugin/repository/everything/</url>
-        </repository>
         <!-- Stealthyone Repo -->
         <repository>
             <id>stealthyone-repo</id>

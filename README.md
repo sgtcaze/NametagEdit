@@ -12,13 +12,14 @@ This plugin allows users to add up to 16 characters before and after their name.
 NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissions. If a user changes groups or permissions, their tag is automatically updated.
 
 * [Official Project Page](https://www.spigotmc.org/resources/nametagedit.3836/)
-* [Development Builds](http://ci.playmc.cc/job/NametagEdit)
+* [Development Builds](http://ci.nametagedit.com/job/NametagEdit)
 
 # Quick Links
 * [API & Developers](documentation/Developers.creole)
 * [Permissions](documentation/Permissions.creole)
 * [Commands](documentation/Commands.creole)
 * [Configuration](documentation/Configuration.creole)
+* [Common Issues](documentation/Support.creole)
 
 # Features
 ✔ Converters to and from MySQL and FlatFile
@@ -45,6 +46,3 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 
 # Incompatible Plugins
 ✖ Any plugin that creates NPCs that share the same username as players who have 'NametagEdit' nametags
-
-## HELP! My nametags are not displaying!
-Click [here](documentation/Support.creole) for common mistakes and proposed fixes.

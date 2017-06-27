@@ -1,21 +1,24 @@
-== Support
-Are your nametags not displaying, or you are receiving strange bugs? Please read below carefully before asking for support!
+= Support
+Are your nametags not displaying? Are things on fire? Please read below carefully before asking for support!
 
-=== If you are using **ViaVersion**:
+== Nametags are assigned to the wrong group!
+Chances are you misconfigured your Group Hierarchy. SortPriority and GroupOrder are NOT the same feature! Read up on proper configuration [here](Configuration.creole)
+
+== Is your client crashing with NametagEdit enabled?
+It is most likely that several plugins are manipulating the main scoreboard, and players are being added to several Scoreboard Teams. This is a well known Minecraft issue and not something we can fix, unfortunately.
+
+== If you are using a minigame or scoreboards plugin
+Please send us the name, or check if it is incompatible [here](IncompatiblePlugins.md)
+
+== ViaVersion:
 If you're using ViaVersion on 1.8.x and having issues with tags showing up in the tab list. Edit the file plugins/ViaVersion/config.yml
 
-Replace:
+Change:
 {{{
 auto-team: true
 }}}
 
-With:
+To:
 {{{
 auto-team: false
 }}}
-
-=== If you are using a minigame or scoreboards plugin
-Please send us the name, or check if it is incompatible [here](IncompatiblePlugins.md)
-
-=== Are your configs correct?
-Enable debug mode with /ne debug, and send us the output you receive in console.
