@@ -3,6 +3,7 @@ package com.nametagedit.plugin;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.api.events.NametagEvent;
+import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.storage.flatfile.FlatFileConfig;
@@ -24,6 +25,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Getter
@@ -49,16 +52,14 @@ public class NametagHandler implements Listener {
     private NametagEdit plugin;
     private NametagManager nametagManager;
 
-    public NametagHandler(Configuration config, NametagEdit plugin, NametagManager nametagManager) {
-        this.config = config;
+    public NametagHandler(NametagEdit plugin, NametagManager nametagManager) {
+        this.config = getCustomConfig();
         this.plugin = plugin;
         this.nametagManager = nametagManager;
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        this.debug = config.getBoolean("Debug");
-        this.tabListDisabled = config.getBoolean("TabListDisabled");
-        this.refreshTagOnWorldChange = config.getBoolean("RefreshTagOnWorldChange");
-        DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
-        clearEmptyTeamTask = clearTeamInterval();
+
+        // Apply config properties
+        this.applyConfig();
 
         if (config.getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this, config);
@@ -72,6 +73,38 @@ public class NametagHandler implements Listener {
                 abstractConfig.load();
             }
         }.runTaskAsynchronously(plugin);
+    }
+
+    /**
+     * This function loads our custom config with comments, and includes changes
+     */
+    private Configuration getCustomConfig() {
+        File file = new File(plugin.getDataFolder(), "config.yml");
+        if (!file.exists()) {
+            plugin.saveDefaultConfig();
+
+            Configuration newConfig = new Configuration(file);
+            newConfig.reload(true);
+            return newConfig;
+        } else {
+            Configuration oldConfig = new Configuration(file);
+            oldConfig.reload(false);
+
+            file.delete();
+            plugin.saveDefaultConfig();
+
+            Configuration newConfig = new Configuration(file);
+            newConfig.reload(true);
+
+            for (String key : oldConfig.getKeys(false)) {
+                if (newConfig.contains(key)) {
+                    newConfig.set(key, oldConfig.get(key));
+                }
+            }
+
+            newConfig.save();
+            return newConfig;
+        }
     }
 
     /**
@@ -133,6 +166,30 @@ public class NametagHandler implements Listener {
         config.save();
     }
 
+    public PlayerData getPlayerData(Player player) {
+        return player == null ? null : playerData.get(player.getUniqueId());
+    }
+
+    void addGroup(GroupData data) {
+        groupData.add(data);
+        abstractConfig.add(data);
+    }
+
+    void deleteGroup(GroupData data) {
+        groupData.remove(data);
+        abstractConfig.delete(data);
+    }
+
+    public GroupData getGroupData(String key) {
+        for (GroupData groupData : getGroupData()) {
+            if (groupData.getGroupName().equalsIgnoreCase(key)) {
+                return groupData;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Replaces placeholders when a player tag is created.
      * Maxim and Clip's plugins are searched for, and input
@@ -156,78 +213,62 @@ public class NametagHandler implements Listener {
         return Utils.format(input, true);
     }
 
-    public PlayerData getPlayerData(Player player) {
-        return player == null ? null : playerData.get(player.getUniqueId());
-    }
-
-    public GroupData getGroupData(String key) {
-        for (GroupData groupData : getGroupData()) {
-            if (groupData.getGroupName().equalsIgnoreCase(key)) {
-                return groupData;
-            }
+    private BukkitTask createTask(String path, BukkitTask existing, Runnable runnable) {
+        if (existing != null) {
+            existing.cancel();
         }
 
-        return null;
-    }
-
-    void addGroup(GroupData data) {
-        groupData.add(data);
-        abstractConfig.add(data);
-    }
-
-    void deleteGroup(GroupData data) {
-        groupData.remove(data);
-        abstractConfig.delete(data);
-    }
-
-    private BukkitTask clearTeamInterval() {
-        int clearInterval = config.getInt("ClearEmptyTeamsInterval", -1);
-        if (clearInterval > 0) {
-            return Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nte teams clear");
-                }
-            }, 0, 20 * clearInterval);
-        }
-        return null;
-    }
-
-    private BukkitTask refreshNametagTask() {
-        int refreshInterval = config.getInt("RefreshInterval", -1);
-        if (refreshInterval > 0) {
-            return Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    applyTags();
-                }
-            }, 0, 20 * refreshInterval);
-        }
-        return null;
+        if (config.getInt(path, -1) <= 0) return null;
+        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20 * config.getInt(path));
     }
 
     public void reload() {
         config.reload(true);
+        applyConfig();
+        nametagManager.reset();
+        abstractConfig.reload();
+    }
+
+    private void applyConfig() {
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
         this.refreshTagOnWorldChange = config.getBoolean("RefreshTagOnWorldChange");
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
-        nametagManager.reset();
-        abstractConfig.reload();
 
-        if (clearEmptyTeamTask != null) {
-            clearEmptyTeamTask.cancel();
+        if (config.getBoolean("MetricsEnabled")) {
+            try {
+                new Metrics(plugin).start();
+            } catch (IOException e) {
+                plugin.getLogger().severe("Couldn't start Metrics!");
+            }
         }
 
-        if (refreshNametagTask != null) {
-            refreshNametagTask.cancel();
-        }
+        clearEmptyTeamTask = createTask("ClearEmptyTeamsInterval", clearEmptyTeamTask, new Runnable() {
+            @Override
+            public void run() {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nte teams clear");
+            }
+        });
 
-        clearEmptyTeamTask = clearTeamInterval();
-        refreshNametagTask = refreshNametagTask();
+        refreshNametagTask = createTask("RefreshInterval", refreshNametagTask, new Runnable() {
+            @Override
+            public void run() {
+                applyTags();
+            }
+        });
     }
 
     public void applyTags() {
+        if (!Bukkit.isPrimaryThread()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    applyTags();
+                }
+            }.runTask(plugin);
+            return;
+        }
+
         for (Player online : Utils.getOnline()) {
             if (online != null) {
                 applyTagToPlayer(online);

@@ -6,16 +6,12 @@ import com.nametagedit.plugin.hooks.HookGroupManager;
 import com.nametagedit.plugin.hooks.HookLibsDisguise;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
 import com.nametagedit.plugin.hooks.HookZPermissions;
-import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.packets.PacketWrapper;
-import com.nametagedit.plugin.utils.Configuration;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -41,17 +37,8 @@ public class NametagEdit extends JavaPlugin {
         testCompat();
         if (!isEnabled()) return;
 
-        Configuration config = loadConfig();
         manager = new NametagManager(this);
-        handler = new NametagHandler(config, this, manager);
-
-        if (config.getBoolean("MetricsEnabled")) {
-            try {
-                new Metrics(this).start();
-            } catch (IOException e) {
-                getLogger().severe("Couldn't start Metrics!");
-            }
-        }
+        handler = new NametagHandler(this, manager);
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         if (checkShouldRegister("zPermissions")) {
@@ -104,35 +91,6 @@ public class NametagEdit extends JavaPlugin {
                 .append(wrapper.error)
                 .append("\nThe plugin will now self destruct.\n------------------------------------------------------")
                 .toString());
-    }
-
-    private Configuration loadConfig() {
-        File file = new File(getDataFolder(), "config.yml");
-        if (!file.exists()) {
-            saveDefaultConfig();
-
-            Configuration newConfig = new Configuration(file);
-            newConfig.reload(true);
-            return newConfig;
-        } else {
-            Configuration oldConfig = new Configuration(file);
-            oldConfig.reload(false);
-
-            file.delete();
-            saveDefaultConfig();
-
-            Configuration newConfig = new Configuration(file);
-            newConfig.reload(true);
-
-            for (String key : oldConfig.getKeys(false)) {
-                if (newConfig.contains(key)) {
-                    newConfig.set(key, oldConfig.get(key));
-                }
-            }
-
-            newConfig.save();
-            return newConfig;
-        }
     }
 
 }
