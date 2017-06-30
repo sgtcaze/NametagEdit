@@ -10,6 +10,7 @@ import com.nametagedit.plugin.storage.flatfile.FlatFileConfig;
 import com.nametagedit.plugin.utils.Configuration;
 import com.nametagedit.plugin.utils.UUIDFetcher;
 import com.nametagedit.plugin.utils.Utils;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -22,16 +23,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Getter
 @Setter
 public class NametagHandler implements Listener {
+
+    // Multiple threads access resources. We need to make sure we avoid concurrency issues.
+    private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
     public static boolean DISABLE_PUSH_ALL_TAGS = false;
     private boolean debug;
@@ -46,14 +53,19 @@ public class NametagHandler implements Listener {
 
     private Configuration config;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private List<GroupData> groupData = new ArrayList<>();
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private Map<UUID, PlayerData> playerData = new HashMap<>();
 
     private NametagEdit plugin;
     private NametagManager nametagManager;
 
     public NametagHandler(NametagEdit plugin, NametagManager nametagManager) {
-        this.config = getCustomConfig();
+        this.config = getCustomConfig(plugin);
         this.plugin = plugin;
         this.nametagManager = nametagManager;
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -64,7 +76,7 @@ public class NametagHandler implements Listener {
         if (config.getBoolean("MySQL.Enabled")) {
             abstractConfig = new DatabaseConfig(plugin, this, config);
         } else {
-            abstractConfig = new FlatFileConfig(plugin, groupData, playerData, this);
+            abstractConfig = new FlatFileConfig(plugin, this);
         }
 
         new BukkitRunnable() {
@@ -78,7 +90,7 @@ public class NametagHandler implements Listener {
     /**
      * This function loads our custom config with comments, and includes changes
      */
-    private Configuration getCustomConfig() {
+    private Configuration getCustomConfig(Plugin plugin) {
         File file = new File(plugin.getDataFolder(), "config.yml");
         if (!file.exists()) {
             plugin.saveDefaultConfig();
@@ -148,9 +160,56 @@ public class NametagHandler implements Listener {
     }
 
     private void handleClear(UUID uuid, String player) {
-        playerData.remove(uuid);
+        removePlayerData(uuid);
         nametagManager.reset(player);
         abstractConfig.clear(uuid, player);
+    }
+
+    public void clearMemoryData() {
+        try {
+            readWriteLock.writeLock().lock();
+            groupData.clear();
+            playerData.clear();
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
+    public void removePlayerData(UUID uuid) {
+        try {
+            readWriteLock.writeLock().lock();
+            playerData.remove(uuid);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
+    public void storePlayerData(UUID uuid, PlayerData data) {
+        try {
+            readWriteLock.writeLock().lock();
+            playerData.put(uuid, data);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
+    public void assignGroupData(List<GroupData> groupData) {
+        try {
+            readWriteLock.writeLock().lock();
+            this.groupData = groupData;
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
+    public void assignData(List<GroupData> groupData, Map<UUID, PlayerData> playerData) {
+        try {
+            readWriteLock.writeLock().lock();
+            this.groupData = groupData;
+            this.playerData = playerData;
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
     }
 
     // ==========================================
@@ -166,18 +225,43 @@ public class NametagHandler implements Listener {
         config.save();
     }
 
+    // =================================================
+    // Below are methods that we have to be careful with
+    // as they can be called from different threads
+    // =================================================
     public PlayerData getPlayerData(Player player) {
         return player == null ? null : playerData.get(player.getUniqueId());
     }
 
     void addGroup(GroupData data) {
-        groupData.add(data);
         abstractConfig.add(data);
+
+        try {
+            readWriteLock.writeLock().lock();
+            groupData.add(data);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
     }
 
     void deleteGroup(GroupData data) {
-        groupData.remove(data);
         abstractConfig.delete(data);
+
+        try {
+            readWriteLock.writeLock().lock();
+            groupData.remove(data);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
+    public List<GroupData> getGroupData() {
+        try {
+            readWriteLock.writeLock().lock();
+            return new ArrayList<>(groupData); // Create a copy instead of unmodifiable
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
     }
 
     public GroupData getGroupData(String key) {
@@ -290,7 +374,7 @@ public class NametagHandler implements Listener {
         }
 
         UUID uuid = player.getUniqueId();
-        PlayerData data = playerData.get(uuid);
+        PlayerData data = getPlayerData(player);
 
         if (data != null) {
             nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, data.getPrefix()), formatWithPlaceholders(player, data.getSuffix()), data.getSortPriority(), true);
@@ -305,7 +389,7 @@ public class NametagHandler implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    for (GroupData group : groupData) {
+                    for (GroupData group : getGroupData()) {
                         if (player.hasPermission(group.getBukkitPermission())) {
                             handleSync(player, group);
                             break;
@@ -379,7 +463,7 @@ public class NametagHandler implements Listener {
         if (data == null) {
             data = new PlayerData(targetName, null, "", "", -1);
             if (player != null) {
-                playerData.put(player.getUniqueId(), data);
+                storePlayerData(player.getUniqueId(), data);
             }
         }
 
@@ -403,7 +487,7 @@ public class NametagHandler implements Listener {
                 if (uuid == null) {
                     NametagMessages.UUID_LOOKUP_FAILED.send(sender);
                 } else {
-                    playerData.put(uuid, finalData);
+                    storePlayerData(uuid, finalData);
                     finalData.setUuid(uuid);
                     abstractConfig.save(finalData);
                 }

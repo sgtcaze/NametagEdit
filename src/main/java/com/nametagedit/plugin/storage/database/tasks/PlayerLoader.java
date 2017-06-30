@@ -63,7 +63,7 @@ public class PlayerLoader extends BukkitRunnable {
                             PlayerData data = handler.getPlayerData(player);
                             if (data == null) {
                                 data = new PlayerData(player.getName(), player.getUniqueId(), prefix, suffix, finalPriority);
-                                handler.getPlayerData().put(player.getUniqueId(), data);
+                                handler.storePlayerData(player.getUniqueId(), data);
                             } else {
                                 data.setPrefix(prefix);
                                 data.setSuffix(suffix);

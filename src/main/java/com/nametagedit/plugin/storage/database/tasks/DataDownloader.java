@@ -33,15 +33,15 @@ public class DataDownloader extends BukkitRunnable {
 
     @Override
     public void run() {
-        final HashMap<String, String> settings = new HashMap<>();
-        final List<GroupData> groupData = new ArrayList<>();
+        HashMap<String, String> settings = new HashMap<>();
+        List<GroupData> groupDataUnordered = new ArrayList<>();
         final Map<UUID, PlayerData> playerData = new HashMap<>();
 
         try (Connection connection = hikari.getConnection()) {
             ResultSet results = connection.prepareStatement("SELECT `name`, `prefix`, `suffix`, `permission`, `priority` FROM " + DatabaseConfig.TABLE_GROUPS).executeQuery();
 
             while (results.next()) {
-                groupData.add(new GroupData(
+                groupDataUnordered.add(new GroupData(
                         results.getString("name"),
                         results.getString("prefix"),
                         results.getString("suffix"),
@@ -76,12 +76,33 @@ public class DataDownloader extends BukkitRunnable {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            // First order the groups before performing assignments
+            String orderSetting = settings.get("order");
+            if (orderSetting != null) {
+                String[] order = orderSetting.split(" ");
+                // This will be the order we will use
+                List<GroupData> current = new ArrayList<>();
+                // Determine order for current loaded groups
+                for (String group : order) {
+                    Iterator<GroupData> itr = groupDataUnordered.iterator();
+                    while (itr.hasNext()) {
+                        GroupData groupData = itr.next();
+                        if (groupData.getGroupName().equalsIgnoreCase(group)) {
+                            current.add(groupData);
+                            itr.remove();
+                            break;
+                        }
+                    }
+                }
+
+                current.addAll(groupDataUnordered); // Add remaining entries (bad order, wasn't specified)
+                groupDataUnordered = current; // Reassign the new group order
+            }
+
+            handler.assignData(groupDataUnordered, playerData); // Safely perform assignments
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    handler.setGroupData(groupData);
-                    handler.setPlayerData(playerData);
-                    loadDatabaseSettings(handler, settings);
                     for (Player player : Utils.getOnline()) {
                         PlayerData data = playerData.get(player.getUniqueId());
                         if (data != null) {
@@ -92,29 +113,6 @@ public class DataDownloader extends BukkitRunnable {
                     handler.applyTags();
                 }
             }.runTask(handler.getPlugin());
-        }
-    }
-
-    private void loadDatabaseSettings(NametagHandler handler, HashMap<String, String> settings) {
-        String orderSetting = settings.get("order");
-        if (orderSetting != null) {
-            String[] order = orderSetting.split(" ");
-            List<GroupData> current = new ArrayList<>();
-            // Determine order for current loaded groups
-            for (String group : order) {
-                Iterator<GroupData> itr = handler.getGroupData().iterator();
-                while (itr.hasNext()) {
-                    GroupData groupData = itr.next();
-                    if (groupData.getGroupName().equalsIgnoreCase(group)) {
-                        current.add(groupData);
-                        itr.remove();
-                        break;
-                    }
-                }
-            }
-
-            current.addAll(handler.getGroupData()); // Add remaining entries (bad order, wasn't specified)
-            handler.setGroupData(current);
         }
     }
 

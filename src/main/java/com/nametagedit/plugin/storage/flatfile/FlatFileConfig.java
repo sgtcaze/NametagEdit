@@ -15,7 +15,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class FlatFileConfig implements AbstractConfig {
 
@@ -28,14 +30,9 @@ public class FlatFileConfig implements AbstractConfig {
     private NametagEdit plugin;
     private NametagHandler handler;
 
-    private List<GroupData> groupData = new ArrayList<>();
-    private Map<UUID, PlayerData> playerData = new HashMap<>();
-
-    public FlatFileConfig(NametagEdit plugin, List<GroupData> groupData, Map<UUID, PlayerData> playerData, NametagHandler handler) {
+    public FlatFileConfig(NametagEdit plugin, NametagHandler handler) {
         this.plugin = plugin;
         this.handler = handler;
-        this.groupData = groupData;
-        this.playerData = playerData;
     }
 
     @Override
@@ -57,8 +54,7 @@ public class FlatFileConfig implements AbstractConfig {
 
     @Override
     public void reload() {
-        groupData.clear();
-        playerData.clear();
+        handler.clearMemoryData();
 
         new BukkitRunnable() {
             @Override
@@ -144,7 +140,7 @@ public class FlatFileConfig implements AbstractConfig {
 
     @Override
     public void clear(UUID uuid, String targetName) {
-        playerData.remove(uuid);
+        handler.removePlayerData(uuid);
         players.set("Players." + uuid.toString(), null);
         save(players, playersFile);
     }
@@ -180,7 +176,7 @@ public class FlatFileConfig implements AbstractConfig {
         PlayerData data = PlayerData.fromFile(player.getUniqueId().toString(), players);
         if (data != null) {
             data.setName(player.getName());
-            this.playerData.put(player.getUniqueId(), data);
+            handler.storePlayerData(player.getUniqueId(), data);
         }
     }
 
@@ -191,6 +187,7 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     private void loadGroups() {
+        List<GroupData> groupData = new ArrayList<>();
         for (String groupName : groups.getConfigurationSection("Groups").getKeys(false)) {
             GroupData data = new GroupData();
             data.setGroupName(groupName);
@@ -200,6 +197,8 @@ public class FlatFileConfig implements AbstractConfig {
             data.setSortPriority(groups.getInt("Groups." + groupName + ".SortPriority", -1));
             groupData.add(data);
         }
+
+        handler.assignGroupData(groupData);
     }
 
     private void storeGroup(GroupData groupData) {
