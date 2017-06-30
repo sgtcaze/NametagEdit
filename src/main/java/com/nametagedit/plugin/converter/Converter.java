@@ -48,29 +48,27 @@ public class Converter {
 
     public void legacyConversion(CommandSender sender, Plugin plugin) {
         try {
-            File groupsFile = new File(plugin.getDataFolder(), "groups.yml");
-            File playersFile = new File(plugin.getDataFolder(), "players.yml");
-
-            YamlConfiguration groups = Utils.getConfig(groupsFile);
-            YamlConfiguration players = Utils.getConfig(playersFile);
-
-            for (String line : getLines(sender, plugin, "groups.txt")) {
-                if (line.contains("=")) {
-                    handleGroup(groups, line);
-                }
-            }
-
-            for (String line : getLines(sender, plugin, "players.txt")) {
-                if (line.contains("=")) {
-                    handlePlayer(players, line);
-                }
-            }
-
-            players.save(playersFile);
-            groups.save(groupsFile);
+            handleFile(plugin, sender, "groups");
+            handleFile(plugin, sender, "players");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleFile(Plugin plugin, CommandSender sender, String fileType) throws IOException {
+        final boolean GROUP = fileType.equals("groups");
+        File nametagConfigFile = new File(plugin.getDataFolder(), fileType + ".yml");
+        YamlConfiguration nametagConfig = Utils.getConfig(nametagConfigFile);
+        for (String line : getLines(sender, plugin, fileType + ".txt")) {
+            if (!line.contains("=")) continue; // If the special token is missing, skip. Malformed line.
+            if (GROUP) {
+                handleGroup(nametagConfig, line);
+            } else {
+                handlePlayer(nametagConfig, line);
+            }
+        }
+
+        nametagConfig.save(nametagConfigFile);
     }
 
     private void handleGroup(YamlConfiguration config, String line) {
@@ -91,14 +89,14 @@ public class Converter {
     }
 
     private void handlePlayer(YamlConfiguration config, String line) {
-        String[] split = line.split("=");
-        String prefix = split[1].trim().split("\"")[1];
-        String[] splot = split[0].trim().split(" ");
-        String playername = splot[0];
-        String type = splot[1];
-        OfflinePlayer op = Bukkit.getOfflinePlayer(playername);
-        String uuid = op.getUniqueId().toString();
-        config.set("Players." + uuid + ".Name", playername);
+        String[] initialSplit = line.split("=");
+        String prefix = initialSplit[1].trim().split("\"")[1];
+        String[] whiteSpaces = initialSplit[0].trim().split(" ");
+        String playerName = whiteSpaces[0];
+        String type = whiteSpaces[1];
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+        String uuid = offlinePlayer.getUniqueId().toString();
+        config.set("Players." + uuid + ".Name", playerName);
         config.set("Players." + uuid + "." + type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase(), prefix);
         config.set("Players." + uuid + ".SortPriority", -1);
     }

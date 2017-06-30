@@ -206,7 +206,7 @@ public class NametagHandler implements Listener {
         return null;
     }
 
-    void reload() {
+    public void reload() {
         config.reload(true);
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");

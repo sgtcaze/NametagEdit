@@ -5,7 +5,6 @@ import com.nametagedit.plugin.NametagMessages;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,67 +26,62 @@ public class ConverterTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean failed = false;
         FileConfiguration config = plugin.getHandler().getConfig();
-        String connectionString = "jdbc:mysql://" + config.getString("MySQL.Hostname") + ":"
-                + config.getInt("MySQL.Port") + "/" + config.getString("MySQL.Database");
+        String connectionString = "jdbc:mysql://" + config.getString("MySQL.Hostname") + ":" + config.getInt("MySQL.Port") + "/" + config.getString("MySQL.Database");
         try (Connection connection = DriverManager.getConnection(connectionString, config.getString("MySQL.Username"), config.getString("MySQL.Password"))) {
             if (databaseToFile) {
-                try {
-                    failed = convertDatabaseToFile(connection);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                convertDatabaseToFile(connection);
             } else {
-                failed = convertFilesToDatabase(connection);
+                convertFilesToDatabase(connection);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            final boolean finalFailed = failed;
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    NametagMessages.OPERATION_COMPLETED.send(sender, finalFailed ? "failed" : "succeeded");
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ne reload");
+                    plugin.getHandler().reload();
                 }
             }.runTask(plugin);
         }
     }
 
-    private boolean convertDatabaseToFile(Connection connection) throws SQLException, IOException {
-        final String GROUP_QUERY = "SELECT name, prefix, suffix, permission, priority FROM " + DatabaseConfig.TABLE_GROUPS;
-        final String PLAYER_QUERY = "SELECT name, uuid, prefix, suffix, priority FROM " + DatabaseConfig.TABLE_PLAYERS;
+    private void convertDatabaseToFile(Connection connection) {
+        try {
+            final String GROUP_QUERY = "SELECT name, prefix, suffix, permission, priority FROM " + DatabaseConfig.TABLE_GROUPS;
+            final String PLAYER_QUERY = "SELECT name, uuid, prefix, suffix, priority FROM " + DatabaseConfig.TABLE_PLAYERS;
 
-        final File groupsFile = new File(plugin.getDataFolder(), "groups_CONVERTED.yml");
-        final File playersFile = new File(plugin.getDataFolder(), "players_CONVERTED.yml");
+            final File groupsFile = new File(plugin.getDataFolder(), "groups_CONVERTED.yml");
+            final File playersFile = new File(plugin.getDataFolder(), "players_CONVERTED.yml");
 
-        final YamlConfiguration groups = Utils.getConfig(groupsFile);
-        final YamlConfiguration players = Utils.getConfig(playersFile);
+            final YamlConfiguration groups = Utils.getConfig(groupsFile);
+            final YamlConfiguration players = Utils.getConfig(playersFile);
 
-        ResultSet results = connection.prepareStatement(GROUP_QUERY).executeQuery();
-        while (results.next()) {
-            groups.set("Groups." + results.getString("name") + ".Permission", results.getString("permission"));
-            groups.set("Groups." + results.getString("name") + ".Prefix", results.getString("prefix"));
-            groups.set("Groups." + results.getString("name") + ".Suffix", results.getString("suffix"));
-            groups.set("Groups." + results.getString("name") + ".SortPriority", results.getInt("priority"));
+            ResultSet results = connection.prepareStatement(GROUP_QUERY).executeQuery();
+            while (results.next()) {
+                groups.set("Groups." + results.getString("name") + ".Permission", results.getString("permission"));
+                groups.set("Groups." + results.getString("name") + ".Prefix", results.getString("prefix"));
+                groups.set("Groups." + results.getString("name") + ".Suffix", results.getString("suffix"));
+                groups.set("Groups." + results.getString("name") + ".SortPriority", results.getInt("priority"));
+            }
+
+            results = connection.prepareStatement(PLAYER_QUERY).executeQuery();
+            while (results.next()) {
+                players.set("Players." + results.getString("uuid") + ".Name", results.getString("name"));
+                players.set("Players." + results.getString("uuid") + ".Prefix", results.getString("prefix"));
+                players.set("Players." + results.getString("uuid") + ".Suffix", results.getString("suffix"));
+                players.set("Players." + results.getString("uuid") + ".SortPriority", results.getInt("priority"));
+            }
+
+            results.close();
+            groups.save(groupsFile);
+            players.save(playersFile);
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
-
-        results = connection.prepareStatement(PLAYER_QUERY).executeQuery();
-        while (results.next()) {
-            players.set("Players." + results.getString("uuid") + ".Name", results.getString("name"));
-            players.set("Players." + results.getString("uuid") + ".Prefix", results.getString("prefix"));
-            players.set("Players." + results.getString("uuid") + ".Suffix", results.getString("suffix"));
-            players.set("Players." + results.getString("uuid") + ".SortPriority", results.getInt("priority"));
-        }
-
-        results.close();
-        groups.save(groupsFile);
-        players.save(playersFile);
-        return false;
     }
 
-    private boolean convertFilesToDatabase(Connection connection) {
+    private void convertFilesToDatabase(Connection connection) {
         final File groupsFile = new File(plugin.getDataFolder(), "groups.yml");
         final File playersFile = new File(plugin.getDataFolder(), "players.yml");
 
@@ -134,8 +128,6 @@ public class ConverterTask extends BukkitRunnable {
                 e.printStackTrace();
             }
         }
-
-        return false;
     }
 
     private boolean checkValid(FileConfiguration configuration, String section) {

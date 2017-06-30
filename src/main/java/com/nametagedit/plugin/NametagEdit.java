@@ -18,6 +18,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * TODO:
+ * - Better uniform message format + more messages
+ * - Code cleanup
+ * - Add language support
+ */
 @Getter
 public class NametagEdit extends JavaPlugin {
 
