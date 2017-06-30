@@ -415,11 +415,6 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
             return;
         }
 
-        if (priority < -1 || priority == 0) {
-            NametagMessages.INVALID_SORT_PRIORITY.send(sender);
-            return;
-        }
-
         handler.save(sender, player, key, priority);
         NametagMessages.SET_PRIORITY.send(sender, priority, key);
     }
