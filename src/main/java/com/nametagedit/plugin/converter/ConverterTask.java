@@ -87,49 +87,54 @@ public class ConverterTask extends BukkitRunnable {
         return false;
     }
 
-    private boolean convertFilesToDatabase(Connection connection) throws SQLException {
+    private boolean convertFilesToDatabase(Connection connection) {
         final File groupsFile = new File(plugin.getDataFolder(), "groups.yml");
         final File playersFile = new File(plugin.getDataFolder(), "players.yml");
 
         final YamlConfiguration groups = Utils.getConfig(groupsFile);
         final YamlConfiguration players = Utils.getConfig(playersFile);
 
-        PreparedStatement insertOrUpdate = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_PLAYERS + " (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?");
-        if (players != null) {
-            if (checkValid(groups, "Players")) {
+        if (players != null && checkValid(players, "Players")) {
+            // Import the player entries from the file
+            try (PreparedStatement playerInsert = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_PLAYERS + " VALUES(?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `prefix`=?, `suffix`=?")) {
                 for (String key : players.getConfigurationSection("Players").getKeys(false)) {
-                    insertOrUpdate.setString(1, key);
-                    insertOrUpdate.setString(2, players.getString("Players." + key + ".Name"));
-                    insertOrUpdate.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-                    insertOrUpdate.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-                    insertOrUpdate.setString(5, players.getString("Players." + key + ".SortPriority"));
-                    insertOrUpdate.setString(6, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
-                    insertOrUpdate.setString(7, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
-                    insertOrUpdate.addBatch();
+                    playerInsert.setString(1, key);
+                    playerInsert.setString(2, players.getString("Players." + key + ".Name"));
+                    playerInsert.setString(3, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                    playerInsert.setString(4, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
+                    playerInsert.setString(5, players.getString("Players." + key + ".SortPriority"));
+                    playerInsert.setString(6, Utils.deformat(players.getString("Players." + key + ".Prefix", "")));
+                    playerInsert.setString(7, Utils.deformat(players.getString("Players." + key + ".Suffix", "")));
+                    playerInsert.addBatch();
                 }
+
+                playerInsert.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
 
-        insertOrUpdate.executeBatch();
-        insertOrUpdate = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_GROUPS + " (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefix=?, suffix=?, permission=?");
-        if (groups != null) {
-            if (checkValid(groups, "Groups")) {
+        if (groups != null && checkValid(groups, "Groups")) {
+            // Import the player entries from the file
+            try (PreparedStatement groupInsert = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_GROUPS + " VALUES(?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `prefix`=?, `suffix`=?, `permission`=?")) {
                 for (String key : groups.getConfigurationSection("Groups").getKeys(false)) {
-                    insertOrUpdate.setString(1, key);
-                    insertOrUpdate.setString(2, groups.getString("Groups." + key + ".Permission"));
-                    insertOrUpdate.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-                    insertOrUpdate.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-                    insertOrUpdate.setString(5, groups.getString("Groups." + key + ".SortPriority"));
-                    insertOrUpdate.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
-                    insertOrUpdate.setString(7, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
-                    insertOrUpdate.setString(8, groups.getString("Groups." + key + ".Permission"));
-                    insertOrUpdate.addBatch();
+                    groupInsert.setString(1, key);
+                    groupInsert.setString(2, groups.getString("Groups." + key + ".Permission"));
+                    groupInsert.setString(3, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                    groupInsert.setString(4, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                    groupInsert.setString(5, groups.getString("Groups." + key + ".SortPriority"));
+                    groupInsert.setString(6, Utils.deformat(groups.getString("Groups." + key + ".Prefix", "")));
+                    groupInsert.setString(7, Utils.deformat(groups.getString("Groups." + key + ".Suffix", "")));
+                    groupInsert.setString(8, groups.getString("Groups." + key + ".Permission"));
+                    groupInsert.addBatch();
                 }
+
+                groupInsert.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
 
-        insertOrUpdate.executeBatch();
-        insertOrUpdate.close();
         return false;
     }
 
