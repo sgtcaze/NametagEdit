@@ -42,9 +42,9 @@ class PacketAccessor {
         }
         
         try {
-			String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-			Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-			getHandle = typeCraftPlayer.getMethod("getHandle");
+            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
+            getHandle = typeCraftPlayer.getMethod("getHandle");
             if (cauldron) {
                 packetClass = net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam.class;
                 Class<?> typeNMSPlayer = net.minecraft.server.v1_7_R4.EntityPlayer.class;
