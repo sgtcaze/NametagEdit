@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 class PacketAccessor {
+    
+    private static boolean cauldron = false;
 
     static Field MEMBERS;
     static Field PREFIX;
@@ -27,15 +29,29 @@ class PacketAccessor {
 
     static {
         try {
-            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-            packetClass = Class.forName("net.minecraft.server." + version + ".PacketPlayOutScoreboardTeam");
-
-            Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
-            Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-            Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + version + ".PlayerConnection");
-            getHandle = typeCraftPlayer.getMethod("getHandle");
-            playerConnection = typeNMSPlayer.getField("playerConnection");
-            sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + version + ".Packet"));
+            Class.forName("cpw.mods.fml.common.Mod");
+            cauldron = true;
+        } catch (ClassNotFoundException e) {
+            ;
+        }
+        
+        try {
+			String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+			Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
+			getHandle = typeCraftPlayer.getMethod("getHandle");
+            if (cauldron) {
+                packetClass = net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam.class;
+                Class<?> typeNMSPlayer = net.minecraft.server.v1_7_R4.EntityPlayer.class;
+                Class<?> typePlayerConnection =  net.minecraft.server.v1_7_R4.PlayerConnection.class;
+                playerConnection = typeNMSPlayer.getField("field_71135_a");
+                sendPacket = typePlayerConnection.getMethod("func_147359_a", net.minecraft.server.v1_7_R4.Packet.class);
+            } else {
+                packetClass = Class.forName("net.minecraft.server." + version + ".PacketPlayOutScoreboardTeam");
+                Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
+                Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + version + ".PlayerConnection");
+                playerConnection = typeNMSPlayer.getField("playerConnection");
+                sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + version + ".Packet"));
+            }
 
             PacketData currentVersion = null;
             for (PacketData packetData : PacketData.values()) {
@@ -43,6 +59,8 @@ class PacketAccessor {
                     currentVersion = packetData;
                 }
             }
+            if (cauldron) 
+                currentVersion = PacketData.cauldron;
 
             if (currentVersion != null) {
                 PREFIX = getNMS(currentVersion.getPrefix());
