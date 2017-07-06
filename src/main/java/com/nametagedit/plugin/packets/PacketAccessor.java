@@ -7,6 +7,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam;
+import net.minecraft.server.v1_7_R4.EntityPlayer;
+import net.minecraft.server.v1_7_R4.PlayerConnection;
+import net.minecraft.server.v1_7_R4.Packet;
+
+
 class PacketAccessor {
     
     private static boolean cauldron = false;
