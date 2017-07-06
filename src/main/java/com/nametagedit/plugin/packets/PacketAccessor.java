@@ -8,8 +8,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam;
-import net.minecraft.serverr.v1_7_R4.EntityPlayer;
-import net.minecraft.serverr.v1_7_R4.PlayerConnection;
+import net.minecraft.server.v1_7_R4.EntityPlayer;
+import net.minecraft.server.v1_7_R4.PlayerConnection;
 import net.minecraft.server.v1_7_R4.Packet;
 
 class PacketAccessor {
@@ -45,9 +45,9 @@ class PacketAccessor {
                 String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 packetClass = net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam.class;
 
-                Class<?> typeNMSPlayer = net.minecraft.serverr.v1_7_R4.EntityPlayer.class;
+                Class<?> typeNMSPlayer = net.minecraft.server.v1_7_R4.EntityPlayer.class;
                 Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-                Class<?> typePlayerConnection =  net.minecraft.serverr.v1_7_R4.PlayerConnection.class;
+                Class<?> typePlayerConnection =  net.minecraft.server.v1_7_R4.PlayerConnection.class;
                 getHandle = typeCraftPlayer.getMethod("getHandle");
                 playerConnection = typeNMSPlayer.getField("field_71135_a");
                 sendPacket = typePlayerConnection.getMethod("func_147359_a", net.minecraft.server.v1_7_R4.Packet.class);
