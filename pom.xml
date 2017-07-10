@@ -84,6 +84,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/LibsDisguises-9.0.9.jar</systemPath>
         </dependency>
+        <!-- CraftBukkit 1.7.10 (for cauldron support codes) -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.7.10-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <!-- Spigot -->
@@ -106,6 +113,11 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <!-- CraftBukkit Repo -->
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.md-5.net/content/groups/public/</url>
         </repository>
     </repositories>
     <!-- Builds NametagEdit -->
