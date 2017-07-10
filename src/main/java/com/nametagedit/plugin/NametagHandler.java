@@ -337,6 +337,7 @@ public class NametagHandler implements Listener {
         refreshNametagTask = createTask("RefreshInterval", refreshNametagTask, new Runnable() {
             @Override
             public void run() {
+                nametagManager.reset();
                 applyTags();
             }
         });
