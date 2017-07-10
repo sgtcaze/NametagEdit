@@ -7,15 +7,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam;
-import net.minecraft.server.v1_7_R4.EntityPlayer;
-import net.minecraft.server.v1_7_R4.PlayerConnection;
-import net.minecraft.server.v1_7_R4.Packet;
-
-
 class PacketAccessor {
-    
-    private static boolean cauldron = false;
+
+    private static boolean CAULDRON_SERVER = false;
 
     static Field MEMBERS;
     static Field PREFIX;
@@ -36,19 +30,20 @@ class PacketAccessor {
     static {
         try {
             Class.forName("cpw.mods.fml.common.Mod");
-            cauldron = true;
-        } catch (ClassNotFoundException e) {
-            ;
+            CAULDRON_SERVER = true;
+        } catch (ClassNotFoundException ignored) {
+            // This is not a cauldron server
         }
-        
+
         try {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
             getHandle = typeCraftPlayer.getMethod("getHandle");
-            if (cauldron) {
+
+            if (CAULDRON_SERVER) {
                 packetClass = net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam.class;
                 Class<?> typeNMSPlayer = net.minecraft.server.v1_7_R4.EntityPlayer.class;
-                Class<?> typePlayerConnection =  net.minecraft.server.v1_7_R4.PlayerConnection.class;
+                Class<?> typePlayerConnection = net.minecraft.server.v1_7_R4.PlayerConnection.class;
                 playerConnection = typeNMSPlayer.getField("field_71135_a");
                 sendPacket = typePlayerConnection.getMethod("func_147359_a", net.minecraft.server.v1_7_R4.Packet.class);
             } else {
@@ -65,8 +60,10 @@ class PacketAccessor {
                     currentVersion = packetData;
                 }
             }
-            if (cauldron) 
+
+            if (CAULDRON_SERVER) {
                 currentVersion = PacketData.cauldron;
+            }
 
             if (currentVersion != null) {
                 PREFIX = getNMS(currentVersion.getPrefix());
