@@ -38,6 +38,11 @@ RefreshTagOnWorldChange: false
 # take any changes made by commands and/or placeholder changes. Set this to < 1 to disable
 # this feature. This feature is in seconds. NOTE: We do not recommend this.
 RefreshInterval: 0
+
+#
+#Disables the command
+DisableCommand: true
+
 #
 # If enabled, NametagEdit will use database support
 MySQL:
