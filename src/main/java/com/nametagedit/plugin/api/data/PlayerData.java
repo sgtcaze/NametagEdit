@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PlayerData {
+public class PlayerData implements INametag {
 
     private String name;
     private UUID uuid;
@@ -35,6 +35,11 @@ public class PlayerData {
         data.setSuffix(file.getString("Players." + key + ".Suffix", ""));
         data.setSortPriority(file.getInt("Players." + key + ".SortPriority", -1));
         return data;
+    }
+
+    @Override
+    public boolean isPlayerTag() {
+        return true;
     }
 
 }

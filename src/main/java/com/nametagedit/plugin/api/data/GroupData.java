@@ -11,7 +11,7 @@ import org.bukkit.permissions.PermissionDefault;
  */
 @Data
 @AllArgsConstructor
-public class GroupData {
+public class GroupData implements INametag {
 
     private String groupName;
     private String prefix;
@@ -27,6 +27,11 @@ public class GroupData {
     public void setPermission(String permission) {
         this.permission = permission;
         bukkitPermission = new Permission(permission, PermissionDefault.FALSE);
+    }
+
+    @Override
+    public boolean isPlayerTag() {
+        return false;
     }
 
 }
