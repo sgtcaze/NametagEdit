@@ -396,7 +396,7 @@ public class NametagHandler implements Listener {
             @Override
             public void run() {
                 nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, nametag.getPrefix()), formatWithPlaceholders(player, nametag.getSuffix()), nametag.getSortPriority());
-                player.setPlayerListName(tabListDisabled ? Utils.format(tagOverrideColor + player.getPlayerListName(), true) : null);
+                player.setPlayerListName(tabListDisabled ? Utils.format(tagOverrideColor + player.getPlayerListName()) : null);
             }
         }.runTask(plugin);
     }
