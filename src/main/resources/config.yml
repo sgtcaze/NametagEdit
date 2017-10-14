@@ -10,6 +10,9 @@ DatabaseVersion: 1
 # If enabled, this will remove any formatting created in the tab list by prefixes / suffixes
 # Do not set this to true if you already have a plugin that changes the tab list
 TabListDisabled: false
+# If the above option is true, use this color for the tab list. Some TabList plugins might
+# conflict with NametagEdit, so you may also leave thins override color blank.
+OverrideColor: "&f"
 #
 # If enabled, this plugin will send small data MCStats.org.
 MetricsEnabled: true

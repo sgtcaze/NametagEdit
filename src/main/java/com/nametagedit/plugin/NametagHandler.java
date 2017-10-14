@@ -45,6 +45,7 @@ public class NametagHandler implements Listener {
     private boolean debug;
     private boolean tabListDisabled;
     private boolean refreshTagOnWorldChange;
+    private String tagOverrideColor;
     // This should only be changed in the code
     private int databaseVersion = 3;
 
@@ -318,6 +319,7 @@ public class NametagHandler implements Listener {
         this.debug = config.getBoolean("Debug");
         this.tabListDisabled = config.getBoolean("TabListDisabled");
         this.refreshTagOnWorldChange = config.getBoolean("RefreshTagOnWorldChange");
+        this.tagOverrideColor = Utils.format(config.getString("OverrideColor"));
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
 
         if (config.getBoolean("MetricsEnabled")) {
@@ -394,7 +396,7 @@ public class NametagHandler implements Listener {
             @Override
             public void run() {
                 nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, nametag.getPrefix()), formatWithPlaceholders(player, nametag.getSuffix()), nametag.getSortPriority());
-                player.setPlayerListName(tabListDisabled ? player.getPlayerListName() : null);
+                player.setPlayerListName(tabListDisabled ? Utils.format(tagOverrideColor + player.getPlayerListName(), true) : null);
             }
         }.runTask(plugin);
     }
