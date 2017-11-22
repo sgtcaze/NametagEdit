@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import com.nametagedit.plugin.utils.Utils;
 
 /**
  * This class represents a Scoreboard Team. It is used
@@ -15,7 +16,7 @@ public class FakeTeam {
 
     // Because some networks use NametagEdit on multiple servers, we may have clashes
     // with the same Team names. The UNIQUE_ID ensures there will be no clashing.
-    private static final String UNIQUE_ID = UUID.randomUUID().toString().replaceAll("[^a-zA-Z]", "").toUpperCase().substring(0, 5);
+    private static final String UNIQUE_ID = Utils.generateUUID();
     // This represents the number of FakeTeams that have been created.
     // It is used to generate a unique Team name.
     private static int ID = 0;
