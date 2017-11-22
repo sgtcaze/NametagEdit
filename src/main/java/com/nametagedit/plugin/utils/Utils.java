@@ -75,5 +75,12 @@ public class Utils {
 
         return YamlConfiguration.loadConfiguration(file);
     }
-
+    public static String generateUUID() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            builder.append(chars.charAt((int) (Math.random() * 26)));
+        }
+        return builder.toString();
+    }
 }
