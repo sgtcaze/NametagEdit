@@ -79,7 +79,7 @@ public class Utils {
          String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
          StringBuilder builder = new StringBuilder();
          for (int i = 0; i < 5; i++) {
-             builder.append(chars.charAt((int) (Math.random() * 26)));
+             builder.append(chars.charAt((int) (Math.random() * chars.length())));
          }
          return builder.toString();
     }
