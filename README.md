@@ -30,7 +30,7 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 
 ✔ Sortable Group/Player Tags in tab
 
-✔ [MDvW Placeholder API](https://www.spigotmc.org/resources/mvdwplaceholderapi.11182/) Support
+✔ [MVdW Placeholder API](https://www.spigotmc.org/resources/mvdwplaceholderapi.11182/) Support
 
 ✔ [Clip Placeholder API](https://www.spigotmc.org/resources/placeholderapi.6245/) Support 
 
