@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.api.events;
 
+import com.nametagedit.plugin.api.data.Nametag;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Cancellable;
@@ -18,7 +19,12 @@ public class NametagEvent extends Event implements Cancellable {
 
     @Getter
     @Setter
+    @Deprecated
     private String value;
+
+    @Getter
+    @Setter
+    private Nametag nametag;
 
     @Getter
     @Setter
@@ -38,6 +44,11 @@ public class NametagEvent extends Event implements Cancellable {
 
     public NametagEvent(String player, String value) {
         this(player, value, ChangeType.UNKNOWN);
+    }
+
+    public NametagEvent(String player, String value, Nametag nametag, ChangeType type) {
+        this(player, value, type);
+        this.nametag = nametag;
     }
 
     public NametagEvent(String player, String value, ChangeType changeType) {
@@ -80,7 +91,7 @@ public class NametagEvent extends Event implements Cancellable {
     }
 
     public enum ChangeType {
-        PREFIX, SUFFIX, GROUP, UNKNOWN
+        PREFIX, SUFFIX, GROUP, CLEAR, PREFIX_AND_SUFFIX, RELOAD, UNKNOWN
     }
 
     public enum StorageType {

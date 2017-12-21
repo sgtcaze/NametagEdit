@@ -28,12 +28,16 @@ public final class NametagAPI implements INametagApi {
 
     @Override
     public void clearNametag(Player player) {
-        manager.reset(player.getName());
+        if (shouldFireEvent(player, NametagEvent.ChangeType.CLEAR)) {
+            manager.reset(player.getName());
+        }
     }
 
     @Override
     public void reloadNametag(Player player) {
-        handler.applyTagToPlayer(player);
+        if (shouldFireEvent(player, NametagEvent.ChangeType.RELOAD)) {
+            handler.applyTagToPlayer(player);
+        }
     }
 
     @Override
@@ -43,45 +47,60 @@ public final class NametagAPI implements INametagApi {
 
     @Override
     public void setPrefix(Player player, String prefix) {
-        setPrefix(player.getName(), handler.formatWithPlaceholders(player, prefix));
+        FakeTeam fakeTeam = manager.getFakeTeam(player.getName());
+        setNametagAlt(player, prefix, fakeTeam == null ? null : fakeTeam.getSuffix());
     }
 
     @Override
     public void setSuffix(Player player, String suffix) {
-        setSuffix(player.getName(), handler.formatWithPlaceholders(player, suffix));
+        FakeTeam fakeTeam = manager.getFakeTeam(player.getName());
+        setNametagAlt(player, fakeTeam == null ? null : fakeTeam.getPrefix(), suffix);
     }
 
     @Override
     public void setPrefix(String player, String prefix) {
-        NametagEvent event = new NametagEvent(player, prefix, NametagEvent.ChangeType.PREFIX, NametagEvent.ChangeReason.API);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            FakeTeam fakeTeam = manager.getFakeTeam(player);
-            manager.setNametag(player, prefix, fakeTeam == null ? null : fakeTeam.getSuffix());
-        }
+        FakeTeam fakeTeam = manager.getFakeTeam(player);
+        manager.setNametag(player, prefix, fakeTeam == null ? null : fakeTeam.getSuffix());
     }
 
     @Override
     public void setSuffix(String player, String suffix) {
-        NametagEvent event = new NametagEvent(player, suffix, NametagEvent.ChangeType.SUFFIX, NametagEvent.ChangeReason.API);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            FakeTeam fakeTeam = manager.getFakeTeam(player);
-            manager.setNametag(player, fakeTeam == null ? null : fakeTeam.getPrefix(), suffix);
-        }
+        FakeTeam fakeTeam = manager.getFakeTeam(player);
+        manager.setNametag(player, fakeTeam == null ? null : fakeTeam.getPrefix(), suffix);
     }
 
     @Override
     public void setNametag(Player player, String prefix, String suffix) {
-        manager.setNametag(player.getName(), handler.formatWithPlaceholders(player, prefix), handler.formatWithPlaceholders(player, suffix));
+        setNametagAlt(player, prefix, suffix);
     }
 
     @Override
     public void setNametag(String player, String prefix, String suffix) {
-        Player onlinePlayer = Bukkit.getPlayerExact(player);
-        prefix = handler.formatWithPlaceholders(onlinePlayer, prefix);
-        suffix = handler.formatWithPlaceholders(onlinePlayer, suffix);
         manager.setNametag(player, prefix, suffix);
+    }
+
+    /**
+     * Private helper function to reduce redundancy
+     */
+    private boolean shouldFireEvent(Player player, NametagEvent.ChangeType type) {
+        NametagEvent event = new NametagEvent(player.getName(), "", getNametag(player), type);
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    /**
+     * Private helper function to reduce redundancy
+     */
+    private void setNametagAlt(Player player, String prefix, String suffix) {
+        Nametag nametag = new Nametag(
+                handler.formatWithPlaceholders(player, prefix),
+                handler.formatWithPlaceholders(player, suffix)
+        );
+
+        NametagEvent event = new NametagEvent(player.getName(), prefix, nametag, NametagEvent.ChangeType.UNKNOWN);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
+        manager.setNametag(player.getName(), nametag.getPrefix(), nametag.getSuffix());
     }
 
 }
