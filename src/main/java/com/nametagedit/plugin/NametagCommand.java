@@ -5,12 +5,9 @@ import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.converter.Converter;
 import com.nametagedit.plugin.converter.ConverterTask;
 import com.nametagedit.plugin.utils.Utils;
-import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -20,10 +17,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@AllArgsConstructor
-public class NametagCommand implements CommandExecutor, TabExecutor {
+public class NametagCommand extends BukkitCommand {
 
     private NametagHandler handler;
+
+    protected NametagCommand(NametagHandler handler) {
+        super("ne");
+        this.handler = handler;
+        this.setAliases(Arrays.asList("nte", "nametagedit", "nametag"));
+    }
 
     private List<String> getSuggestions(String argument, String... array) {
         argument = argument.toLowerCase();
@@ -34,99 +36,6 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
             }
         }
         return suggestions;
-    }
-
-    /**
-     * Handles auto completions
-     */
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 1) {
-            return getSuggestions(args[0], "debug", "reload", "convert", "player", "group");
-        } else if (args.length == 2 || args.length == 3) {
-            if (args[0].equalsIgnoreCase("player")) {
-                if (args.length == 2) {
-                    List<String> suggestions = new ArrayList<>();
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.getName().toLowerCase().startsWith(args[1].toLowerCase())) {
-                            suggestions.add(player.getName());
-                        }
-                    }
-                    return suggestions;
-                } else {
-                    return getSuggestions(args[2], "clear", "prefix", "suffix", "priority");
-                }
-            } else if (args[0].equalsIgnoreCase("group")) {
-                if (args.length == 2) {
-                    List<String> data = new ArrayList<>(handler.getGroupData().size() + 4);
-                    data.add("list");
-                    data.add("add");
-                    data.add("remove");
-                    data.add("order");
-                    for (GroupData groupData : handler.getGroupData()) {
-                        data.add(groupData.getGroupName());
-                    }
-
-                    return getSuggestions(args[1], data.toArray(new String[data.size()]));
-                } else {
-                    return getSuggestions(args[2], "clear", "prefix", "suffix", "permission", "priority");
-                }
-            }
-        }
-
-        return new ArrayList<>();
-    }
-
-    /**
-     * Base command for NametagEdit. See the Wiki for usage and examples.
-     */
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (isNotPermissed(sender, "nametagedit.use")) return false;
-        if (args.length < 1) {
-            sendUsage(sender);
-        } else if (args.length >= 1) {
-            switch (args[0].toLowerCase()) {
-                case "reload":
-                    cmdReload(sender);
-                    break;
-                case "convert":
-                    cmdConvert(sender, args);
-                    break;
-                case "debug":
-                    handler.toggleDebug();
-                    NametagMessages.DEBUG_TOGGLED.send(sender, handler.debug() ? "&aENABLED" : "&cDISABLED");
-                    break;
-                case "player":
-                    cmdPlayer(sender, args);
-                    break;
-                case "group":
-                    cmdGroups(sender, args);
-                    break;
-                case "teams":
-                    int emptyTeams = 0;
-                    boolean unregister = args.length > 1 && args[1].equalsIgnoreCase("clear");
-                    for (Team team : Bukkit.getScoreboardManager().getMainScoreboard().getTeams()) {
-                        if (team.getEntries().isEmpty()) {
-                            if (unregister) {
-                                team.unregister();
-                            }
-                            emptyTeams++;
-                        }
-                    }
-
-                    NametagMessages.CLEARED_TEAMS.send(sender, emptyTeams, unregister);
-                    break;
-                case "priority":
-                    cmdPriority(sender, args);
-                    break;
-                default:
-                    sendUsage(sender);
-                    break;
-            }
-        }
-
-        return false;
     }
 
     private boolean isPermissed(CommandSender sender, String permission) {
@@ -419,4 +328,89 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         NametagMessages.SET_PRIORITY.send(sender, priority, key);
     }
 
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        if (isNotPermissed(sender, "nametagedit.use")) return false;
+        if (args.length < 1) {
+            sendUsage(sender);
+        } else if (args.length >= 1) {
+            switch (args[0].toLowerCase()) {
+                case "reload":
+                    cmdReload(sender);
+                    break;
+                case "convert":
+                    cmdConvert(sender, args);
+                    break;
+                case "debug":
+                    handler.toggleDebug();
+                    NametagMessages.DEBUG_TOGGLED.send(sender, handler.debug() ? "&aENABLED" : "&cDISABLED");
+                    break;
+                case "player":
+                    cmdPlayer(sender, args);
+                    break;
+                case "group":
+                    cmdGroups(sender, args);
+                    break;
+                case "teams":
+                    int emptyTeams = 0;
+                    boolean unregister = args.length > 1 && args[1].equalsIgnoreCase("clear");
+                    for (Team team : Bukkit.getScoreboardManager().getMainScoreboard().getTeams()) {
+                        if (team.getEntries().isEmpty()) {
+                            if (unregister) {
+                                team.unregister();
+                            }
+                            emptyTeams++;
+                        }
+                    }
+
+                    NametagMessages.CLEARED_TEAMS.send(sender, emptyTeams, unregister);
+                    break;
+                case "priority":
+                    cmdPriority(sender, args);
+                    break;
+                default:
+                    sendUsage(sender);
+                    break;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+        if (args.length == 1) {
+            return getSuggestions(args[0], "debug", "reload", "convert", "player", "group");
+        } else if (args.length == 2 || args.length == 3) {
+            if (args[0].equalsIgnoreCase("player")) {
+                if (args.length == 2) {
+                    List<String> suggestions = new ArrayList<>();
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.getName().toLowerCase().startsWith(args[1].toLowerCase())) {
+                            suggestions.add(player.getName());
+                        }
+                    }
+                    return suggestions;
+                } else {
+                    return getSuggestions(args[2], "clear", "prefix", "suffix", "priority");
+                }
+            } else if (args[0].equalsIgnoreCase("group")) {
+                if (args.length == 2) {
+                    List<String> data = new ArrayList<>(handler.getGroupData().size() + 4);
+                    data.add("list");
+                    data.add("add");
+                    data.add("remove");
+                    data.add("order");
+                    for (GroupData groupData : handler.getGroupData()) {
+                        data.add(groupData.getGroupName());
+                    }
+
+                    return getSuggestions(args[1], data.toArray(new String[data.size()]));
+                } else {
+                    return getSuggestions(args[2], "clear", "prefix", "suffix", "permission", "priority");
+                }
+            }
+        }
+
+        return new ArrayList<>();
+    }
 }

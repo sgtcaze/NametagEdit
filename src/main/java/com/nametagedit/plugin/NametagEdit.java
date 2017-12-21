@@ -9,9 +9,11 @@ import com.nametagedit.plugin.hooks.HookZPermissions;
 import com.nametagedit.plugin.packets.PacketWrapper;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -53,7 +55,16 @@ public class NametagEdit extends JavaPlugin {
             pluginManager.registerEvents(new HookLibsDisguise(this), this);
         }
 
-        getCommand("ne").setExecutor(new NametagCommand(handler));
+        if(!handler.getConfig().getBoolean("DisableCommand", true)){
+            try {
+                Field f = this.getServer().getClass().getDeclaredField("commandMap");
+                f.setAccessible(true);
+                SimpleCommandMap scm = (SimpleCommandMap) f.get(this.getServer());
+                scm.register(this.getName(), new NametagCommand(handler));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (api == null) {
             api = new NametagAPI(handler, manager);
