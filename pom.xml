@@ -43,6 +43,12 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/EssentialsGroupManager.jar</systemPath>
         </dependency>
+        <!-- LuckPerms -->
+        <dependency>
+            <groupId>me.lucko.luckperms</groupId>
+            <artifactId>luckperms-api</artifactId>
+            <version>4.0</version>
+        </dependency>
         <!-- HikariCP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
