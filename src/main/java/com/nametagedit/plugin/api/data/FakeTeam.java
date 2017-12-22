@@ -1,11 +1,9 @@
 package com.nametagedit.plugin.api.data;
 
+import com.nametagedit.plugin.utils.Utils;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
-import com.nametagedit.plugin.utils.Utils;
 
 /**
  * This class represents a Scoreboard Team. It is used
