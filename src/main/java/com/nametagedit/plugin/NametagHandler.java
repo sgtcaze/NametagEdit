@@ -297,6 +297,12 @@ public class NametagHandler implements Listener {
             input = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, input);
         }
 
+        if (input == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "NametagEdit was unable to format nametag for " + player.getName());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Are your PlaceHolder plugins properly installed?");
+            return "";
+        }
+
         return Utils.format(input, true);
     }
 
