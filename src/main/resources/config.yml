@@ -5,8 +5,6 @@
 # Source Code: http://www.github.com/sgtcaze/NametagEdit
 #---------------------------------------------------------
 #
-# Do NOT change this setting. Bad things will happen if you do!!
-DatabaseVersion: 1
 # If enabled, this will remove any formatting created in the tab list by prefixes / suffixes
 # Do not set this to true if you already have a plugin that changes the tab list
 TabListDisabled: false

@@ -9,22 +9,26 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @AllArgsConstructor
 public class DatabaseUpdater extends BukkitRunnable {
 
-    private int currentVersion;
     private NametagHandler handler;
     private HikariDataSource hikari;
     private NametagEdit plugin;
 
+    private static final int CURRENT_DATABASE_VERSION = 3;
+
     @Override
     public void run() {
         try (Connection connection = hikari.getConnection()) {
+            int currentVersion = getCurrentDatabaseVersion(connection);
+
             createTablesIfNotExists(connection);
 
-            while (currentVersion < handler.getDatabaseVersion()) {
+            while (currentVersion < CURRENT_DATABASE_VERSION) {
                 switch (currentVersion) {
                     case 1:
                         handleUpdate1(connection);
@@ -33,7 +37,11 @@ public class DatabaseUpdater extends BukkitRunnable {
                         handleUpdate2(connection);
                         break;
                 }
+
+                currentVersion++;
             }
+
+            setCurrentDatabaseVersion(connection, CURRENT_DATABASE_VERSION);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -51,9 +59,6 @@ public class DatabaseUpdater extends BukkitRunnable {
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " ADD `priority` INT NOT NULL");
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " ADD `priority` INT NOT NULL");
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " MODIFY `permission` VARCHAR(64)");
-        currentVersion++;
-        handler.getConfig().set("DatabaseVersion", currentVersion);
-        handler.getConfig().save();
     }
 
     private void handleUpdate2(Connection connection) {
@@ -61,21 +66,47 @@ public class DatabaseUpdater extends BukkitRunnable {
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " CHANGE `suffix` `suffix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CHANGE `prefix` `prefix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CHANGE `suffix` `suffix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
-        currentVersion++;
-        handler.getConfig().set("DatabaseVersion", currentVersion);
-        handler.getConfig().save();
+    }
+
+    private void setCurrentDatabaseVersion(Connection connection, int currentVersion) {
+        try (PreparedStatement select = connection.prepareStatement("INSERT INTO " + DatabaseConfig.TABLE_CONFIG +
+                " VALUES('db_version', ?) ON DUPLICATE KEY UPDATE `value`=?")) {
+            select.setInt(1, currentVersion);
+            select.setInt(2, currentVersion);
+            select.execute();
+        } catch (SQLException e) {
+            handleError(e);
+        }
+    }
+
+    private int getCurrentDatabaseVersion(Connection connection) {
+        try (PreparedStatement select = connection.prepareStatement("SELECT `value` FROM " + DatabaseConfig.TABLE_CONFIG + " WHERE `setting`='db_version'")) {
+            try (ResultSet resultSet = select.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("value");
+                }
+            }
+        } catch (SQLException e) {
+            handleError(e);
+        }
+
+        return 1;
     }
 
     private void execute(Connection connection, String query) {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.execute();
         } catch (SQLException e) {
-            if (handler.isDebug()) {
-                e.printStackTrace();
-            } else {
-                plugin.getLogger().severe("NametagEdit Query Failed - Reason: " + e.getMessage());
-                plugin.getLogger().severe("If this is not a connection error, please enable debug with /nte debug and post the error on our GitHub Issue Tracker.");
-            }
+            handleError(e);
+        }
+    }
+
+    private void handleError(SQLException e) {
+        if (handler.isDebug()) {
+            e.printStackTrace();
+        } else {
+            plugin.getLogger().severe("NametagEdit Query Failed - Reason: " + e.getMessage());
+            plugin.getLogger().severe("If this is not a connection error, please enable debug with /nte debug and post the error on our GitHub Issue Tracker.");
         }
     }
 

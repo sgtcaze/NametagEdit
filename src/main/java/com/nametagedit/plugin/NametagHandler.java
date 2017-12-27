@@ -46,8 +46,6 @@ public class NametagHandler implements Listener {
     private boolean tabListDisabled;
     private boolean refreshTagOnWorldChange;
     private String tagOverrideColor;
-    // This should only be changed in the code
-    private int databaseVersion = 3;
 
     private BukkitTask clearEmptyTeamTask;
     private BukkitTask refreshNametagTask;

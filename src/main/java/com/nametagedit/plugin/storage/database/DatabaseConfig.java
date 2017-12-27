@@ -51,7 +51,7 @@ public class DatabaseConfig implements AbstractConfig {
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
 
-        new DatabaseUpdater(config.getInt("DatabaseVersion", 1), handler, hikari, plugin).runTaskAsynchronously(plugin);
+        new DatabaseUpdater(handler, hikari, plugin).runTaskAsynchronously(plugin);
     }
 
     @Override
