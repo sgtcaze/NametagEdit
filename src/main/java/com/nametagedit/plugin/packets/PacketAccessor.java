@@ -41,11 +41,11 @@ class PacketAccessor {
             getHandle = typeCraftPlayer.getMethod("getHandle");
 
             if (CAULDRON_SERVER) {
-                packetClass = net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam.class;
-                Class<?> typeNMSPlayer = net.minecraft.server.v1_7_R4.EntityPlayer.class;
-                Class<?> typePlayerConnection = net.minecraft.server.v1_7_R4.PlayerConnection.class;
+                packetClass = Class.forName("net.minecraft.server.v1_7_R4.PacketPlayOutScoreboardTeam");
+                Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.v1_7_R4.EntityPlayer");
+                Class<?> typePlayerConnection = Class.forName("net.minecraft.server.v1_7_R4.PlayerConnection");
                 playerConnection = typeNMSPlayer.getField("field_71135_a");
-                sendPacket = typePlayerConnection.getMethod("func_147359_a", net.minecraft.server.v1_7_R4.Packet.class);
+                sendPacket = typePlayerConnection.getMethod("func_147359_a", Class.forName("net.minecraft.server.v1_7_R4.Packet"));
             } else {
                 packetClass = Class.forName("net.minecraft.server." + version + ".PacketPlayOutScoreboardTeam");
                 Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + version + ".EntityPlayer");

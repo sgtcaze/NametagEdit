@@ -37,20 +37,20 @@ public class NametagEdit extends JavaPlugin {
         manager = new NametagManager(this);
         handler = new NametagHandler(this, manager);
 
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        if (checkShouldRegister("zPermissions")) {
-            pluginManager.registerEvents(new HookZPermissions(handler), this);
-        } else if (checkShouldRegister("PermissionsEx")) {
-            pluginManager.registerEvents(new HookPermissionsEX(handler), this);
-        } else if (checkShouldRegister("GroupManager")) {
-            pluginManager.registerEvents(new HookGroupManager(handler), this);
-        } else if (checkShouldRegister("LuckPerms")) {
-            pluginManager.registerEvents(new HookLuckPerms(handler), this);
-        }
-
-        if (pluginManager.getPlugin("LibsDisguises") != null) {
-            pluginManager.registerEvents(new HookLibsDisguise(this), this);
-        }
+//        PluginManager pluginManager = Bukkit.getPluginManager();
+//        if (checkShouldRegister("zPermissions")) {
+//            pluginManager.registerEvents(new HookZPermissions(handler), this);
+//        } else if (checkShouldRegister("PermissionsEx")) {
+//            pluginManager.registerEvents(new HookPermissionsEX(handler), this);
+//        } else if (checkShouldRegister("GroupManager")) {
+//            pluginManager.registerEvents(new HookGroupManager(handler), this);
+//        } else if (checkShouldRegister("LuckPerms")) {
+//            pluginManager.registerEvents(new HookLuckPerms(handler), this);
+//        }
+//
+//        if (pluginManager.getPlugin("LibsDisguises") != null) {
+//            pluginManager.registerEvents(new HookLibsDisguise(this), this);
+//        }
 
         getCommand("ne").setExecutor(new NametagCommand(handler));
 
