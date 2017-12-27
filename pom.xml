@@ -104,11 +104,12 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-        <!-- Stealthyone Repo -->
+        <!-- Stealthyone Repo
         <repository>
             <id>stealthyone-repo</id>
             <url>http://repo.stealthyone.com/content/groups/public</url>
         </repository>
+         -->
         <!-- MVdW Repo -->
         <repository>
             <id>mvdw-software</id>
