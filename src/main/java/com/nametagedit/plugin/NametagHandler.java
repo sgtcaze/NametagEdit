@@ -288,13 +288,13 @@ public class NametagHandler implements Listener {
 
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
             plugin.debug("Trying to use MVdWPlaceholderAPI for placeholders");
-//            input = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, input);
+            input = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, input);
         }
 
         // The string can become null again at this point. Add another check.
         if (input != null && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             plugin.debug("Trying to use PlaceholderAPI for placeholders");
-//            input = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, input);
+            input = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, input);
         }
 
         if (input == null) {
