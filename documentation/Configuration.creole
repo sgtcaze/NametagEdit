@@ -12,7 +12,8 @@ Three configurable files will be generated if they do not exist. They are: "conf
 | MySQL | true/false | If 'true', NametagEdit will use MySQL to store group/player data |
 | RefreshTagOnWorldChange | true/false | If enabled, NametagEdit will refresh a player's nametag when they change worlds. |
 | RefreshInterval | Integer | This feature will refresh all player's nametags on an interval expressed in seconds. |
-| TabListDisabled | true/false | If enabled, NametagEdit will not alter a user's name in the tab. This can also be overriden with the function setPlayerListName(); |
+| Tablist.Enabled | true/false | If enabled, NametagEdit will alter a user's name in the tab. |
+| Tablist.LongTags | true/false | If enabled, NametagEdit will format the user's PlayerListName for longer nametags. |
 
 === groups.yml
 Place your HIGHEST permission group at the top. At the top of the file there should be a group like "Owner" while the bottom should have something similar to "Default".

@@ -85,7 +85,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         if (isNotPermissed(sender, "nametagedit.use")) return false;
         if (args.length < 1) {
             sendUsage(sender);
-        } else if (args.length >= 1) {
+        } else {
             switch (args[0].toLowerCase()) {
                 case "reload":
                     cmdReload(sender);
@@ -102,6 +102,10 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
                     break;
                 case "group":
                     cmdGroups(sender, args);
+                    break;
+                case "longtags":
+                    handler.toggleLongTags();
+                    NametagMessages.LONG_TAGS.send(sender, handler.isLongNametagsEnabled() ? "&aENABLED" : "&cDISABLED");
                     break;
                 case "teams":
                     int emptyTeams = 0;
@@ -175,6 +179,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         sender.sendMessage(Utils.format("&8» &a/nte player"));
         sender.sendMessage(Utils.format("&8» &a/nte group"));
         sender.sendMessage(Utils.format("&8» &a/nte priority"));
+        sender.sendMessage(Utils.format("&8» &a/nte longtags"));
     }
 
     /**

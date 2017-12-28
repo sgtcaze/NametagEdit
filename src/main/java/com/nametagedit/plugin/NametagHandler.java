@@ -43,9 +43,10 @@ public class NametagHandler implements Listener {
 
     public static boolean DISABLE_PUSH_ALL_TAGS = false;
     private boolean debug;
-    private boolean tabListDisabled;
+    @Getter(AccessLevel.NONE)
+    private boolean tabListEnabled;
+    private boolean longNametagsEnabled;
     private boolean refreshTagOnWorldChange;
-    private String tagOverrideColor;
 
     private BukkitTask clearEmptyTeamTask;
     private BukkitTask refreshNametagTask;
@@ -225,6 +226,12 @@ public class NametagHandler implements Listener {
         config.save();
     }
 
+    void toggleLongTags() {
+        longNametagsEnabled = !longNametagsEnabled;
+        config.set("Tablist.LongTags", longNametagsEnabled);
+        config.save();
+    }
+
     // =================================================
     // Below are methods that we have to be careful with
     // as they can be called from different threads
@@ -322,9 +329,9 @@ public class NametagHandler implements Listener {
 
     private void applyConfig() {
         this.debug = config.getBoolean("Debug");
-        this.tabListDisabled = config.getBoolean("TabListDisabled");
+        this.tabListEnabled = config.getBoolean("Tablist.Enabled");
+        this.longNametagsEnabled = config.getBoolean("Tablist.LongTags");
         this.refreshTagOnWorldChange = config.getBoolean("RefreshTagOnWorldChange");
-        this.tagOverrideColor = Utils.format(config.getString("OverrideColor"));
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
 
         if (config.getBoolean("MetricsEnabled")) {
@@ -401,7 +408,17 @@ public class NametagHandler implements Listener {
             @Override
             public void run() {
                 nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, nametag.getPrefix()), formatWithPlaceholders(player, nametag.getSuffix()), nametag.getSortPriority());
-                player.setPlayerListName(tabListDisabled ? Utils.format(tagOverrideColor + player.getPlayerListName()) : null);
+                // If the TabList is disabled...
+                if (!tabListEnabled) {
+                    // apply the default white username to the player.
+                    player.setPlayerListName(Utils.format("&f" + player.getPlayerListName()));
+                } else {
+                    if (longNametagsEnabled) {
+                        player.setPlayerListName(Utils.format(nametag.getPrefix() + player.getName() + nametag.getSuffix()));
+                    } else {
+                        player.setPlayerListName(null);
+                    }
+                }
             }
         }.runTask(plugin);
     }

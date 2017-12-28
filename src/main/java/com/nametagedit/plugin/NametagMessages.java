@@ -11,6 +11,7 @@ public enum NametagMessages {
     SET_PRIORITY("Set sort priority to %s for %s"),
     CLEARED_TEAMS("Empty teams: %s. Purge: %s."),
     DEBUG_TOGGLED("NametagEdit debug has been %s"),
+    LONG_TAGS("Long Nametags has been %s"),
     GROUP_EXISTS("The group %s already exists"),
     GROUP_VALUE_CLEARED("Cleared the %s for the group %s"),
     GROUP_EXISTS_NOT("The group %s does not exist!"),
