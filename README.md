@@ -45,7 +45,6 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 **A:** Yes. Read up on how to use it [here](documentation/Configuration.creole)
 
 # TODO
-* Utilize PlayerListName in later versions of MC where string length is not an issue.
 
 # Incompatible Plugins
 ✖ Any plugin that creates NPCs that share the same username as players who have 'NametagEdit' nametags
