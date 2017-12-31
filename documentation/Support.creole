@@ -10,6 +10,9 @@ It is most likely that several plugins are manipulating the main scoreboard, and
 == If you are using a minigame or scoreboards plugin
 Please send us the name, or check if it is incompatible [here](IncompatiblePlugins.md)
 
+== Long Tags Don't Work!
+The nameplate (above your head) is limited to 48 characters total. 16 characters for the prefix, 16 for your name, and 16 for the suffix. It is NOT a bug that nametags longer than 16 characters are cut off. This is because of a limitation in the minecraft scoreboard code.  
+
 == ViaVersion:
 If you're using ViaVersion on 1.8.x and having issues with tags showing up in the tab list. Edit the file plugins/ViaVersion/config.yml
 
