@@ -48,3 +48,4 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 
 # Incompatible Plugins
 ✖ Any plugin that creates NPCs that share the same username as players who have 'NametagEdit' nametags
+✖ Any plugin that uses Team color sidebars without specifically supporting NametagEdit
