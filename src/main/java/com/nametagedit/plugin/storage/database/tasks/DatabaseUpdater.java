@@ -19,7 +19,7 @@ public class DatabaseUpdater extends BukkitRunnable {
     private HikariDataSource hikari;
     private NametagEdit plugin;
 
-    private static final int CURRENT_DATABASE_VERSION = 3;
+    private static final int CURRENT_DATABASE_VERSION = 4;
 
     @Override
     public void run() {
@@ -35,6 +35,9 @@ public class DatabaseUpdater extends BukkitRunnable {
                         break;
                     case 2:
                         handleUpdate2(connection);
+                        break;
+                    case 3:
+                        handleUpdate3(connection);
                         break;
                 }
 
@@ -66,6 +69,13 @@ public class DatabaseUpdater extends BukkitRunnable {
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " CHANGE `suffix` `suffix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CHANGE `prefix` `prefix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CHANGE `suffix` `suffix` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
+    }
+
+    private void handleUpdate3(Connection connection) {
+        execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " CONVERT TO CHARACTER SET utf8;");
+        execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CONVERT TO CHARACTER SET utf8;");
+
+        // TODO: Queries for Issue #230.
     }
 
     private void setCurrentDatabaseVersion(Connection connection, int currentVersion) {
