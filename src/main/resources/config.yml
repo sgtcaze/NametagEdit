@@ -58,3 +58,9 @@ MySQL:
   GroupsTable: nte_groups
   PlayersTable: nte_players
   ConfigTable: nte_config
+  # Minimum connection pool size
+  # WARNING: If you have no idea what this is for, do not change.
+  # To see the optimal connections for your setup, please visit:
+  # https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+  # And review the pool size configuration (Tn x (Cm - 1) + 1)
+  MinimumPoolSize: 10

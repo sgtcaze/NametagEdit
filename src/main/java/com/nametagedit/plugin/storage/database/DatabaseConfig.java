@@ -42,7 +42,7 @@ public class DatabaseConfig implements AbstractConfig {
         FileConfiguration config = handler.getConfig();
         shutdown();
         hikari = new HikariDataSource();
-        hikari.setMaximumPoolSize(10);
+        hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
         hikari.setPoolName("NametagEdit Pool");
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", config.getString("MySQL.Hostname"));
