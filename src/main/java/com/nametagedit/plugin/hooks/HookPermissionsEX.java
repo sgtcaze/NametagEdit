@@ -17,7 +17,7 @@ public class HookPermissionsEX implements Listener {
     public void onPermissionEntityEvent(PermissionEntityEvent event) {
         Player player = Bukkit.getPlayerExact(event.getEntity().getName());
         if (player != null) {
-            handler.applyTagToPlayer(player);
+            handler.applyTagToPlayer(player, false);
         }
     }
 

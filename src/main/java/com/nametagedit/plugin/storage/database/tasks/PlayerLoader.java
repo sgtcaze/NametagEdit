@@ -2,6 +2,7 @@ package com.nametagedit.plugin.storage.database.tasks;
 
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.PlayerData;
+import com.nametagedit.plugin.api.events.NametagFirstLoadedEvent;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class PlayerLoader extends BukkitRunnable {
     private Plugin plugin;
     private NametagHandler handler;
     private HikariDataSource hikari;
+    private boolean loggedIn;
 
     @Override
     public void run() {
@@ -70,7 +72,7 @@ public class PlayerLoader extends BukkitRunnable {
                             }
                         }
 
-                        handler.applyTagToPlayer(player);
+                        handler.applyTagToPlayer(player, loggedIn);
                     }
                 }
             }.runTask(plugin);

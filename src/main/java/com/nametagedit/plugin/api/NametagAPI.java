@@ -36,7 +36,7 @@ public final class NametagAPI implements INametagApi {
     @Override
     public void reloadNametag(Player player) {
         if (shouldFireEvent(player, NametagEvent.ChangeType.RELOAD)) {
-            handler.applyTagToPlayer(player);
+            handler.applyTagToPlayer(player, false);
         }
     }
 

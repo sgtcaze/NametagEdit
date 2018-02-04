@@ -25,7 +25,7 @@ public class HookLuckPerms implements Listener {
         User user = event.getUser();
         Player player = Bukkit.getPlayer(user.getUuid());
         if (player != null) {
-            handler.applyTagToPlayer(player);
+            handler.applyTagToPlayer(player, false);
         }
     }
 

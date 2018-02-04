@@ -260,7 +260,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
             }
 
             handler.clear(sender, targetName);
-            handler.applyTagToPlayer(Bukkit.getPlayerExact(targetName));
+            handler.applyTagToPlayer(Bukkit.getPlayerExact(targetName), false);
         } else if (args.length >= 4) {
             switch (args[2].toLowerCase()) {
                 case "prefix":

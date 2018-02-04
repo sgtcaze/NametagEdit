@@ -16,7 +16,7 @@ public class HookGroupManager implements Listener {
     public void onGMUserEvent(GMUserEvent event) {
         Player player = event.getUser().getBukkitPlayer();
         if (player != null) {
-            handler.applyTagToPlayer(player);
+            handler.applyTagToPlayer(player, false);
         }
     }
 

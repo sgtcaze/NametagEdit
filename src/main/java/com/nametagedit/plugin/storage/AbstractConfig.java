@@ -20,7 +20,7 @@ public interface AbstractConfig {
 
     void shutdown();
 
-    void load(Player player);
+    void load(Player player, boolean loggedIn);
 
     void save(PlayerData... playerData);
 

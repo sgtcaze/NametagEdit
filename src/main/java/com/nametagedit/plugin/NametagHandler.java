@@ -4,6 +4,7 @@ import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.INametag;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.api.events.NametagEvent;
+import com.nametagedit.plugin.api.events.NametagFirstLoadedEvent;
 import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
@@ -139,7 +140,7 @@ public class NametagHandler implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                abstractConfig.load(player);
+                abstractConfig.load(player, true);
             }
         }.runTaskLaterAsynchronously(plugin, 1);
     }
@@ -155,7 +156,7 @@ public class NametagHandler implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                applyTagToPlayer(event.getPlayer());
+                applyTagToPlayer(event.getPlayer(), false);
             }
         }.runTaskLater(plugin, 3);
     }
@@ -371,20 +372,20 @@ public class NametagHandler implements Listener {
 
         for (Player online : Utils.getOnline()) {
             if (online != null) {
-                applyTagToPlayer(online);
+                applyTagToPlayer(online, false);
             }
         }
 
         plugin.debug("Applied tags to all online players.");
     }
 
-    public void applyTagToPlayer(final Player player) {
+    public void applyTagToPlayer(final Player player, final boolean loggedIn) {
         // If on the primary thread, run async
         if (Bukkit.isPrimaryThread()) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    applyTagToPlayer(player);
+                    applyTagToPlayer(player, loggedIn);
                 }
             }.runTaskAsynchronously(plugin);
             return;
@@ -418,6 +419,10 @@ public class NametagHandler implements Listener {
                     } else {
                         player.setPlayerListName(null);
                     }
+                }
+
+                if (loggedIn) {
+                    Bukkit.getPluginManager().callEvent(new NametagFirstLoadedEvent(player, nametag));
                 }
             }
         }.runTask(plugin);
@@ -485,7 +490,7 @@ public class NametagHandler implements Listener {
         }
 
         if (player != null) {
-            applyTagToPlayer(player);
+            applyTagToPlayer(player, false);
             data.setUuid(player.getUniqueId());
             abstractConfig.save(data);
             return;

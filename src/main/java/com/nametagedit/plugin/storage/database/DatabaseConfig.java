@@ -67,8 +67,8 @@ public class DatabaseConfig implements AbstractConfig {
     }
 
     @Override
-    public void load(Player player) {
-        new PlayerLoader(player.getUniqueId(), plugin, handler, hikari).runTaskAsynchronously(plugin);
+    public void load(Player player, boolean loggedIn) {
+        new PlayerLoader(player.getUniqueId(), plugin, handler, hikari, loggedIn).runTaskAsynchronously(plugin);
     }
 
     @Override
