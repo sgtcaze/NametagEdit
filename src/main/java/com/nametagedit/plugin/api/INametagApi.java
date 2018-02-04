@@ -1,9 +1,19 @@
 package com.nametagedit.plugin.api;
 
+import com.nametagedit.plugin.api.data.FakeTeam;
 import com.nametagedit.plugin.api.data.Nametag;
 import org.bukkit.entity.Player;
 
 public interface INametagApi {
+
+    /**
+     * Function gets the fake team data for
+     * player.
+     *
+     * @param player the player to check
+     * @return the fake team
+     */
+    FakeTeam getFakeTeam(Player player);
 
     /**
      * Function gets the nametag for a player if

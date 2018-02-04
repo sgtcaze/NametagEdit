@@ -20,6 +20,11 @@ public final class NametagAPI implements INametagApi {
     private NametagManager manager;
 
     @Override
+    public FakeTeam getFakeTeam(Player player) {
+        return manager.getFakeTeam(player.getName());
+    }
+
+    @Override
     public Nametag getNametag(Player player) {
         FakeTeam team = manager.getFakeTeam(player.getName());
         boolean nullTeam = team == null;
