@@ -288,7 +288,7 @@ public class NametagHandler implements Listener {
      * is replaced. We use direct imports to avoid any problems!
      * (So don't change that)
      */
-    public String formatWithPlaceholders(Player player, String input) {
+    public String formatWithPlaceholders(Player player, String input, boolean limitChars) {
         if (input == null) return "";
         if (player == null) return input;
 
@@ -309,7 +309,7 @@ public class NametagHandler implements Listener {
             return "";
         }
 
-        return Utils.format(input, true);
+        return Utils.format(input, limitChars);
     }
 
     private BukkitTask createTask(String path, BukkitTask existing, Runnable runnable) {
@@ -408,14 +408,15 @@ public class NametagHandler implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, nametag.getPrefix()), formatWithPlaceholders(player, nametag.getSuffix()), nametag.getSortPriority());
+                nametagManager.setNametag(player.getName(), formatWithPlaceholders(player, nametag.getPrefix(), true),
+                        formatWithPlaceholders(player, nametag.getSuffix(), true), nametag.getSortPriority());
                 // If the TabList is disabled...
                 if (!tabListEnabled) {
                     // apply the default white username to the player.
                     player.setPlayerListName(Utils.format("&f" + player.getPlayerListName()));
                 } else {
                     if (longNametagsEnabled) {
-                        player.setPlayerListName(Utils.format(nametag.getPrefix() + player.getName() + nametag.getSuffix()));
+                        player.setPlayerListName(formatWithPlaceholders(player, nametag.getPrefix() + player.getName() + nametag.getSuffix(), false));
                     } else {
                         player.setPlayerListName(null);
                     }
