@@ -98,8 +98,8 @@ public final class NametagAPI implements INametagApi {
      */
     private void setNametagAlt(Player player, String prefix, String suffix) {
         Nametag nametag = new Nametag(
-                handler.formatWithPlaceholders(player, prefix),
-                handler.formatWithPlaceholders(player, suffix)
+                handler.formatWithPlaceholders(player, prefix, true),
+                handler.formatWithPlaceholders(player, suffix, true)
         );
 
         NametagEvent event = new NametagEvent(player.getName(), prefix, nametag, NametagEvent.ChangeType.UNKNOWN);
