@@ -45,6 +45,21 @@ Example Usage:
     }
 }}}
 
+{{{
+    @EventHandler
+    public void onNametagFirstLoadedEvent(NametagFirstLoadedEvent event) {
+        // This event is fired when a player joins the server and their nametag is determined
+		// This is useful for custom join messages. For general nametag changes, listen to NametagEvent
+		INametag tag = event.getNametag();
+		Player player = event.getPlayer();
+		
+		String prefix = tag.getPrefix();
+		String suffix = tag.getSuffix();
+		int sortPriority = tag.getSortPriority();
+		boolean isPlayerTag = tag.isPlayerTag();
+    }
+}}}
+
 === API Methods
 
 There are various methods available through the API. You can access these methods via NametagEdit.getApi()
