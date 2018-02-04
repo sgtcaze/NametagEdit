@@ -78,10 +78,10 @@ If you use or develop a plugin that utilizes scoreboards, there can be issues wh
 
 To get around this, simply use:
 
-```
+{{{
 FakeTeam team = NametagEdit.getApi().getFakeTeam(String player);
 String name = team.getName();
-```
+}}}
 
 And reuse the name for the new scoreboard. Credit to @Maximvdw for the workaround, which can be found at [[https://github.com/sgtcaze/NametagEdit/pull/229|Adding Compatibility]]
 
