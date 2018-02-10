@@ -1,6 +1,6 @@
 name: NametagEdit
 main: com.nametagedit.plugin.NametagEdit
-version: 4.2.0
+version: 4.2.1
 authors: [sgtcaze, Cory]
 soft-depend: [zPermissions, PermissionsEX, GroupManager, LuckPerms, LibsDisguises]
 commands:

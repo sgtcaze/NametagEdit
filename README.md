@@ -50,6 +50,9 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissio
 #### Q: Can I sort nametags in the tab list?
 **A:** Yes. Read up on how to use it [here](documentation/Configuration.creole)
 
+#### Q: NametagEdit doesn't work with Placeholder API related plugins!
+**A:** NametagEdit does not have anything to do with this process. The placeholder API is an interface, and requires OTHER plugins to function. Consult the documentation for your chosen plugin.
+
 # TODO
 
 # Incompatible Plugins

@@ -294,19 +294,19 @@ public class NametagHandler implements Listener {
 
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
             plugin.debug("Trying to use MVdWPlaceholderAPI for placeholders");
-            input = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, input);
+            if (be.maximvdw.placeholderapi.PlaceholderAPI.getLoadedPlaceholderCount() != 0) {
+                input = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, input);
+            } else {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[NametagEdit] As the error above suggests, you " +
+                        "do NOT have any placeholder plugins installed. The placeholder API is merely an interface, it " +
+                        "requires other plugins to function. This is NOT an issue with NametagEdit.");
+            }
         }
 
         // The string can become null again at this point. Add another check.
         if (input != null && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             plugin.debug("Trying to use PlaceholderAPI for placeholders");
             input = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, input);
-        }
-
-        if (input == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "NametagEdit was unable to format nametag for " + player.getName());
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Are your PlaceHolder plugins properly installed?");
-            return "";
         }
 
         return Utils.format(input, limitChars);
