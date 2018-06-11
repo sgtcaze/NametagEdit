@@ -1,8 +1,8 @@
 # NametagEdit
 
 [![Build Status](https://travis-ci.org/sgtcaze/NametagEdit.svg?branch=master)](https://travis-ci.org/sgtcaze/NametagEdit)
-[![Dev Builds](https://img.shields.io/badge/Jenkins-Development%20Builds-lightgrey.svg)](http://ci.playmc.cc/job/NametagEdit/)
-[![Support](https://img.shields.io/badge/Minecraft-1.7--1.12-red.svg)](documentation/Support)
+[![Dev Builds](https://img.shields.io/badge/Jenkins-Development%20Builds-lightgrey.svg)](https://ci.nametagedit.com/job/NametagEdit/)
+[![Support](https://img.shields.io/badge/Minecraft-1.7--1.12.2-red.svg)](documentation/Support)
 [![Spigot](https://img.shields.io/badge/Spigot-Project%20Page-yellow.svg)](https://www.spigotmc.org/resources/nametagedit.3836/)
 [![JDK](https://img.shields.io/badge/JDK-1.8-blue.svg)](http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html)
 [![NametagEditAPI](https://img.shields.io/badge/NTE-Developer%20API-ff69b4.svg)](documentation/Developers.creole)
