@@ -10,6 +10,7 @@
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <src.dir>${project.build.directory}/generated-sources/delombok</src.dir>
     </properties>
     <dependencies>
         <!--Spigot API-->
@@ -97,8 +98,16 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.14.8</version>
+            <version>1.16.20</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- McDuels -->
+        <dependency>
+            <groupId>me.stevie212</groupId>
+            <artifactId>McDuels</artifactId>
+            <version>15.0.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/McDuels.jar</systemPath>
         </dependency>
     </dependencies>
     <repositories>
@@ -119,6 +128,14 @@
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
+<profiles>
+    <profile>
+        <id>lombok-build</id>
+        <properties>
+            <src.dir>${project.build.directory}/generated-sources/delombok</src.dir>
+        </properties>
+    </profile>
+</profiles>
     <!-- Builds NametagEdit -->
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -173,6 +190,23 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
             </plugin>
+       <plugin>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven-plugin</artifactId>
+            <version>1.16.20.0</version>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>delombok</goal>
+                    </goals>
+                    <configuration>
+                        <sourceDirectory>src/main/java</sourceDirectory>
+                        <addOutputDirectory>false</addOutputDirectory>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 </project>
