@@ -51,7 +51,9 @@ public class NametagEdit extends JavaPlugin {
         if (pluginManager.getPlugin("LibsDisguises") != null) {
             pluginManager.registerEvents(new HookLibsDisguise(this), this);
         }
-
+        if (pluginManager.getPlugin("McDuels") != null) {
+            pluginManager.registerEvents(new HookMcDuels(handler, this), this);
+        }
         getCommand("ne").setExecutor(new NametagCommand(handler));
 
         if (api == null) {
