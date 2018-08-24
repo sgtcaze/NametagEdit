@@ -1,15 +1,21 @@
 package com.nametagedit.plugin;
 
-import com.nametagedit.plugin.api.INametagApi;
-import com.nametagedit.plugin.api.NametagAPI;
-import com.nametagedit.plugin.hooks.*;
-import com.nametagedit.plugin.packets.PacketWrapper;
-import lombok.Getter;
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import com.nametagedit.plugin.api.INametagApi;
+import com.nametagedit.plugin.api.NametagAPI;
+import com.nametagedit.plugin.hooks.HookGroupManager;
+import com.nametagedit.plugin.hooks.HookLibsDisguise;
+import com.nametagedit.plugin.hooks.HookLuckPerms;
+import com.nametagedit.plugin.hooks.HookPermissionsEX;
+import com.nametagedit.plugin.hooks.HookZPermissions;
+import com.nametagedit.plugin.packets.PacketWrapper;
+
+import lombok.Getter;
 
 /**
  * TODO:
@@ -24,7 +30,7 @@ public class NametagEdit extends JavaPlugin {
 
     private NametagHandler handler;
     private NametagManager manager;
-
+    
     public static INametagApi getApi() {
         return api;
     }
@@ -91,5 +97,5 @@ public class NametagEdit extends JavaPlugin {
                 .append("\nThe plugin will now self destruct.\n------------------------------------------------------")
                 .toString());
     }
-
+    
 }
