@@ -30,7 +30,7 @@ public class NametagEdit extends JavaPlugin {
 
     private NametagHandler handler;
     private NametagManager manager;
-    
+
     public static INametagApi getApi() {
         return api;
     }
@@ -97,5 +97,5 @@ public class NametagEdit extends JavaPlugin {
                 .append("\nThe plugin will now self destruct.\n------------------------------------------------------")
                 .toString());
     }
-    
+
 }
