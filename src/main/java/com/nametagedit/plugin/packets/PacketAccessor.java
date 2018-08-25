@@ -13,6 +13,7 @@ class PacketAccessor {
 
     private static List<String> legacyVersions = Arrays.asList("v1_7_R1","v1_7_R2","v1_7_R3","v1_7_R4","v1_8_R1","v1_8_R2","v1_8_R3","v1_9_R1","v1_9_R2","v1_10_R1","v1_11_R1","v1_12_R1");
     private static boolean CAULDRON_SERVER = false;
+    private static boolean LEGACY_SERVER = false;
 
     static Field MEMBERS;
     static Field PREFIX;
@@ -41,6 +42,10 @@ class PacketAccessor {
 
         try {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            
+            if (legacyVersions.contains(version))
+                LEGACY_SERVER = true;
+            
             Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
             getHandle = typeCraftPlayer.getMethod("getHandle");
 
@@ -78,7 +83,7 @@ class PacketAccessor {
                 PACK_OPTION = getNMS(currentVersion.getPackOption());
                 DISPLAY_NAME = getNMS(currentVersion.getDisplayName());
 
-                if (!isLegacyClient()) {
+                if (!isLegacyVersion()) {
                     TEAM_COLOR = getNMS(currentVersion.getColor());
                 }
 
@@ -95,13 +100,8 @@ class PacketAccessor {
         }
     }
 
-    public static boolean isLegacyClient() {
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-
-        if (legacyVersions.contains(version) || CAULDRON_SERVER)
-            return true;
-
-        return false;
+    public static boolean isLegacyVersion() {
+        return LEGACY_SERVER;
     }
 
     private static boolean isPushVersion(String version) {

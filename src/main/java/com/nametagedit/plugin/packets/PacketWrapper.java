@@ -22,7 +22,7 @@ public class PacketWrapper {
 
     static {
         try {
-            if (!PacketAccessor.isLegacyClient()) {
+            if (!PacketAccessor.isLegacyVersion()) {
                 String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
                 Class<?> typeChatComponentText = Class.forName("net.minecraft.server." + version + ".ChatComponentText");
@@ -47,7 +47,7 @@ public class PacketWrapper {
         setupDefaults(name, param);
         if (param == 0 || param == 2) {
             try {            	            	
-                if (PacketAccessor.isLegacyClient()) {
+                if (PacketAccessor.isLegacyVersion()) {
                     PacketAccessor.DISPLAY_NAME.set(packet, name);
                     PacketAccessor.PREFIX.set(packet, prefix);
                     PacketAccessor.SUFFIX.set(packet, suffix);
