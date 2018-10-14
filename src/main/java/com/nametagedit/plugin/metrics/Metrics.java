@@ -1,4 +1,5 @@
 package com.nametagedit.plugin.metrics;
+package org.bstats.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
