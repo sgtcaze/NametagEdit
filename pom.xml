@@ -108,6 +108,13 @@
             <artifactId>guava</artifactId>
             <version>r05</version>
         </dependency>
+        <!-- bStats -->
+        <dependency>
+        	<groupId>org.bstats.bStats-Metrics</groupId>
+        	<artifactId>bstats-bukkit</artifactId>
+        	<version>1.3</version>
+        	<scope>compile</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <!-- Spigot -->
@@ -126,6 +133,11 @@
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <!-- bStats -->
+        <repository>
+        	<id>jitpack.io</id>
+        	<url>https://jitpack.io</url>
+		</repository>
     </repositories>
     <!-- Builds NametagEdit -->
     <build>
@@ -161,6 +173,7 @@
                                 <includes>
                                     <include>org.slf4j:*</include>
                                     <include>com.zaxxer:*</include>
+                                    <include>org.bstats.bStats-Metrics:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
