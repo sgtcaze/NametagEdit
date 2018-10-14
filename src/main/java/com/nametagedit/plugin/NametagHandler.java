@@ -337,7 +337,7 @@ public class NametagHandler implements Listener {
 
         if (config.getBoolean("MetricsEnabled")) {
             try {
-            	metrics.enable();
+				Metrics();
             } catch (IOException e) {
                 plugin.getLogger().severe("Couldn't start Metrics!");
             }
@@ -358,6 +358,18 @@ public class NametagHandler implements Listener {
             }
         });
     }
+	
+  	private void Metrics() {
+    	Metrics metrics = new Metrics(this);
+    	metrics.addCustomChart(new Metrics.SimplePie("using_expansion_cloud",
+        	() -> getExpansionCloud() != null ? "yes" : "no"));
+
+    	metrics.addCustomChart(
+        	new Metrics.SimplePie("using_spigot", () -> getServerVersion().isSpigot() ? "yes" : "no"));
+
+    }));
+
+  }
 
     public void applyTags() {
         if (!Bukkit.isPrimaryThread()) {
