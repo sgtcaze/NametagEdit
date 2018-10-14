@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 @Getter
 @Setter
 public class NametagHandler implements Listener {
@@ -337,7 +336,16 @@ public class NametagHandler implements Listener {
 
         if (config.getBoolean("MetricsEnabled")) {
             try {
-                new Metrics(plugin).start();
+
+            	Metrics metrics = new Metrics(this);
+
+		        metrics.addCustomChart(new Metrics.SimplePie("chart_id", new Callable<String>() {
+		        	@Override
+		        	public String call() throws Exception {
+		        		return "My value";
+		        	}
+
+		    	}));
             } catch (IOException e) {
                 plugin.getLogger().severe("Couldn't start Metrics!");
             }
