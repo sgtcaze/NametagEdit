@@ -5,6 +5,7 @@ import com.nametagedit.plugin.api.data.INametag;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.api.events.NametagFirstLoadedEvent;
+import org.bstats.bukkit.Metrics;
 import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
@@ -28,8 +29,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bstats.bukkit.Metrics;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -337,7 +336,7 @@ public class NametagHandler implements Listener {
 
         if (config.getBoolean("MetricsEnabled")) {
             try {
-				Metrics();
+				setupMetrics();
             } catch (IOException e) {
                 plugin.getLogger().severe("Couldn't start Metrics!");
             }
@@ -359,13 +358,13 @@ public class NametagHandler implements Listener {
         });
     }
 	
-  	private void Metrics() {
-    	Metrics m = new Metrics(this);
-    	m.addCustomChart(new Metrics.SimplePie("using_expansion_cloud",
-        	() -> getExpansionCloud() != null ? "yes" : "no"));
+  private void setupMetrics() {
+    Metrics m = new Metrics(this);
+    m.addCustomChart(new Metrics.SimplePie("using_expansion_cloud",
+        () -> getExpansionCloud() != null ? "yes" : "no"));
 
-    	m.addCustomChart(
-        	new Metrics.SimplePie("using_spigot", () -> getServerVersion().isSpigot() ? "yes" : "no"));
+    m.addCustomChart(
+        new Metrics.SimplePie("using_spigot", () -> getServerVersion().isSpigot() ? "yes" : "no"));
 
     }));
 
