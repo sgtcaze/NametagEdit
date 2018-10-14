@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bstats.bukkit.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -336,10 +337,7 @@ public class NametagHandler implements Listener {
 
         if (config.getBoolean("MetricsEnabled")) {
             try {
-
-            	Metrics metrics = new Metrics(this);
             	metrics.enable();
-            	
             } catch (IOException e) {
                 plugin.getLogger().severe("Couldn't start Metrics!");
             }
