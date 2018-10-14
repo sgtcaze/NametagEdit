@@ -5,7 +5,6 @@ import com.nametagedit.plugin.api.data.INametag;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.api.events.NametagFirstLoadedEvent;
-import org.bstats.bukkit.Metrics;
 import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;

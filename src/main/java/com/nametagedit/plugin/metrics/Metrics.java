@@ -1,4 +1,3 @@
-package org.bstats.bukkit;
 package com.nametagedit.plugin.metrics;
 
 import org.bukkit.Bukkit;
