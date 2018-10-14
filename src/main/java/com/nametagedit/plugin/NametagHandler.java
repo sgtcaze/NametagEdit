@@ -338,14 +338,8 @@ public class NametagHandler implements Listener {
             try {
 
             	Metrics metrics = new Metrics(this);
-
-		        metrics.addCustomChart(new Metrics.SimplePie("chart_id", new Callable<String>() {
-		        	@Override
-		        	public String call() throws Exception {
-		        		return "My value";
-		        	}
-
-		    	}));
+            	metrics.enable();
+            	
             } catch (IOException e) {
                 plugin.getLogger().severe("Couldn't start Metrics!");
             }
