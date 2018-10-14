@@ -5,7 +5,6 @@ import com.nametagedit.plugin.api.data.INametag;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.api.events.NametagFirstLoadedEvent;
-import org.bstats.bukkit.Metrics;
 import com.nametagedit.plugin.metrics.Metrics;
 import com.nametagedit.plugin.storage.AbstractConfig;
 import com.nametagedit.plugin.storage.database.DatabaseConfig;
@@ -337,11 +336,7 @@ public class NametagHandler implements Listener {
         if (config.getBoolean("MetricsEnabled")) {
             try {
     			Metrics m = new Metrics(this);
-    			m.addCustomChart(new Metrics.SimplePie("using_expansion_cloud",
-        		() -> getExpansionCloud() != null ? "yes" : "no"));
-
-    			m.addCustomChart(
-        		new Metrics.SimplePie("using_spigot", () -> getServerVersion().isSpigot() ? "yes" : "no"));
+    			m.addCustomChart(new Metrics.SimplePie("using_spigot", () -> getServerVersion().isSpigot() ? "yes" : "no"));
             } catch (IOException e) {
                 plugin.getLogger().severe("Couldn't start Metrics!");
             }
