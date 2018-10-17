@@ -15,7 +15,7 @@ import com.nametagedit.plugin.utils.Utils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.bstats.bukkit.Metrics;
+import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -29,11 +29,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 @Getter
 @Setter
 public class NametagHandler implements Listener {
@@ -335,12 +336,8 @@ public class NametagHandler implements Listener {
         DISABLE_PUSH_ALL_TAGS = config.getBoolean("DisablePush");
 
         if (config.getBoolean("MetricsEnabled")) {
-            try {
-    			Metrics m = new Metrics(this);
-    			m.addCustomChart(new Metrics.SimplePie("using_spigot", () -> getServerVersion().isSpigot() ? "yes" : "no"));
-            } catch (IOException e) {
-                plugin.getLogger().severe("Couldn't start Metrics!");
-            }
+            Metrics m = new Metrics(NametagEdit.getPlugin(NametagEdit.class));
+            m.addCustomChart(new Metrics.SimplePie("using_spigot", () -> PlaceholderAPIPlugin.getServerVersion().isSpigot() ? "yes" : "no"));
         }
 
         clearEmptyTeamTask = createTask("ClearEmptyTeamsInterval", clearEmptyTeamTask, new Runnable() {
