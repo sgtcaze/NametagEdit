@@ -11,7 +11,7 @@
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.14-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <dependencies>
         <!--Spigot API -->
