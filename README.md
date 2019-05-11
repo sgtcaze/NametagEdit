@@ -15,7 +15,7 @@ This plugin allows users to add up to 16 characters before and after their name.
 NametagEdit has support for EssentialsGroupManager, PermissionsEx and zPermissions. If a user changes groups or permissions, their tag is automatically updated.
 
 * [Official Project Page](https://www.spigotmc.org/resources/nametagedit.3836/)
-* [Development Builds](http://ci.nametagedit.com/job/NametagEdit)
+* [Development Builds](http://ci.nametagedit.com)
 
 # Quick Links
 * [API & Developers](documentation/Developers.creole)
