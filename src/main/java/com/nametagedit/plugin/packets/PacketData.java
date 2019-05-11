@@ -15,7 +15,7 @@ enum PacketData {
     v1_10("h", "c", "d", "a", "i", "j", "b", "NA", "f", "e"),
     v1_11("h", "c", "d", "a", "i", "j", "b", "NA", "f", "e"),
     v1_12("h", "c", "d", "a", "i", "j", "b", "NA", "f", "e"),
-    v1_13("h", "c", "d", "a", "i", "j", "b", "g", "f", "e");
+    v1_13("h", "c", "d", "a", "i", "j", "b", "g", "f", "e"),
     v1_14("h", "c", "d", "a", "i", "j", "b", "g", "f", "e");
     
     private String members;
