@@ -29,10 +29,8 @@ public class FakeTeam {
 
  		// Adding a VersionChecker for proper limits to ensure they're no crashes.
 		if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R1) {
-			log.info("Hooking into v1_13_R1...");
         	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
 		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R1) {
-			log.info("Hooking into v1_14_R1...");
         	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
 		} else {
         	this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
