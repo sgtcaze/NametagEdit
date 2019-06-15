@@ -1,6 +1,8 @@
 package com.nametagedit.plugin.api.data;
 
 import com.nametagedit.plugin.utils.Utils;
+import com.nametagedit.plugin.packets.VersionChecker;
+import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
 import lombok.Data;
 
 import java.util.ArrayList;
