@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import com.nametagedit.plugin.packets.VersionChecker;
+import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class Utils {
 
     public static String format(String input, boolean limitChars) {
         String colored = ChatColor.translateAlternateColorCodes('&', input);
-        
+
         if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R1) {
             return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
         } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R1) {
