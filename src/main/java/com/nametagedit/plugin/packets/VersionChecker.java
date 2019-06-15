@@ -7,7 +7,7 @@
  * You are NOT allowed to publish this plugin (BetterNick) or your modified version of this plugin (BetterNick)
  * 
  */
-package de.domedd.betternick.packets;
+package com.nametagedit.plugin.packets;
 
 import org.bukkit.Bukkit;
 
