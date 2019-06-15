@@ -14,6 +14,19 @@ import com.nametagedit.plugin.hooks.HookLuckPerms;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
 import com.nametagedit.plugin.hooks.HookZPermissions;
 import com.nametagedit.plugin.packets.PacketWrapper;
+import com.nametagedit.plugin.packets.VersionChecker;
+import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
+import com.nametagedit.plugin.packets.v1_8_R1;
+import com.nametagedit.plugin.packets.v1_8_R2;
+import com.nametagedit.plugin.packets.v1_8_R3;
+import com.nametagedit.plugin.packets.v1_9_R1;
+import com.nametagedit.plugin.packets.v1_9_R2;
+import com.nametagedit.plugin.packets.v1_10_R1;
+import com.nametagedit.plugin.packets.v1_11_R1;
+import com.nametagedit.plugin.packets.v1_12_R1;
+import com.nametagedit.plugin.packets.v1_13_R1;
+import com.nametagedit.plugin.packets.v1_13_R2;
+import com.nametagedit.plugin.packets.v1_14_R1;
 
 import lombok.Getter;
 
