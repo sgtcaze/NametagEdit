@@ -26,9 +26,9 @@ public class FakeTeam {
 
     public FakeTeam(String prefix, String suffix, int sortPriority, boolean playerTag) {
         this.name = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
-        // It is possible the names of the Team exceeded the length of 16 in the past,
+        // It is possible the names of the Team exceeded the length of 32 in the past,
         // and caused crashes as a result. This is a layer of protection against that.
-        this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
+        this.name = this.name.length() > 32 ? this.name.substring(0, 32) : this.name;
         this.prefix = prefix;
         this.suffix = suffix;
     }

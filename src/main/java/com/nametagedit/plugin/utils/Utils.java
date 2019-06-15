@@ -29,7 +29,7 @@ public class Utils {
 
     public static String format(String input, boolean limitChars) {
         String colored = ChatColor.translateAlternateColorCodes('&', input);
-        return limitChars && colored.length() > 16 ? colored.substring(0, 16) : colored;
+        return limitChars && colored.length() > 32 ? colored.substring(0, 32) : colored;
     }
 
     public static List<Player> getOnline() {
