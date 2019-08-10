@@ -161,7 +161,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         sender.sendMessage(Utils.format("&8» &a/nte group list"));
         sender.sendMessage(Utils.format("&8» &a/nte group add <Group>"));
         sender.sendMessage(Utils.format("&8» &a/nte group remove <Group>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group order <Owner Admin ModEtc...>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group order <Owner Admin Mod Etc...>"));
         sender.sendMessage(Utils.format("&8» &a/nte group <Group> clear <prefix/suffix>"));
         sender.sendMessage(Utils.format("&8» &a/nte group <Group> prefix <Prefix>"));
         sender.sendMessage(Utils.format("&8» &a/nte group <Group> suffix <Suffix>"));
