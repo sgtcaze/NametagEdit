@@ -150,8 +150,8 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         sender.sendMessage(Utils.format("\n&8» &a&lNametagEdit Player Help &8«"));
         sender.sendMessage(Utils.format("\n\n&8Type a command to get started:"));
         sender.sendMessage(Utils.format("&8» &a/nte player <Player> clear"));
-        sender.sendMessage(Utils.format("&8» &a/nte player <Player> prefix <MyPrefix>"));
-        sender.sendMessage(Utils.format("&8» &a/nte player <Player> suffix <MySuffix>"));
+        sender.sendMessage(Utils.format("&8» &a/nte player <Player> prefix <Prefix>"));
+        sender.sendMessage(Utils.format("&8» &a/nte player <Player> suffix <Suffix>"));
         sender.sendMessage(Utils.format("&8» &a/nte player <Player> priority <#>"));
     }
 
@@ -159,14 +159,14 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         sender.sendMessage(Utils.format("\n&8» &a&lNametagEdit Player Help &8«"));
         sender.sendMessage(Utils.format("\n\n&8Type a command to get started:"));
         sender.sendMessage(Utils.format("&8» &a/nte group list"));
-        sender.sendMessage(Utils.format("&8» &a/nte group add <MyGroup>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group remove <MyGroup>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group order <GroupOrder>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group <MyGroup> clear <prefix/suffix>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group <MyGroup> prefix <MyPrefix>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group <MyGroup> suffix <MySuffix>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group <MyGroup> permission <MyPermission>"));
-        sender.sendMessage(Utils.format("&8» &a/nte group <MyGroup> priority <#>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group add <Group>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group remove <Group>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group order <Owner Admin Mod Etc...>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group <Group> clear <prefix/suffix>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group <Group> prefix <Prefix>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group <Group> suffix <Suffix>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group <Group> permission <Permission>"));
+        sender.sendMessage(Utils.format("&8» &a/nte group <Group> priority <#>"));
     }
 
     private void sendUsage(CommandSender sender) {

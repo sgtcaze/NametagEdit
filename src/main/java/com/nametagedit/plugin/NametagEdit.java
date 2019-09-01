@@ -14,7 +14,6 @@ import com.nametagedit.plugin.hooks.HookLuckPerms;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
 import com.nametagedit.plugin.hooks.HookZPermissions;
 import com.nametagedit.plugin.packets.PacketWrapper;
-
 import lombok.Getter;
 
 /**
