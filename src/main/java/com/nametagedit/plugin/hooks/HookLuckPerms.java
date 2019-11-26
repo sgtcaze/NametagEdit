@@ -1,11 +1,11 @@
 package com.nametagedit.plugin.hooks;
 
 import com.nametagedit.plugin.NametagHandler;
-import me.lucko.luckperms.LuckPerms;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.User;
-import me.lucko.luckperms.api.event.EventBus;
-import me.lucko.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.event.EventBus;
+import net.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -16,7 +16,7 @@ public class HookLuckPerms implements Listener {
 
     public HookLuckPerms(NametagHandler handler) {
         this.handler = handler;
-        LuckPermsApi api = LuckPerms.getApi();
+        LuckPerms api = LuckPermsProvider.get();
         EventBus eventBus = api.getEventBus();
         eventBus.subscribe(UserDataRecalculateEvent.class, this::onUserDataRecalculateEvent);
     }
