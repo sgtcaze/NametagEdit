@@ -53,12 +53,12 @@
             <systemPath>${basedir}/lib/EssentialsGroupManager.jar</systemPath>
         </dependency>
         <!-- LuckPerms -->
-        <dependency>
-            <groupId>me.lucko.luckperms</groupId>
-            <artifactId>luckperms-api</artifactId>
-            <version>4.0</version>
-            <scope>provided</scope>
-        </dependency>
+	  <dependency>
+	      <groupId>net.luckperms</groupId>
+	      <artifactId>api</artifactId>
+	      <version>5.0</version>
+	      <scope>provided</scope>
+	  </dependency>
         <!-- MVdW Placeholder API -->
         <dependency>
             <groupId>be.maximvdw</groupId>
