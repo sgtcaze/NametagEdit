@@ -23,7 +23,7 @@ public class HookLuckPerms implements Listener {
 
     private void onUserDataRecalculateEvent(UserDataRecalculateEvent event) {
         User user = event.getUser();
-        Player player = Bukkit.getPlayer(user.getUuid());
+        Player player = Bukkit.getPlayer(user.getUniqueId());
         if (player != null) {
             handler.applyTagToPlayer(player, false);
         }
