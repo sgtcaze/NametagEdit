@@ -52,12 +52,13 @@ public class NametagEdit extends JavaPlugin {
             pluginManager.registerEvents(new HookGroupManager(handler), this);
         } else if (checkShouldRegister("LuckPerms")) {
             pluginManager.registerEvents(new HookLuckPerms(handler), this);
-        } else if (checkShouldRegister("Guilds")) {
-            pluginManager.registerEvents(new HookGuilds(handler), this);
         }
 
         if (pluginManager.getPlugin("LibsDisguises") != null) {
             pluginManager.registerEvents(new HookLibsDisguise(this), this);
+        }
+        if (pluginManager.getPlugin("Guilds") != null) {
+            pluginManager.registerEvents(new HookGuilds(handler), this);
         }
 
         getCommand("ne").setExecutor(new NametagCommand(handler));
