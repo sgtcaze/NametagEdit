@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.nametagedit.plugin.api.INametagApi;
 import com.nametagedit.plugin.api.NametagAPI;
 import com.nametagedit.plugin.hooks.HookGroupManager;
+import com.nametagedit.plugin.hooks.HookGuilds;
 import com.nametagedit.plugin.hooks.HookLibsDisguise;
 import com.nametagedit.plugin.hooks.HookLuckPerms;
 import com.nametagedit.plugin.hooks.HookPermissionsEX;
@@ -51,6 +52,8 @@ public class NametagEdit extends JavaPlugin {
             pluginManager.registerEvents(new HookGroupManager(handler), this);
         } else if (checkShouldRegister("LuckPerms")) {
             pluginManager.registerEvents(new HookLuckPerms(handler), this);
+        } else if (checkShouldRegister("Guilds")) {
+            pluginManager.registerEvents(new HookGuilds(handler), this);
         }
 
         if (pluginManager.getPlugin("LibsDisguises") != null) {

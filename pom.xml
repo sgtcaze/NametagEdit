@@ -36,6 +36,14 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/PermissionsEx.jar</systemPath>
         </dependency>
+        <!-- PermissionsEx -->
+        <dependency>
+            <groupId>be.maximvdw</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>3.0.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/MVdWPlaceholderAPI.jar</systemPath>
+        </dependency>
         <!-- zPermissions -->
         <dependency>
             <groupId>org.tyrannyofheaven.bukkit</groupId>
@@ -59,14 +67,6 @@
 	      <version>5.0</version>
 	      <scope>provided</scope>
 	  </dependency>
-        <!-- MVdW Placeholder API -->
-        <dependency>
-            <groupId>be.maximvdw</groupId>
-            <artifactId>MVdWPlaceholderAPI</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-            <!--<version>2.1.1-SNAPSHOT</version> -->
-            <scope>provided</scope>
-        </dependency>
         <!-- Clip Placeholder API -->
         <dependency>
             <groupId>me.clip</groupId>
@@ -81,6 +81,14 @@
             <version>9.0.7</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/LibsDisguises-9.0.9.jar</systemPath>
+        </dependency>
+        <!-- Guilds -->
+        <dependency>
+            <groupId>me.glaremasters</groupId>
+            <artifactId>guilds</artifactId>
+            <version>3.5.3.8-RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Guilds-3.5.3.8-RELEASE.jar</systemPath>
         </dependency>
         <!-- HikariCP -->
         <dependency>
