@@ -38,7 +38,7 @@ public class VersionChecker {
 			return BukkitVersion.v1_14_R1;
 		} else if(Bukkit.getVersion().contains("(MC: 1.15)")) {
 			return BukkitVersion.v1_15_R1;
-		else {
+		} else {
 			return null;
 		}
 	}
