@@ -36,11 +36,13 @@ public class VersionChecker {
 			return BukkitVersion.v1_13_R2;
 		} else if(Bukkit.getVersion().contains("(MC: 1.14)") || Bukkit.getVersion().contains("(MC: 1.14.1)") || Bukkit.getVersion().contains("(MC: 1.14.2)") || Bukkit.getVersion().contains("(MC: 1.14.3)")) {
 			return BukkitVersion.v1_14_R1;
+		} else if(Bukkit.getVersion().contains("(MC: 1.15)")) {
+			return BukkitVersion.v1_15_R1;
 		} else {
 			return null;
 		}
 	}
 	public static enum BukkitVersion {
-		v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1, v1_11_R1, v1_12_R1, v1_13_R1, v1_13_R2, v1_14_R1; 
+		v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1, v1_11_R1, v1_12_R1, v1_13_R1, v1_13_R2, v1_14_R1, v1_15_R1; 
 	}
 }
