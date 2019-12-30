@@ -1,9 +1,16 @@
 package com.nametagedit.plugin.api;
 
+import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.Nametag;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
+/**
+ *
+ */
 public interface INametagApi {
 
     /**
@@ -128,4 +135,36 @@ public interface INametagApi {
      */
     void setNametag(String player, String prefix, String suffix);
 
+    /**
+     * Gets the data of all groups
+     * @return list containing all group data
+     */
+    List<GroupData> getGroupData();
+
+
+    /**
+     * Saves the provided group data
+     * @param groupData the group data to save
+     */
+    void saveGroupData(GroupData... groupData);
+
+    /**
+     * Applies tags to all players
+     * <p>
+     * Note: Only affects memory, does NOT
+     * add/remove from storage.
+     * </p>
+     */
+    void applyTags();
+
+    /**
+     * Applies tags to specific player
+     * <p>
+     * Note: Only affects memory, does NOT
+     * add/remove from storage
+     * </p>
+     * @param player the player to apply nametag to
+     * @param loggedIn is the player logged in
+     */
+    void applyTagToPlayer(Player player, boolean loggedIn);
 }
