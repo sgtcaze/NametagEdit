@@ -2,7 +2,6 @@ package com.nametagedit.plugin.hooks;
 
 import com.nametagedit.plugin.NametagHandler;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +14,7 @@ public class HookGuilds implements Listener {
 
     @EventHandler
     public void onGuildEvent(GuildEvent event) {
-        Player player = Bukkit.getPlayerExact(event.getPlayer().getName());
+        Player player = event.getPlayer();
         if (player != null) {
             handler.applyTagToPlayer(player, false);
         }
