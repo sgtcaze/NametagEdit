@@ -56,9 +56,8 @@
         <dependency>
             <groupId>me.glaremasters</groupId>
             <artifactId>guilds</artifactId>
-            <version>3.5.3.8-RELEASE</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Guilds-3.5.3.8-RELEASE.jar</systemPath>
+            <version>3.5.4.1</version>
+            <scope>provided</scope>
         </dependency>
         <!-- LuckPerms -->
         <dependency>
@@ -146,6 +145,11 @@
         	<id>jitpack.io</id>
         	<url>https://jitpack.io</url>
 		</repository>
+        <!-- Guilds Repo -->
+        <repository>
+        	<id>guilds</id>
+        	<url>https://repo.glaremasters.me/repository/guilds/</url>
+        </repository>
     </repositories>
     <!-- Builds NametagEdit -->
     <build>
