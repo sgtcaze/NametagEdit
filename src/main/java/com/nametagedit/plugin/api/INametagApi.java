@@ -1,6 +1,5 @@
 package com.nametagedit.plugin.api;
 
-import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.FakeTeam;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.Nametag;
@@ -167,4 +166,38 @@ public interface INametagApi {
      * @param loggedIn is the player logged in
      */
     void applyTagToPlayer(Player player, boolean loggedIn);
+
+    /**
+     * Updates a players prefix
+     * <p>
+     * Note: Does affect memory. Automatically applies tags to player
+     * so no applyTags call is necessary
+     * </p>
+     * @param target name of the player to update tag of
+     * @param prefix prefix to change to
+     */
+    void updatePlayerPrefix(String target, String prefix);
+
+    /**
+     * Updates a players suffix
+     * <p>
+     * Note: Does affect memory. Automatically applies tags to player
+     * so no applyTags call is necessary
+     * </p>
+     * @param target name of the player to update tag of
+     * @param suffix suffix to change to
+     */
+    void updatePlayerSuffix(String target, String suffix);
+
+    /**
+     * Updates a players nametag
+     * <p>
+     * Note: Does affect memory. Automatically applies tags to player
+     * so no applyTags call is necessary
+     * </p>
+     * @param target name of the player to update tag of
+     * @param prefix prefix to set to
+     * @param suffix suffix to set to
+     */
+    void updatePlayerNametag(String target, String prefix, String suffix);
 }
