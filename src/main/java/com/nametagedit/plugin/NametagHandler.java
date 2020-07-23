@@ -136,11 +136,11 @@ public class NametagHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         nametagManager.sendTeams(player);
-
         new BukkitRunnable() {
             @Override
             public void run() {
                 abstractConfig.load(player, true);
+                applyTagToPlayer(event.getPlayer(), true);
             }
         }.runTaskLaterAsynchronously(plugin, 1);
     }
