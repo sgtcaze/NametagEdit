@@ -304,10 +304,10 @@ public class NametagHandler implements Listener {
         }*/
 
         // The string can become null again at this point. Add another check.
-        if (input != null && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+/*        if (input != null && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             plugin.debug("Trying to use PlaceholderAPI for placeholders");
             input = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, input);
-        }
+        }*/
 
         return Utils.format(input, limitChars);
     }
