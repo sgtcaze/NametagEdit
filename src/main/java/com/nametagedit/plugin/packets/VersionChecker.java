@@ -46,6 +46,8 @@ public class VersionChecker {
 			return BukkitVersion.v1_16_R1;
 		} else if(Bukkit.getVersion().contains("(MC: 1.16.2)")) {
 			return BukkitVersion.v1_16_R2;
+		} else if(Bukkit.getVersion().contains("(MC: 1.16.3)")) {
+			return BukkitVersion.v1_16_R2;
 		} else {
 			return null;
 		}
