@@ -1,6 +1,5 @@
 package com.nametagedit.plugin.api;
 
-import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.NametagManager;
 import com.nametagedit.plugin.api.data.FakeTeam;
@@ -106,6 +105,21 @@ public final class NametagAPI implements INametagApi {
     @Override
     public void applyTagToPlayer(Player player, boolean loggedIn) {
         handler.applyTagToPlayer(player,loggedIn);
+    }
+
+    @Override
+    public void updatePlayerPrefix(String target, String prefix) {
+        handler.save(target, NametagEvent.ChangeType.PREFIX, prefix);
+    }
+
+    @Override
+    public void updatePlayerSuffix(String target, String suffix) {
+        handler.save(target, NametagEvent.ChangeType.SUFFIX, suffix);
+    }
+
+    @Override
+    public void updatePlayerNametag(String target, String prefix, String suffix) {
+        handler.save(target, prefix, suffix);
     }
 
     /**
