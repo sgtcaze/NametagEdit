@@ -40,8 +40,6 @@ public class Utils {
             return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
         } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R1) {
             return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R2) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
         } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R1) {
             return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
         } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R2) {
