@@ -38,8 +38,6 @@ public class FakeTeam {
             this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
 		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R1) {
         	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R2) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
 		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R1) {
         	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
 		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R2) {
