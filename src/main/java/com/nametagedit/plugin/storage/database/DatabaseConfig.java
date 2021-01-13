@@ -49,7 +49,9 @@ public class DatabaseConfig implements AbstractConfig {
         hikari.addDataSourceProperty("requireSSL", false);
         hikari.addDataSourceProperty("verifyServerCertificate", false);
         hikari.addDataSourceProperty("serverName", config.getString("MySQL.Hostname"));
-        hikari.addDataSourceProperty("port", config.getString("MySQL.Port"));
+        if (config.isSet("MySQL.Port")) {
+            hikari.addDataSourceProperty("port", config.getString("MySQL.Port"));
+        }
         hikari.addDataSourceProperty("databaseName", config.getString("MySQL.Database"));
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
