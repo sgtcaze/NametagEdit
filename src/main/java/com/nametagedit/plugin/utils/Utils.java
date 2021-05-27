@@ -14,6 +14,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -22,7 +24,7 @@ public class Utils {
     }
 
     public static String deformat(String input) {
-        return input.replace("§", "&");
+        return ChatColor.stripColor(input);
     }
 
     public static String format(String input) {
@@ -49,6 +51,33 @@ public class Utils {
         } else {
             return limitChars && colored.length() > 16 ? colored.substring(0, 16) : colored;
         }
+    }
+
+    public final static char COLOR_CHAR = ChatColor.COLOR_CHAR;
+
+    // Colorizes messages with preset colorcodes (&) and if using 1.16, applies hex values via "&#hexvalue"
+    public static String colorize(String input) {
+
+        // Apply preset colorcodes
+        input = ChatColor.translateAlternateColorCodes('&', input);
+
+        // Apply hex values
+        input = translateHexColorCodes(input);
+
+        // Return modified input.
+        return input;
+    }
+
+    public static String translateHexColorCodes(String message) {
+        final Pattern hexPattern = Pattern.compile("\\&#" + "([A-Fa-f0-9]{6})");
+        Matcher matcher = hexPattern.matcher(message);
+        StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            matcher.appendReplacement(buffer, COLOR_CHAR + "x" + COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1) + COLOR_CHAR
+                    + group.charAt(2) + COLOR_CHAR + group.charAt(3) + COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5));
+        }
+        return matcher.appendTail(buffer).toString();
     }
 
     public static List<Player> getOnline() {
