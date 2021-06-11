@@ -21,6 +21,14 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--Bukkit API -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${spigot.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/craftbukkit-1.16.5.jar</systemPath>
+        </dependency>
         <!-- PermissionsEx -->
         <dependency>
             <groupId>ninja.leaping.permissionsex</groupId>
