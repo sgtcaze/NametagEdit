@@ -109,6 +109,13 @@
             <artifactId>guava</artifactId>
             <version>r05</version>
         </dependency>
+        <!-- bStats -->
+        <dependency>
+        	<groupId>org.bstats</groupId>
+        	<artifactId>bstats-bukkit</artifactId>
+        	<version>2.2.1</version>
+        	<scope>compile</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <!-- Spigot -->
@@ -169,6 +176,12 @@
                                     <include>com.zaxxer:*</include>
                                 </includes>
                             </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>org.bstats.bStats-Metrics:*</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
