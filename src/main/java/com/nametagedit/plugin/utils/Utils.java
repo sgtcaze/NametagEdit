@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     private static final char COLOR_CHAR = '\u00A7';
-    private static final Pattern hexPattern = Pattern.compile("&#[A-Fa-f0-9]{6}");
+    private static final Pattern hexPattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
     public static String format(String[] text, int to, int from) {
         return StringUtils.join(text, ' ', to, from).replace("'", "");
