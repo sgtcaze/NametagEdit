@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 
 public class Utils {
     private static final char COLOR_CHAR = '\u00A7';
-    private static final Pattern hexPattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
     public static String format(String[] text, int to, int from) {
         return StringUtils.join(text, ' ', to, from).replace("'", "");
@@ -45,18 +44,20 @@ public class Utils {
         }
     }
 
-    public static String color(String text) {
-        if (text == null) return "";
+    public final static Pattern hexPattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
+    public static String color(String message) {
         switch (VersionChecker.getBukkitVersion()) {
             case v1_16_R1: case v1_16_R2: case v1_16_R3:
-                final Matcher matcher = hexPattern.matcher(text);
-                while (matcher.find()) {
-                    final String color = text.substring(matcher.start(), matcher.end()); // ex: &#1258DA
-                    text = text.replace(color, net.md_5.bungee.api.ChatColor.of(color.substring(1)).toString());
-                }
-                break;
+            Matcher matcher = hexPattern.matcher(message);
+            StringBuffer buffer = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
+            }
+            return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
         }
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
 
         char[] b = text.toCharArray();
         for (int i = 0; i < b.length - 1; i++) {
