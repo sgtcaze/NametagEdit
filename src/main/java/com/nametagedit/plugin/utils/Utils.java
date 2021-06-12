@@ -46,18 +46,17 @@ public class Utils {
 
     public final static Pattern hexPattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
-    public static String color(String message) {
+    public static String color(String text) {
         switch (VersionChecker.getBukkitVersion()) {
             case v1_16_R1: case v1_16_R2: case v1_16_R3:
-            Matcher matcher = hexPattern.matcher(message);
+            Matcher matcher = hexPattern.matcher(text);
             StringBuffer buffer = new StringBuffer();
             while (matcher.find()) {
                 matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
             }
             return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
+        return ChatColor.translateAlternateColorCodes('&',text);
 
         char[] b = text.toCharArray();
         for (int i = 0; i < b.length - 1; i++) {
