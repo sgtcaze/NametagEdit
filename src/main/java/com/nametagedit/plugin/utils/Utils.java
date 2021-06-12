@@ -57,15 +57,6 @@ public class Utils {
             return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
         }
         return ChatColor.translateAlternateColorCodes('&',text);
-
-        char[] b = text.toCharArray();
-        for (int i = 0; i < b.length - 1; i++) {
-            if (b[i] == '&' && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(b[i + 1]) > -1) {
-                b[i] = COLOR_CHAR;
-                b[i + 1] = Character.toLowerCase(b[i + 1]);
-            }
-        }
-        return new String(b);
     }
 
     public static List<Player> getOnline() {
