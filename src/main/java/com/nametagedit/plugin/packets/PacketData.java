@@ -31,7 +31,7 @@ enum PacketData {
     private final String color;
     private final String push;
     private final String visibility;
-    //1.17+
+    // 1.17+
     private final String params;
 
 }
