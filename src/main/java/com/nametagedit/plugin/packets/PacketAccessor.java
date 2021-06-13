@@ -180,6 +180,10 @@ class PacketAccessor {
     }
 
     static Object createPacketParams() {
+        if (!isParamsVersion()) {
+            return null;
+        }
+
         try {
             if (!isParamsVersion()) {
                 return packetParamsClass.newInstance();
