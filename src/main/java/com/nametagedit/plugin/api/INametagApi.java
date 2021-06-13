@@ -1,9 +1,15 @@
 package com.nametagedit.plugin.api;
 
 import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.Nametag;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
+/**
+ *
+ */
 public interface INametagApi {
 
     /**
@@ -128,4 +134,70 @@ public interface INametagApi {
      */
     void setNametag(String player, String prefix, String suffix);
 
+    /**
+     * Gets the data of all groups
+     * @return list containing all group data
+     */
+    List<GroupData> getGroupData();
+
+
+    /**
+     * Saves the provided group data
+     * @param groupData the group data to save
+     */
+    void saveGroupData(GroupData... groupData);
+
+    /**
+     * Applies tags to all players
+     * <p>
+     * Note: Only affects memory, does NOT
+     * add/remove from storage.
+     * </p>
+     */
+    void applyTags();
+
+    /**
+     * Applies tags to specific player
+     * <p>
+     * Note: Only affects memory, does NOT
+     * add/remove from storage
+     * </p>
+     * @param player the player to apply nametag to
+     * @param loggedIn is the player logged in
+     */
+    void applyTagToPlayer(Player player, boolean loggedIn);
+
+    /**
+     * Updates a players prefix
+     * <p>
+     * Note: Does affect memory. Automatically applies tags to player
+     * so no applyTags call is necessary
+     * </p>
+     * @param target name of the player to update tag of
+     * @param prefix prefix to change to
+     */
+    void updatePlayerPrefix(String target, String prefix);
+
+    /**
+     * Updates a players suffix
+     * <p>
+     * Note: Does affect memory. Automatically applies tags to player
+     * so no applyTags call is necessary
+     * </p>
+     * @param target name of the player to update tag of
+     * @param suffix suffix to change to
+     */
+    void updatePlayerSuffix(String target, String suffix);
+
+    /**
+     * Updates a players nametag
+     * <p>
+     * Note: Does affect memory. Automatically applies tags to player
+     * so no applyTags call is necessary
+     * </p>
+     * @param target name of the player to update tag of
+     * @param prefix prefix to set to
+     * @param suffix suffix to set to
+     */
+    void updatePlayerNametag(String target, String prefix, String suffix);
 }

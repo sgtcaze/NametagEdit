@@ -470,6 +470,42 @@ public class NametagHandler implements Listener {
         }
     }
 
+    public void save(String targetName, NametagEvent.ChangeType changeType, String value) {
+        save(null, targetName, changeType, value);
+    }
+
+    // Reduces checks to have this method (ie not saving data twice)
+    public void save(String targetName, String prefix, String suffix) {
+        Player player = Bukkit.getPlayerExact(targetName);
+
+        PlayerData data = getPlayerData(player);
+        if (data == null) {
+            data = new PlayerData(targetName, null, "", "", -1);
+            if (player != null) {
+                storePlayerData(player.getUniqueId(), data);
+            }
+        }
+
+        data.setPrefix(prefix);
+        data.setSuffix(suffix);
+
+        if (player != null) {
+            applyTagToPlayer(player, false);
+            data.setUuid(player.getUniqueId());
+            abstractConfig.save(data);
+            return;
+        }
+
+        final PlayerData finalData = data;
+        UUIDFetcher.lookupUUID(targetName, plugin, (uuid) -> {
+            if (uuid != null) {
+                storePlayerData(uuid, finalData);
+                finalData.setUuid(uuid);
+                abstractConfig.save(finalData);
+            }
+        });
+    }
+
     void save(final CommandSender sender, String targetName, NametagEvent.ChangeType changeType, String value) {
         Player player = Bukkit.getPlayerExact(targetName);
 
@@ -495,18 +531,17 @@ public class NametagHandler implements Listener {
         }
 
         final PlayerData finalData = data;
-        UUIDFetcher.lookupUUID(targetName, plugin, new UUIDFetcher.UUIDLookup() {
-            @Override
-            public void response(UUID uuid) {
-                if (uuid == null) {
-                    NametagMessages.UUID_LOOKUP_FAILED.send(sender);
-                } else {
-                    storePlayerData(uuid, finalData);
-                    finalData.setUuid(uuid);
-                    abstractConfig.save(finalData);
-                }
+        UUIDFetcher.lookupUUID(targetName, plugin, (uuid) -> {
+            if (uuid == null && sender != null) { // null is passed in api
+                NametagMessages.UUID_LOOKUP_FAILED.send(sender);
+            }
+            else {
+                storePlayerData(uuid, finalData);
+                finalData.setUuid(uuid);
+                abstractConfig.save(finalData);
             }
         });
     }
+
 
 }

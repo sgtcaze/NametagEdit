@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.4.4</version>
+    <version>4.4.16</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>http://maven.apache.org</url>
@@ -52,13 +52,21 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/EssentialsGroupManager.jar</systemPath>
         </dependency>
+        <!-- Guilds -->
+        <dependency>
+            <groupId>me.glaremasters</groupId>
+            <artifactId>guilds</artifactId>
+            <version>3.5.3.8-RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Guilds-3.5.3.8-RELEASE.jar</systemPath>
+        </dependency>
         <!-- LuckPerms -->
-	  <dependency>
-	      <groupId>net.luckperms</groupId>
-	      <artifactId>api</artifactId>
-	      <version>5.0</version>
-	      <scope>provided</scope>
-	  </dependency>
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.0</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- MVdW Placeholder API -->
         <dependency>
             <groupId>be.maximvdw</groupId>

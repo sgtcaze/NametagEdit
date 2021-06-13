@@ -3,11 +3,14 @@ package com.nametagedit.plugin.api;
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.NametagManager;
 import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.Nametag;
 import com.nametagedit.plugin.api.events.NametagEvent;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Implements the INametagAPI interface. There only
@@ -82,6 +85,41 @@ public final class NametagAPI implements INametagApi {
     @Override
     public void setNametag(String player, String prefix, String suffix) {
         manager.setNametag(player, prefix, suffix);
+    }
+
+    @Override
+    public List<GroupData> getGroupData() {
+        return handler.getGroupData();
+    }
+
+    @Override
+    public void saveGroupData(GroupData... groupData) {
+        handler.getAbstractConfig().save(groupData);
+    }
+
+    @Override
+    public void applyTags() {
+        handler.applyTags();
+    }
+
+    @Override
+    public void applyTagToPlayer(Player player, boolean loggedIn) {
+        handler.applyTagToPlayer(player,loggedIn);
+    }
+
+    @Override
+    public void updatePlayerPrefix(String target, String prefix) {
+        handler.save(target, NametagEvent.ChangeType.PREFIX, prefix);
+    }
+
+    @Override
+    public void updatePlayerSuffix(String target, String suffix) {
+        handler.save(target, NametagEvent.ChangeType.SUFFIX, suffix);
+    }
+
+    @Override
+    public void updatePlayerNametag(String target, String prefix, String suffix) {
+        handler.save(target, prefix, suffix);
     }
 
     /**
