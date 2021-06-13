@@ -21,17 +21,17 @@ enum PacketData {
     v1_16("h", "c", "d", "a", "i", "j", "b", "g", "f", "e", "NA"),
     v1_17("j", "b", "c", "i", "h", "g", "a", "f", "e", "d", "k");
 
-    private String members;
-    private String prefix;
-    private String suffix;
-    private String teamName;
-    private String paramInt;
-    private String packOption;
-    private String displayName;
-    private String color;
-    private String push;
-    private String visibility;
+    private final String members;
+    private final String prefix;
+    private final String suffix;
+    private final String teamName;
+    private final String paramInt;
+    private final String packOption;
+    private final String displayName;
+    private final String color;
+    private final String push;
+    private final String visibility;
     //1.17+
-    private String params;
+    private final String params;
 
 }

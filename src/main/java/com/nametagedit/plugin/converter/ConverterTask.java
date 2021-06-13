@@ -20,9 +20,9 @@ import java.sql.*;
 @AllArgsConstructor
 public class ConverterTask extends BukkitRunnable {
 
-    private boolean databaseToFile;
-    private CommandSender sender;
-    private NametagEdit plugin;
+    private final boolean databaseToFile;
+    private final CommandSender sender;
+    private final NametagEdit plugin;
 
     @Override
     public void run() {

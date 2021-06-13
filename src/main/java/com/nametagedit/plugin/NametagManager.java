@@ -20,7 +20,7 @@ public class NametagManager {
 
     private final HashMap<String, FakeTeam> TEAMS = new HashMap<>();
     private final HashMap<String, FakeTeam> CACHED_FAKE_TEAMS = new HashMap<>();
-    private NametagEdit plugin;
+    private final NametagEdit plugin;
 
     /**
      * Gets the current team given a prefix and suffix

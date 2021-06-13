@@ -14,8 +14,8 @@ class PacketAccessor {
     public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
     private static final List<String> legacyVersions = Arrays.asList("v1_7_R1", "v1_7_R2", "v1_7_R3", "v1_7_R4", "v1_8_R1", "v1_8_R2", "v1_8_R3", "v1_9_R1", "v1_9_R2", "v1_10_R1", "v1_11_R1", "v1_12_R1");
-    private static boolean CAULDRON_SERVER = false;
-    private static boolean LEGACY_SERVER = false;
+    private static final boolean CAULDRON_SERVER = false;
+    private static final boolean LEGACY_SERVER = false;
 
     private static Object UNSAFE;
     private static Method ALLOCATE_INSTANCE;

@@ -23,8 +23,8 @@ public class FakeTeam {
     private static int ID = 0;
     private final ArrayList<String> members = new ArrayList<>();
     private String name;
-    private String prefix = "";
-    private String suffix = "";
+    private String prefix;
+    private String suffix;
 
     public FakeTeam(String prefix, String suffix, int sortPriority, boolean playerTag) {
         this.name = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
