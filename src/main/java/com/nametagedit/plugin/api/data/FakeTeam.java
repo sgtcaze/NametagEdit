@@ -1,8 +1,8 @@
 package com.nametagedit.plugin.api.data;
 
-import com.nametagedit.plugin.utils.Utils;
 import com.nametagedit.plugin.packets.VersionChecker;
 import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
+import com.nametagedit.plugin.utils.Utils;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -23,35 +23,37 @@ public class FakeTeam {
     private static int ID = 0;
     private final ArrayList<String> members = new ArrayList<>();
     private String name;
-    private String prefix = "";
-    private String suffix = "";
+    private String prefix;
+    private String suffix;
 
     public FakeTeam(String prefix, String suffix, int sortPriority, boolean playerTag) {
         this.name = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
 
- 		// Adding a VersionChecker for proper limits to ensure they're no crashes.
-		if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R1) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R1) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R2) {
+        // Adding a VersionChecker for proper limits to ensure they're no crashes.
+        if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R1) {
             this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R1) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R1) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R2) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R3) {
-        	this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
-		} else {
-        	this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
-		}
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R1) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R2) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R1) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R1) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R2) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R3) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else if (VersionChecker.getBukkitVersion() == BukkitVersion.v1_17_R1) {
+            this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+        } else {
+            this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
+        }
 
-		this.prefix = prefix;
-		this.suffix = suffix;
+        this.prefix = prefix;
+        this.suffix = suffix;
 
-	}
+    }
 
     public void addMember(String player) {
         if (!members.contains(player)) {

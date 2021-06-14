@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.utils;
 
+import com.nametagedit.plugin.packets.VersionChecker;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,8 +8,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import com.nametagedit.plugin.packets.VersionChecker;
-import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+
     private static final char COLOR_CHAR = '\u00A7';
     private static final Pattern hexPattern = Pattern.compile("&#[A-Fa-f0-9]{6}");
 

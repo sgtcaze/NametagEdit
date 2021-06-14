@@ -27,8 +27,8 @@ public class FlatFileConfig implements AbstractConfig {
     private YamlConfiguration groups;
     private YamlConfiguration players;
 
-    private NametagEdit plugin;
-    private NametagHandler handler;
+    private final NametagEdit plugin;
+    private final NametagHandler handler;
 
     public FlatFileConfig(NametagEdit plugin, NametagHandler handler) {
         this.plugin = plugin;
@@ -119,7 +119,7 @@ public class FlatFileConfig implements AbstractConfig {
                 @Override
                 public void response(UUID uuid) {
                     if (players.contains("Players." + uuid.toString())) {
-                        players.set("Players." + uuid.toString(), priority);
+                        players.set("Players." + uuid, priority);
                         save(players, playersFile);
                     }
                 }

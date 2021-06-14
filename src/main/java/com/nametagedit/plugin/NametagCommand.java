@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NametagCommand implements CommandExecutor, TabExecutor {
 
-    private NametagHandler handler;
+    private final NametagHandler handler;
 
     private List<String> getSuggestions(String argument, String... array) {
         argument = argument.toLowerCase();
@@ -67,7 +67,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
                         data.add(groupData.getGroupName());
                     }
 
-                    return getSuggestions(args[1], data.toArray(new String[data.size()]));
+                    return getSuggestions(args[1], data.toArray(new String[0]));
                 } else {
                     return getSuggestions(args[2], "clear", "prefix", "suffix", "permission", "priority");
                 }

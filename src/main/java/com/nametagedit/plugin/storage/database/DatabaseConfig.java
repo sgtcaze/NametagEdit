@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class DatabaseConfig implements AbstractConfig {
 
-    private NametagEdit plugin;
-    private NametagHandler handler;
+    private final NametagEdit plugin;
+    private final NametagHandler handler;
     private HikariDataSource hikari;
 
     // These are used if the user wants to customize the
