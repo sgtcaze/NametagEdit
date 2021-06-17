@@ -11,7 +11,8 @@ import java.util.List;
 
 class PacketAccessor {
 
-    public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    protected static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    protected static final int MINOR_VERSION = Integer.parseInt(VERSION.split("_")[1]);
 
     private static final List<String> legacyVersions = Arrays.asList("v1_7_R1", "v1_7_R2", "v1_7_R3", "v1_7_R4", "v1_8_R1", "v1_8_R2", "v1_8_R3", "v1_9_R1", "v1_9_R2", "v1_10_R1", "v1_11_R1", "v1_12_R1");
     private static boolean CAULDRON_SERVER = false;
@@ -142,15 +143,15 @@ class PacketAccessor {
     }
 
     public static boolean isParamsVersion() {
-        return Integer.parseInt(PacketAccessor.VERSION.split("_")[1]) >= 17;
+        return MINOR_VERSION >= 17;
     }
 
     private static boolean isPushVersion() {
-        return Integer.parseInt(PacketAccessor.VERSION.split("_")[1]) >= 9;
+        return MINOR_VERSION >= 9;
     }
 
     private static boolean isVisibilityVersion() {
-        return Integer.parseInt(PacketAccessor.VERSION.split("_")[1]) >= 8;
+        return MINOR_VERSION >= 8;
     }
 
     private static Field getNMS(String path) throws Exception {
@@ -180,13 +181,10 @@ class PacketAccessor {
     }
 
     static Object createPacketParams() {
-        if (!isParamsVersion()) {
-            return null;
-        }
 
         try {
             if (!isParamsVersion()) {
-                return packetParamsClass.newInstance();
+                return null;
             } else {
                 return ALLOCATE_INSTANCE.invoke(UNSAFE, packetParamsClass);
             }
