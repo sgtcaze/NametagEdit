@@ -43,7 +43,7 @@ public class DatabaseConfig implements AbstractConfig {
         shutdown();
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
-        hikari.connectionTimeout("connectionTimeout", 30000);
+        hikari.connectionTimeout(30000);
         hikari.setPoolName("NametagEdit Pool");
 
         String port = "3306";
