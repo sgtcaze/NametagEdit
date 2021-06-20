@@ -87,9 +87,9 @@
         <dependency>
             <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
-            <version>9.0.7</version>
+            <version>10.0.25</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/LibsDisguises-9.0.9.jar</systemPath>
+            <systemPath>${basedir}/lib/LibsDisguises-10.0.25.jar</systemPath>
         </dependency>
         <!-- HikariCP -->
         <dependency>
