@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class DatabaseConfig implements AbstractConfig {
 
-    private final NametagEdit plugin;
-    private final NametagHandler handler;
+    private NametagEdit plugin;
+    private NametagHandler handler;
     private HikariDataSource hikari;
 
     // These are used if the user wants to customize the
@@ -42,19 +42,24 @@ public class DatabaseConfig implements AbstractConfig {
         FileConfiguration config = handler.getConfig();
         shutdown();
         hikari = new HikariDataSource();
-        hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
+        //hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
         hikari.setPoolName("NametagEdit Pool");
-        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        hikari.addDataSourceProperty("useSSL", false);
-        hikari.addDataSourceProperty("requireSSL", false);
-        hikari.addDataSourceProperty("verifyServerCertificate", false);
-        hikari.addDataSourceProperty("serverName", config.getString("MySQL.Hostname"));
+
+        String port = "3306";
+
         if (config.isSet("MySQL.Port")) {
-            hikari.addDataSourceProperty("port", config.getString("MySQL.Port"));
+            port = config.getString("MySQL.Port");
         }
-        hikari.addDataSourceProperty("databaseName", config.getString("MySQL.Database"));
+
+        hikari.setJdbcUrl("jdbc:mysql://" + config.getString("MySQL.Hostname") + ":" + port + "/" + config.getString("MySQL.Database"));
+        //hikari.addDataSourceProperty("useSSL", false);
+        //hikari.addDataSourceProperty("requireSSL", false);
+        //hikari.addDataSourceProperty("verifyServerCertificate", false);
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
+
+        hikari.setUsername(config.getString("MySQL.Username"));
+        hikari.setPassword(config.getString("MySQL.Password"));
 
         new DatabaseUpdater(handler, hikari, plugin).runTaskAsynchronously(plugin);
     }
