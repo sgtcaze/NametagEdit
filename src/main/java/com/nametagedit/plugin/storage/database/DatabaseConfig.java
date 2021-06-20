@@ -43,6 +43,7 @@ public class DatabaseConfig implements AbstractConfig {
         shutdown();
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
+        hikari.connectionTimeout("connectionTimeout", 30000);
         hikari.setPoolName("NametagEdit Pool");
 
         String port = "3306";
@@ -52,10 +53,10 @@ public class DatabaseConfig implements AbstractConfig {
         }
 
         hikari.setJdbcUrl("jdbc:mysql://" + config.getString("MySQL.Hostname") + ":" + port + "/" + config.getString("MySQL.Database"));
+        hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("useSSL", false);
         hikari.addDataSourceProperty("requireSSL", false);
         hikari.addDataSourceProperty("verifyServerCertificate", false);
-        hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
 
         hikari.setUsername(config.getString("MySQL.Username"));
