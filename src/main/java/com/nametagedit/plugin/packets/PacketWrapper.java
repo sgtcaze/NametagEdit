@@ -2,7 +2,6 @@ package com.nametagedit.plugin.packets;
 
 import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -25,12 +24,10 @@ public class PacketWrapper {
     static {
         try {
             if (!PacketAccessor.isLegacyVersion()) {
-                final String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-
                 if (!PacketAccessor.isParamsVersion()) {
-                    Class<?> typeChatComponentText = Class.forName("net.minecraft.server." + version + ".ChatComponentText");
+                    Class<?> typeChatComponentText = Class.forName("net.minecraft.server." + PacketAccessor.VERSION + ".ChatComponentText");
                     ChatComponentText = typeChatComponentText.getConstructor(String.class);
-                    typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.server." + version + ".EnumChatFormat");
+                    typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.server." + PacketAccessor.VERSION + ".EnumChatFormat");
                 } else {
                     // 1.17+
                     Class<?> typeChatComponentText = Class.forName("net.minecraft.network.chat.ChatComponentText");
