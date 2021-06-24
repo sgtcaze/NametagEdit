@@ -20,8 +20,8 @@ import java.util.*;
 public class DataDownloader extends BukkitRunnable {
 
     private final List<UUID> players = new ArrayList<>();
-    private NametagHandler handler;
-    private HikariDataSource hikari;
+    private final NametagHandler handler;
+    private final HikariDataSource hikari;
 
     public DataDownloader(NametagHandler handler, HikariDataSource hikari) {
         this.handler = handler;

@@ -12,8 +12,8 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class GroupDeleter extends BukkitRunnable {
 
-    private String groupName;
-    private HikariDataSource hikari;
+    private final String groupName;
+    private final HikariDataSource hikari;
 
     @Override
     public void run() {

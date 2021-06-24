@@ -9,7 +9,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsPlayerUpdateEvent;
 @AllArgsConstructor
 public class HookZPermissions implements Listener {
 
-    private NametagHandler handler;
+    private final NametagHandler handler;
 
     @EventHandler
     public void onZPermissionsRankChangeEvent(ZPermissionsPlayerUpdateEvent event) {

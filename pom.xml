@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.4.16</version>
+    <version>4.5.0</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>https://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <dependencies>
         <!--Spigot API -->
@@ -26,7 +26,8 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>${spigot.version}</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/craftbukkit-1.16.5.jar</systemPath>
         </dependency>
         <!-- PermissionsEx -->
         <dependency>
@@ -114,7 +115,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>r05</version>
+            <version>30.0-jre</version>
         </dependency>
         <!-- bStats -->
         <dependency>
