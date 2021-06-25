@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class DatabaseConfig implements AbstractConfig {
 
-    private final NametagEdit plugin;
-    private final NametagHandler handler;
+    private NametagEdit plugin;
+    private NametagHandler handler;
     private HikariDataSource hikari;
 
     // These are used if the user wants to customize the
@@ -44,17 +44,22 @@ public class DatabaseConfig implements AbstractConfig {
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
         hikari.setPoolName("NametagEdit Pool");
-        hikari.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
+      
+        String port = "3306";
+
+        if (config.isSet("MySQL.Port")) {
+            port = config.getString("MySQL.Port");
+        }
+
+        hikari.setJdbcUrl("jdbc:mysql://" + config.getString("MySQL.Hostname") + ":" + port + "/" + config.getString("MySQL.Database"));
         hikari.addDataSourceProperty("useSSL", false);
         hikari.addDataSourceProperty("requireSSL", false);
         hikari.addDataSourceProperty("verifyServerCertificate", false);
-        hikari.addDataSourceProperty("serverName", config.getString("MySQL.Hostname"));
-        if (config.isSet("MySQL.Port")) {
-            hikari.addDataSourceProperty("port", config.getString("MySQL.Port"));
-        }
-        hikari.addDataSourceProperty("databaseName", config.getString("MySQL.Database"));
         hikari.addDataSourceProperty("user", config.getString("MySQL.Username"));
         hikari.addDataSourceProperty("password", config.getString("MySQL.Password"));
+
+        hikari.setUsername(config.getString("MySQL.Username"));
+        hikari.setPassword(config.getString("MySQL.Password"));
 
         new DatabaseUpdater(handler, hikari, plugin).runTaskAsynchronously(plugin);
     }
