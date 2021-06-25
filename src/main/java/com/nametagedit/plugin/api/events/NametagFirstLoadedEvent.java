@@ -17,8 +17,8 @@ public class NametagFirstLoadedEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private Player player;
-    private INametag nametag;
+    private final Player player;
+    private final INametag nametag;
 
     public static HandlerList getHandlerList() {
         return HANDLERS;

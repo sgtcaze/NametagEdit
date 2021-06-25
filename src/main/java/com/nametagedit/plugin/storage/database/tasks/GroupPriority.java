@@ -12,9 +12,9 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class GroupPriority extends BukkitRunnable {
 
-    private String group;
-    private int priority;
-    private HikariDataSource hikari;
+    private final String group;
+    private final int priority;
+    private final HikariDataSource hikari;
 
     @Override
     public void run() {
