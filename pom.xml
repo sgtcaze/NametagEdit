@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.5.0</version>
+    <version>4.4.16</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
-    <url>https://maven.apache.org</url>
+    <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <dependencies>
         <!--Spigot API -->
@@ -26,8 +26,7 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>${spigot.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/craftbukkit-1.16.5.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <!-- PermissionsEx -->
         <dependency>
@@ -115,7 +114,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.0-jre</version>
+            <version>r05</version>
         </dependency>
         <!-- bStats -->
         <dependency>
@@ -135,12 +134,12 @@
         <repository>
             <id>mvdw-software</id>
             <name>MVdW Public Repositories</name>
-            <url>https://repo.mvdw-software.be/content/groups/public/</url>
+            <url>http://repo.mvdw-software.be/content/groups/public/</url>
         </repository>
         <!-- Clip Repo -->
         <repository>
             <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <!-- bStats -->
         <repository>

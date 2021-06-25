@@ -21,11 +21,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PlayerLoader extends BukkitRunnable {
 
-    private final UUID uuid;
-    private final Plugin plugin;
-    private final NametagHandler handler;
-    private final HikariDataSource hikari;
-    private final boolean loggedIn;
+    private UUID uuid;
+    private Plugin plugin;
+    private NametagHandler handler;
+    private HikariDataSource hikari;
+    private boolean loggedIn;
 
     @Override
     public void run() {

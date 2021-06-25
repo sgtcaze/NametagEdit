@@ -13,8 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PlayerDeleter extends BukkitRunnable {
 
-    private final UUID uuid;
-    private final HikariDataSource hikari;
+    private UUID uuid;
+    private HikariDataSource hikari;
 
     @Override
     public void run() {

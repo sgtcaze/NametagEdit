@@ -12,9 +12,9 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class GroupConfigUpdater extends BukkitRunnable {
 
-    private final String setting;
-    private final String value;
-    private final HikariDataSource hikari;
+    private String setting;
+    private String value;
+    private HikariDataSource hikari;
 
     @Override
     public void run() {

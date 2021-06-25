@@ -32,7 +32,7 @@ public enum NametagMessages {
 
     @Override
     public String toString() {
-        return Utils.color("&8» &a" + text);
+        return ChatColor.translateAlternateColorCodes('&', "&8» &a" + text);
     }
 
     public void send(CommandSender sender) {

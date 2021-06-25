@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class DatabaseConfig implements AbstractConfig {
 
-    private final NametagEdit plugin;
-    private final NametagHandler handler;
+    private NametagEdit plugin;
+    private NametagHandler handler;
     private HikariDataSource hikari;
 
     // These are used if the user wants to customize the
@@ -44,7 +44,7 @@ public class DatabaseConfig implements AbstractConfig {
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
         hikari.setPoolName("NametagEdit Pool");
-        hikari.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
+        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
         hikari.addDataSourceProperty("useSSL", false);
         hikari.addDataSourceProperty("requireSSL", false);
         hikari.addDataSourceProperty("verifyServerCertificate", false);
@@ -89,11 +89,14 @@ public class DatabaseConfig implements AbstractConfig {
     @Override
     public void savePriority(boolean playerTag, String key, final int priority) {
         if (playerTag) {
-            UUIDFetcher.lookupUUID(key, plugin, uuid -> {
-                if (uuid != null) {
-                    new PlayerPriority(uuid, priority, hikari).runTaskAsynchronously(plugin);
-                } else {
-                    plugin.getLogger().severe("An error has occurred while looking for UUID.");
+            UUIDFetcher.lookupUUID(key, plugin, new UUIDFetcher.UUIDLookup() {
+                @Override
+                public void response(UUID uuid) {
+                    if (uuid != null) {
+                        new PlayerPriority(uuid, priority, hikari).runTaskAsynchronously(plugin);
+                    } else {
+                        // TODO: Send error
+                    }
                 }
             });
         } else {
