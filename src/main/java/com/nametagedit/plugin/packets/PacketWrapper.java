@@ -94,7 +94,7 @@ public class PacketWrapper {
                     PacketAccessor.PACK_OPTION.set(packet, 1);
 
                     if (PacketAccessor.VISIBILITY != null) {
-                        PacketAccessor.VISIBILITY.set(packetParams, visible ? "always" : "never");
+                        PacketAccessor.VISIBILITY.set(packet, visible ? "always" : "never");
                     }
                 } else {
                     // 1.17+
