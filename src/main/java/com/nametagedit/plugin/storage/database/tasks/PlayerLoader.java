@@ -21,11 +21,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PlayerLoader extends BukkitRunnable {
 
-    private final UUID uuid;
-    private final Plugin plugin;
-    private final NametagHandler handler;
-    private final HikariDataSource hikari;
-    private final boolean loggedIn;
+    private UUID uuid;
+    private Plugin plugin;
+    private NametagHandler handler;
+    private HikariDataSource hikari;
+    private boolean loggedIn;
 
     @Override
     public void run() {
@@ -37,18 +37,19 @@ public class PlayerLoader extends BukkitRunnable {
         try (Connection connection = hikari.getConnection()) {
             final String QUERY = "SELECT `prefix`, `suffix`, `priority` FROM " + DatabaseConfig.TABLE_PLAYERS + " WHERE `uuid`=?";
 
-            PreparedStatement select = connection.prepareStatement(QUERY);
-            select.setString(1, uuid.toString());
+            try (PreparedStatement select = connection.prepareStatement(QUERY)) {
+                select.setString(1, uuid.toString());
 
-            ResultSet resultSet = select.executeQuery();
-            if (resultSet.next()) {
-                tempPrefix = resultSet.getString("prefix");
-                tempSuffix = resultSet.getString("suffix");
-                priority = resultSet.getInt("priority");
-                found = true;
+                ResultSet resultSet = select.executeQuery();
+                if (resultSet.next()) {
+                    tempPrefix = resultSet.getString("prefix");
+                    tempSuffix = resultSet.getString("suffix");
+                    priority = resultSet.getInt("priority");
+                    found = true;
+                }
+
+                resultSet.close();
             }
-
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
