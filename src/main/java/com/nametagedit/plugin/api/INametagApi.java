@@ -135,6 +135,30 @@ public interface INametagApi {
     void setNametag(String player, String prefix, String suffix);
 
     /**
+     * Hide the name above the head
+     * @param player the player whose nametag to hide
+     */
+    void hideNametag(Player player);
+
+    /**
+     * Hide the name above the head
+     * @param player he player whose nametag to hide
+     */
+    void hideNametag(String player);
+
+    /**
+     * Show the name above the head
+     * @param player he player whose nametag to show
+     */
+    void showNametag(Player player);
+
+    /**
+     * Show the name above the head
+     * @param player he player whose nametag to show
+     */
+    void showNametag(String player);
+
+    /**
      * Gets the data of all groups
      * @return list containing all group data
      */
