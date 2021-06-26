@@ -67,8 +67,6 @@ public class Utils {
             text = matcher.appendTail(buffer).toString();
         }
 
-        Bukkit.broadcastMessage(text);
-
         return text;
     }
 
