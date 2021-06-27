@@ -44,7 +44,6 @@ public class DatabaseConfig implements AbstractConfig {
         hikari = new HikariDataSource();
         hikari.setMaximumPoolSize(config.getInt("MinimumPoolSize", 10));
         hikari.setPoolName("NametagEdit Pool");
-        hikari.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
 
         String port = "3306";
 
