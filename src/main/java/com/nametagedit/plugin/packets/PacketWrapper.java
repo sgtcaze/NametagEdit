@@ -5,7 +5,8 @@ import com.nametagedit.plugin.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +18,7 @@ public class PacketWrapper {
     private final Object packet = PacketAccessor.createPacket();
     private final Object packetParams = PacketAccessor.createPacketParams();
 
-    private static Constructor<?> ChatComponentText;
+    private static Method CraftChatMessage;
     private static Class<? extends Enum> typeEnumChatFormat;
     private static Enum RESET_COLOR;
 
@@ -25,15 +26,13 @@ public class PacketWrapper {
         try {
             if (!PacketAccessor.isLegacyVersion()) {
                 if (!PacketAccessor.isParamsVersion()) {
-                    Class<?> typeChatComponentText = Class.forName("net.minecraft.server." + PacketAccessor.VERSION + ".ChatComponentText");
-                    ChatComponentText = typeChatComponentText.getConstructor(String.class);
                     typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.server." + PacketAccessor.VERSION + ".EnumChatFormat");
                 } else {
                     // 1.17+
-                    Class<?> typeChatComponentText = Class.forName("net.minecraft.network.chat.ChatComponentText");
-                    ChatComponentText = typeChatComponentText.getConstructor(String.class);
                     typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.EnumChatFormat");
                 }
+                Class<?> typeCraftChatMessage = Class.forName("org.bukkit.craftbukkit." + PacketAccessor.VERSION + ".util.CraftChatMessage");
+                CraftChatMessage = typeCraftChatMessage.getMethod("fromString", String.class);
                 RESET_COLOR = Enum.valueOf(typeEnumChatFormat, "RESET");
             }
         } catch (Exception e) {
@@ -78,15 +77,15 @@ public class PacketWrapper {
 
                     if (!PacketAccessor.isParamsVersion()) {
                         PacketAccessor.TEAM_COLOR.set(packet, colorEnum);
-                        PacketAccessor.DISPLAY_NAME.set(packet, ChatComponentText.newInstance(name));
-                        PacketAccessor.PREFIX.set(packet, ChatComponentText.newInstance(prefix));
-                        PacketAccessor.SUFFIX.set(packet, ChatComponentText.newInstance(suffix));
+                        PacketAccessor.DISPLAY_NAME.set(packet, Array.get(CraftChatMessage.invoke(null, name), 0));
+                        PacketAccessor.PREFIX.set(packet, Array.get(CraftChatMessage.invoke(null, prefix), 0));
+                        PacketAccessor.SUFFIX.set(packet, Array.get(CraftChatMessage.invoke(null, suffix), 0));
                     } else {
                         // 1.17+
                         PacketAccessor.TEAM_COLOR.set(packetParams, colorEnum == null ? RESET_COLOR : colorEnum);
-                        PacketAccessor.DISPLAY_NAME.set(packetParams, ChatComponentText.newInstance(name));
-                        PacketAccessor.PREFIX.set(packetParams, ChatComponentText.newInstance(prefix));
-                        PacketAccessor.SUFFIX.set(packetParams, ChatComponentText.newInstance(suffix));
+                        PacketAccessor.DISPLAY_NAME.set(packetParams, Array.get(CraftChatMessage.invoke(null, name), 0));
+                        PacketAccessor.PREFIX.set(packetParams, Array.get(CraftChatMessage.invoke(null, prefix), 0));
+                        PacketAccessor.SUFFIX.set(packetParams, Array.get(CraftChatMessage.invoke(null, suffix), 0));
                     }
                 }
 
