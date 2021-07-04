@@ -25,6 +25,7 @@ public class FakeTeam {
     private String name;
     private String prefix;
     private String suffix;
+    private boolean visible = true;
 
     public FakeTeam(String prefix, String suffix, int sortPriority, boolean playerTag) {
         this.name = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
@@ -48,8 +49,8 @@ public class FakeTeam {
         }
     }
 
-    public boolean isSimilar(String prefix, String suffix) {
-        return this.prefix.equals(prefix) && this.suffix.equals(suffix);
+    public boolean isSimilar(String prefix, String suffix, boolean visible) {
+        return this.prefix.equals(prefix) && this.suffix.equals(suffix) && this.visible == visible;
     }
 
     /**

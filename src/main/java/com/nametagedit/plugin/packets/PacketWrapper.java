@@ -49,7 +49,7 @@ public class PacketWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public PacketWrapper(String name, String prefix, String suffix, int param, Collection<?> players) {
+    public PacketWrapper(String name, String prefix, String suffix, int param, Collection<?> players, boolean visible) {
         setupDefaults(name, param);
         if (param == 0 || param == 2) {
             try {
@@ -93,14 +93,14 @@ public class PacketWrapper {
                     PacketAccessor.PACK_OPTION.set(packet, 1);
 
                     if (PacketAccessor.VISIBILITY != null) {
-                        PacketAccessor.VISIBILITY.set(packet, "always");
+                        PacketAccessor.VISIBILITY.set(packet, visible ? "always" : "never");
                     }
                 } else {
                     // 1.17+
                     PacketAccessor.PACK_OPTION.set(packetParams, 1);
 
                     if (PacketAccessor.VISIBILITY != null) {
-                        PacketAccessor.VISIBILITY.set(packetParams, "always");
+                        PacketAccessor.VISIBILITY.set(packetParams, visible ? "always" : "never");
                     }
                 }
 
