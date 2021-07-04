@@ -87,7 +87,7 @@ public class NametagEdit extends JavaPlugin {
     }
 
     private void testCompat() {
-        PacketWrapper wrapper = new PacketWrapper("TEST", "&f", "", 0, new ArrayList<>());
+        PacketWrapper wrapper = new PacketWrapper("TEST", "&f", "", 0, new ArrayList<>(), true);
         wrapper.send();
         if (wrapper.error == null) return;
         Bukkit.getPluginManager().disablePlugin(this);

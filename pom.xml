@@ -8,7 +8,7 @@
     <version>4.5.0</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
-    <url>http://maven.apache.org</url>
+    <url>https://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
@@ -135,12 +135,12 @@
         <repository>
             <id>mvdw-software</id>
             <name>MVdW Public Repositories</name>
-            <url>http://repo.mvdw-software.be/content/groups/public/</url>
+            <url>https://repo.mvdw-software.be/content/groups/public/</url>
         </repository>
         <!-- Clip Repo -->
         <repository>
             <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <!-- bStats -->
         <repository>

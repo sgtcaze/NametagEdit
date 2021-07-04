@@ -88,6 +88,30 @@ public final class NametagAPI implements INametagApi {
     }
 
     @Override
+    public void hideNametag(Player player) {
+        FakeTeam fakeTeam = manager.getFakeTeam(player.getName());
+        manager.setNametag(player.getName(), fakeTeam == null ? null : fakeTeam.getPrefix(), fakeTeam == null ? null : fakeTeam.getSuffix(), false);
+    }
+
+    @Override
+    public void hideNametag(String player) {
+        FakeTeam fakeTeam = manager.getFakeTeam(player);
+        manager.setNametag(player, fakeTeam == null ? null : fakeTeam.getPrefix(), fakeTeam == null ? null : fakeTeam.getSuffix(), false);
+    }
+
+    @Override
+    public void showNametag(Player player) {
+        FakeTeam fakeTeam = manager.getFakeTeam(player.getName());
+        manager.setNametag(player.getName(), fakeTeam == null ? null : fakeTeam.getPrefix(), fakeTeam == null ? null : fakeTeam.getSuffix(), true);
+    }
+
+    @Override
+    public void showNametag(String player) {
+        FakeTeam fakeTeam = manager.getFakeTeam(player);
+        manager.setNametag(player, fakeTeam == null ? null : fakeTeam.getPrefix(), fakeTeam == null ? null : fakeTeam.getSuffix(), true);
+    }
+
+    @Override
     public List<GroupData> getGroupData() {
         return handler.getGroupData();
     }
@@ -104,7 +128,7 @@ public final class NametagAPI implements INametagApi {
 
     @Override
     public void applyTagToPlayer(Player player, boolean loggedIn) {
-        handler.applyTagToPlayer(player,loggedIn);
+        handler.applyTagToPlayer(player, loggedIn);
     }
 
     @Override
