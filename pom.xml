@@ -135,7 +135,7 @@
         <repository>
             <id>mvdw-software</id>
             <name>MVdW Public Repositories</name>
-            <url>https://repo.mvdw-software.be/content/groups/public/</url>
+            <url>http://repo.mvdw-software.be/content/groups/public/</url>
         </repository>
         <!-- Clip Repo -->
         <repository>
