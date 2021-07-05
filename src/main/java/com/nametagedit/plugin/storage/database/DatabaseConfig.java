@@ -14,13 +14,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class DatabaseConfig implements AbstractConfig {
 
-    private NametagEdit plugin;
-    private NametagHandler handler;
+    private final NametagEdit plugin;
+    private final NametagHandler handler;
     private HikariDataSource hikari;
 
     // These are used if the user wants to customize the
@@ -74,6 +76,24 @@ public class DatabaseConfig implements AbstractConfig {
         if (hikari != null) {
             hikari.close();
         }
+    }
+
+    @Override
+    public CompletableFuture<Collection<PlayerData>> players() {
+        CompletableFuture<Collection<PlayerData>> data = new CompletableFuture<>();
+
+        new DataDownloader(handler,hikari,data,null).runTaskAsynchronously(plugin);
+
+        return data;
+    }
+
+    @Override
+    public CompletableFuture<Collection<GroupData>> groups() {
+        CompletableFuture<Collection<GroupData>> data = new CompletableFuture<>();
+
+        new DataDownloader(handler,hikari,null,data).runTaskAsynchronously(plugin);
+
+        return data;
     }
 
     @Override

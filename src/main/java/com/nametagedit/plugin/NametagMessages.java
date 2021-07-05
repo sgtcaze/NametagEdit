@@ -26,7 +26,10 @@ public enum NametagMessages {
     CREATED_GROUP("Created group %s"),
     NOT_A_NUMBER("Uh-oh! %s does not appear to be a number!"),
     FILE_MISCONFIGURED("The file %s is not properly configured. Please read the configuration guide, otherwise conversion will fail."),
-    CONVERSION("Attempting to convert %s from %s to %s. (Legacy: %s)");
+    CONVERSION("Attempting to convert %s from %s to %s. (Legacy: %s)"),
+    EDITOR_ERROR("An error has occurred while trying to create an editor session. Please try again later."),
+    EDITOR("A new editor session has been created: %s"),
+    EDITOR_IMPORT("All editor data has been imported!");
 
     private final String text;
 

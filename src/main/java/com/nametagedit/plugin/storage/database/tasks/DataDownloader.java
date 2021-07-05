@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class DataDownloader extends BukkitRunnable {
 
@@ -23,12 +24,21 @@ public class DataDownloader extends BukkitRunnable {
     private final NametagHandler handler;
     private final HikariDataSource hikari;
 
+    private CompletableFuture<Collection<PlayerData>> playersFuture;
+    private CompletableFuture<Collection<GroupData>> groupsFuture;
+
     public DataDownloader(NametagHandler handler, HikariDataSource hikari) {
         this.handler = handler;
         this.hikari = hikari;
         for (Player player : Utils.getOnline()) {
             players.add(player.getUniqueId());
         }
+    }
+
+    public DataDownloader(NametagHandler handler, HikariDataSource hikari, CompletableFuture<Collection<PlayerData>> playersFuture, CompletableFuture<Collection<GroupData>> groupsFuture) {
+        this(handler,hikari);
+        this.playersFuture = playersFuture;
+        this.groupsFuture = groupsFuture;
     }
 
     @Override
@@ -97,23 +107,36 @@ public class DataDownloader extends BukkitRunnable {
 
                 current.addAll(groupDataUnordered); // Add remaining entries (bad order, wasn't specified)
                 groupDataUnordered = current; // Reassign the new group order
+
+
+                if (playersFuture != null) {
+                    playersFuture.complete(playerData.values());
+                } else if (groupsFuture != null) {
+                    groupsFuture.complete(groupDataUnordered);
+                } else {
+                    this.assign(groupDataUnordered,playerData);
+                }
             }
 
-            handler.assignData(groupDataUnordered, playerData); // Safely perform assignments
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (Player player : Utils.getOnline()) {
-                        PlayerData data = playerData.get(player.getUniqueId());
-                        if (data != null) {
-                            data.setName(player.getName());
-                        }
-                    }
 
-                    handler.applyTags();
-                }
-            }.runTask(handler.getPlugin());
         }
+    }
+
+    private void assign(List<GroupData> groupData, Map<UUID,PlayerData> playerData) {
+        handler.assignData(groupData, playerData); // Safely perform assignments
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player player : Utils.getOnline()) {
+                    PlayerData data = playerData.get(player.getUniqueId());
+                    if (data != null) {
+                        data.setName(player.getName());
+                    }
+                }
+
+                handler.applyTags();
+            }
+        }.runTask(handler.getPlugin());
     }
 
 }

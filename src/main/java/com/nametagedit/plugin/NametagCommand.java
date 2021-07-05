@@ -5,6 +5,7 @@ import com.nametagedit.plugin.api.events.NametagEvent;
 import com.nametagedit.plugin.converter.Converter;
 import com.nametagedit.plugin.converter.ConverterTask;
 import com.nametagedit.plugin.utils.Utils;
+import com.nametagedit.plugin.web.EditorSession;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,6 +17,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scoreboard.Team;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +44,7 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
-            return getSuggestions(args[0], "debug", "reload", "convert", "player", "group");
+            return getSuggestions(args[0], "debug", "reload", "convert", "player", "group", "editor");
         } else if (args.length == 2 || args.length == 3) {
             if (args[0].equalsIgnoreCase("player")) {
                 if (args.length == 2) {
@@ -87,6 +89,9 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
             sendUsage(sender);
         } else {
             switch (args[0].toLowerCase()) {
+                case "editor":
+                    cmdEditor(sender,args);
+                    break;
                 case "reload":
                     cmdReload(sender);
                     break;
@@ -174,12 +179,40 @@ public class NametagCommand implements CommandExecutor, TabExecutor {
         sender.sendMessage(Utils.format("     by Cory and sgtcaze"));
         sender.sendMessage(Utils.format("\n\n&8Type a command to get started:"));
         sender.sendMessage(Utils.format("&8» &a/nte debug"));
+        sender.sendMessage(Utils.format("&8» &a/nte editor"));
         sender.sendMessage(Utils.format("&8» &a/nte reload"));
         sender.sendMessage(Utils.format("&8» &a/nte convert"));
         sender.sendMessage(Utils.format("&8» &a/nte player"));
         sender.sendMessage(Utils.format("&8» &a/nte group"));
         sender.sendMessage(Utils.format("&8» &a/nte priority"));
         sender.sendMessage(Utils.format("&8» &a/nte longtags"));
+    }
+
+    private void cmdEditor(CommandSender sender, String[] args) {
+        if (isNotPermissed(sender, "nametagedit.editor")) {
+            return;
+        }
+
+        Bukkit.getScheduler().runTaskAsynchronously(handler.getPlugin(), () -> {
+            try {
+
+                if (args.length == 1) {
+                    EditorSession session = new EditorSession(handler.getPlugin(),sender);
+                    session.startSession();
+                    NametagMessages.EDITOR.send(sender,session.formatUrl());
+                    return;
+                }
+
+                String code = args[1];
+                EditorSession session = EditorSession.from(handler.getPlugin(), sender, code);
+                session.retrieveData();
+                NametagMessages.EDITOR_IMPORT.send(sender);
+
+            } catch (IOException e) {
+                NametagMessages.EDITOR_ERROR.send(sender);
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
