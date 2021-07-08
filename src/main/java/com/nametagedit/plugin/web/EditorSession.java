@@ -1,7 +1,6 @@
 package com.nametagedit.plugin.web;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nametagedit.plugin.NametagEdit;
@@ -9,6 +8,8 @@ import com.nametagedit.plugin.NametagHandler;
 import com.nametagedit.plugin.api.data.GroupData;
 import com.nametagedit.plugin.api.data.PlayerData;
 import com.nametagedit.plugin.storage.AbstractConfig;
+import com.nametagedit.plugin.web.json.JsonConverter;
+import com.nametagedit.plugin.web.json.JsonTrack;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -21,15 +22,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Getter
@@ -73,20 +71,17 @@ public class EditorSession {
             return;
         }
 
-        Gson gson = new Gson();
         JsonObject json = new JsonObject();
-        JsonObject data = new JsonObject();
 
         AbstractConfig config = plugin.getHandler().getAbstractConfig();
 
         Collection<GroupData> groups = config.groups().join();
         Collection<PlayerData> players = config.players().join();
 
-        data.add("players", gson.toJsonTree(players));
-        data.add("groups", gson.toJsonTree(groups));
+        JsonElement data = new JsonConverter(groups,players).convert();
 
         json.addProperty("player", player.getName());
-        json.add("data",data);
+        json.add("tracks",data);
 
         // Create a connection to the paste server and make a request
         HttpURLConnection connection = this.createConnection("post");
@@ -104,7 +99,6 @@ public class EditorSession {
         connection.disconnect();
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     public void retrieveData() throws IOException {
         if (plugin.getServer().isPrimaryThread()) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -117,39 +111,46 @@ public class EditorSession {
             return;
         }
 
-        Gson gson = new Gson();
-
         HttpURLConnection connection = this.createConnection(code);
         connection.setRequestMethod("GET");
 
         // Read the response from the server
         JsonObject response = this.readResponse(connection);
-        JsonObject data = response.get("data").getAsJsonObject();
+        JsonObject data = response.get("tracks").getAsJsonObject();
 
-        Type playersType = new TypeToken<ArrayList<PlayerData>>(){}.getType();
-        Type groupsType = new TypeToken<ArrayList<GroupData>>(){}.getType();
-
-        Collection<PlayerData> players = gson.fromJson(data.get("players"), playersType);
-        Collection<GroupData> groups = gson.fromJson(data.get("groups"), groupsType);
+        List<JsonTrack> tracks = new JsonConverter().from(data);
 
         NametagHandler handler = plugin.getHandler();
 
-        groups.stream()
-                .filter(Objects::nonNull)
-                .forEach((group) -> {
-                    plugin.debug("Importing " + group.getGroupName() + "...");
-                    group.setPermission(group.getPermission());
+        tracks.forEach((track) -> {
+            plugin.debug("Importing " + track.getId() + "...");
+
+            switch (track.getType().toLowerCase()) {
+                case "group":
+                    GroupData group = new GroupData();
+                    group.setPermission(track.getPermission());
+                    group.setGroupName(track.getId());
+                    group.setPrefix(track.getPrefix());
+                    group.setSuffix(track.getSuffix());
+                    group.setSortPriority(track.getSortPriority());
+
                     handler.deleteGroup(group);
                     handler.addGroup(group);
-                });
+                    break;
+                case "player":
+                    PlayerData player = new PlayerData();
+                    player.setUuid(UUID.fromString(track.getId()));
+                    player.setPrefix(track.getPrefix());
+                    player.setSuffix(track.getSuffix());
+                    player.setSortPriority(track.getSortPriority());
 
-        players.stream()
-                .filter(Objects::nonNull)
-                .forEach((player) -> {
-                    plugin.debug("Importing " + player.getName() + "...");
                     handler.removePlayerData(player.getUuid());
                     handler.storePlayerData(player.getUuid(),player);
-                });
+                    break;
+                default:
+                    break;
+            }
+        });
 
         connection.disconnect();
     }
