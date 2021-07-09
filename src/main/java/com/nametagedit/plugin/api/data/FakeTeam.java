@@ -33,7 +33,7 @@ public class FakeTeam {
         switch (VersionChecker.getBukkitVersion()) {
             case v1_13_R1: case v1_14_R1: case v1_14_R2: case v1_15_R1: case v1_16_R1:
             case v1_16_R2: case v1_16_R3: case v1_17_R1:
-                this.name = this.name.length() > 128 ? this.name.substring(0, 128) : this.name;
+                this.name = this.name.length() > 256 ? this.name.substring(0, 256) : this.name;
             default:
                 this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
         }

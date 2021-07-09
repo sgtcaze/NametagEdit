@@ -38,7 +38,7 @@ public class Utils {
         switch (VersionChecker.getBukkitVersion()) {
             case v1_13_R1: case v1_14_R1: case v1_14_R2: case v1_15_R1: case v1_16_R1:
             case v1_16_R2: case v1_16_R3: case v1_17_R1:
-                return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
+                return limitChars && colored.length() > 256 ? colored.substring(0, 256) : colored;
             default:
                 return limitChars && colored.length() > 16 ? colored.substring(0, 16) : colored;
         }
