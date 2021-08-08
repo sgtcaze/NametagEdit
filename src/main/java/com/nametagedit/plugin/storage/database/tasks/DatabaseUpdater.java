@@ -93,7 +93,6 @@ public class DatabaseUpdater extends BukkitRunnable {
                 " VALUES('db_version', ?) ON DUPLICATE KEY UPDATE `value`=?")) {
             select.setInt(1, currentVersion);
             select.setInt(2, currentVersion);
-            select.setInt(3, currentVersion);
             select.execute();
         } catch (SQLException e) {
             handleError(e);
