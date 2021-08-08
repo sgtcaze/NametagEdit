@@ -19,8 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 public final class NametagAPI implements INametagApi {
 
-    private NametagHandler handler;
-    private NametagManager manager;
+    private final NametagHandler handler;
+    private final NametagManager manager;
 
     @Override
     public FakeTeam getFakeTeam(Player player) {

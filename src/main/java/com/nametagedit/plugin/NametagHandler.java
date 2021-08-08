@@ -320,7 +320,7 @@ public class NametagHandler implements Listener {
         }
 
         if (config.getInt(path, -1) <= 0) return null;
-        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20 * config.getInt(path));
+        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20L * config.getInt(path));
     }
 
     public void reload() {

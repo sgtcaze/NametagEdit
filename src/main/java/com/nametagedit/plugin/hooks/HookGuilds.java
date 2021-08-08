@@ -11,7 +11,7 @@ import me.glaremasters.guilds.api.events.base.GuildEvent;
 @AllArgsConstructor
 public class HookGuilds implements Listener {
 
-    private NametagHandler handler;
+    private final NametagHandler handler;
 
     @EventHandler
     public void onGuildEvent(GuildEvent event) {
