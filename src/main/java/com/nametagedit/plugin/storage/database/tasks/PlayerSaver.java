@@ -14,8 +14,8 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class PlayerSaver extends BukkitRunnable {
 
-    private PlayerData[] playerData;
-    private HikariDataSource hikari;
+    private final PlayerData[] playerData;
+    private final HikariDataSource hikari;
 
     @Override
     public void run() {

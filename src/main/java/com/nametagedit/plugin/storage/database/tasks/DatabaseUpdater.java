@@ -15,11 +15,11 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class DatabaseUpdater extends BukkitRunnable {
 
-    private NametagHandler handler;
-    private HikariDataSource hikari;
-    private NametagEdit plugin;
+    private final NametagHandler handler;
+    private final HikariDataSource hikari;
+    private final NametagEdit plugin;
 
-    private static final int CURRENT_DATABASE_VERSION = 4;
+    private static final int CURRENT_DATABASE_VERSION = 5;
 
     @Override
     public void run() {
@@ -39,6 +39,9 @@ public class DatabaseUpdater extends BukkitRunnable {
                     case 3:
                         handleUpdate3(connection);
                         break;
+                    case 4:
+                        handleUpdate4(connection);
+                        break;
                 }
 
                 currentVersion++;
@@ -53,9 +56,9 @@ public class DatabaseUpdater extends BukkitRunnable {
     }
 
     private void createTablesIfNotExists(Connection connection) {
-        execute(connection, "CREATE TABLE IF NOT EXISTS " + DatabaseConfig.TABLE_CONFIG + " (`setting` varchar(16) NOT NULL, `value` varchar(200) NOT NULL, PRIMARY KEY (`setting`)) ENGINE=InnoDB DEFAULT CHARSET=latin1");
-        execute(connection, "CREATE TABLE IF NOT EXISTS " + DatabaseConfig.TABLE_GROUPS + " (`name` varchar(64) NOT NULL, `permission` varchar(64) DEFAULT NULL, `prefix` varchar(64) NOT NULL, `suffix` varchar(64) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=latin1");
-        execute(connection, "CREATE TABLE IF NOT EXISTS " + DatabaseConfig.TABLE_PLAYERS + " (`uuid` varchar(64) NOT NULL, `name` varchar(16) NOT NULL, `prefix` varchar(64) NOT NULL, `suffix` varchar(64) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`uuid`)) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+        execute(connection, "CREATE TABLE IF NOT EXISTS " + DatabaseConfig.TABLE_CONFIG + " (`setting` varchar(16) NOT NULL, `value` varchar(200) NOT NULL, PRIMARY KEY (`setting`)) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        execute(connection, "CREATE TABLE IF NOT EXISTS " + DatabaseConfig.TABLE_GROUPS + " (`name` varchar(64) NOT NULL, `permission` varchar(64) DEFAULT NULL, `prefix` varchar(256) NOT NULL, `suffix` varchar(256) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        execute(connection, "CREATE TABLE IF NOT EXISTS " + DatabaseConfig.TABLE_PLAYERS + " (`uuid` varchar(64) NOT NULL, `name` varchar(16) NOT NULL, `prefix` varchar(256) NOT NULL, `suffix` varchar(256) NOT NULL, `priority` int(11) NOT NULL, PRIMARY KEY (`uuid`)) ENGINE=InnoDB DEFAULT CHARSET=utf8");
     }
 
     private void handleUpdate1(Connection connection) {
@@ -76,6 +79,13 @@ public class DatabaseUpdater extends BukkitRunnable {
         execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CONVERT TO CHARACTER SET utf8;");
 
         // TODO: Queries for Issue #230.
+    }
+
+    private void handleUpdate4(Connection connection) {
+        execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " CHANGE `prefix` `prefix` VARCHAR(256);");
+        execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_GROUPS + " CHANGE `suffix` `suffix` VARCHAR(256);");
+        execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CHANGE `prefix` `prefix` VARCHAR(256);");
+        execute(connection, "ALTER TABLE " + DatabaseConfig.TABLE_PLAYERS + " CHANGE `suffix` `suffix` VARCHAR(256);");
     }
 
     private void setCurrentDatabaseVersion(Connection connection, int currentVersion) {

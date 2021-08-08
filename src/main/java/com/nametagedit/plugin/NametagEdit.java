@@ -87,18 +87,16 @@ public class NametagEdit extends JavaPlugin {
     }
 
     private void testCompat() {
-        PacketWrapper wrapper = new PacketWrapper("TEST", "&f", "", 0, new ArrayList<>());
+        PacketWrapper wrapper = new PacketWrapper("TEST", "&f", "", 0, new ArrayList<>(), true);
         wrapper.send();
         if (wrapper.error == null) return;
         Bukkit.getPluginManager().disablePlugin(this);
-        getLogger().severe(new StringBuilder()
-                .append("\n------------------------------------------------------\n")
-                .append("[WARNING] NametagEdit v").append(getDescription().getVersion()).append(" Failed to load! [WARNING]")
-                .append("\n------------------------------------------------------")
-                .append("\nThis might be an issue with reflection. REPORT this:\n> ")
-                .append(wrapper.error)
-                .append("\nThe plugin will now self destruct.\n------------------------------------------------------")
-                .toString());
+        getLogger().severe("\n------------------------------------------------------\n" +
+                "[WARNING] NametagEdit v" + getDescription().getVersion() + " Failed to load! [WARNING]" +
+                "\n------------------------------------------------------" +
+                "\nThis might be an issue with reflection. REPORT this:\n> " +
+                wrapper.error +
+                "\nThe plugin will now self destruct.\n------------------------------------------------------");
     }
 
 }

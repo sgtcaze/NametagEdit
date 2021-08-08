@@ -37,18 +37,19 @@ public class PlayerLoader extends BukkitRunnable {
         try (Connection connection = hikari.getConnection()) {
             final String QUERY = "SELECT `prefix`, `suffix`, `priority` FROM " + DatabaseConfig.TABLE_PLAYERS + " WHERE `uuid`=?";
 
-            PreparedStatement select = connection.prepareStatement(QUERY);
-            select.setString(1, uuid.toString());
+            try (PreparedStatement select = connection.prepareStatement(QUERY)) {
+                select.setString(1, uuid.toString());
 
-            ResultSet resultSet = select.executeQuery();
-            if (resultSet.next()) {
-                tempPrefix = resultSet.getString("prefix");
-                tempSuffix = resultSet.getString("suffix");
-                priority = resultSet.getInt("priority");
-                found = true;
+                ResultSet resultSet = select.executeQuery();
+                if (resultSet.next()) {
+                    tempPrefix = resultSet.getString("prefix");
+                    tempSuffix = resultSet.getString("suffix");
+                    priority = resultSet.getInt("priority");
+                    found = true;
+                }
+
+                resultSet.close();
             }
-
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

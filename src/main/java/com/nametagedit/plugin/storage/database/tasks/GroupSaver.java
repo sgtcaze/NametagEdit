@@ -14,8 +14,8 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class GroupSaver extends BukkitRunnable {
 
-    private GroupData[] groupData;
-    private HikariDataSource hikari;
+    private final GroupData[] groupData;
+    private final HikariDataSource hikari;
 
     @Override
     public void run() {

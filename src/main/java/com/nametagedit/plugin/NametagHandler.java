@@ -289,6 +289,7 @@ public class NametagHandler implements Listener {
      * (So don't change that)
      */
     public String formatWithPlaceholders(Player player, String input, boolean limitChars) {
+        plugin.debug("Formatting text..");
         if (input == null) return "";
         if (player == null) return input;
 
@@ -309,6 +310,7 @@ public class NametagHandler implements Listener {
             input = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, input);
         }
 
+        plugin.debug("Applying colors..");
         return Utils.format(input, limitChars);
     }
 
@@ -318,7 +320,7 @@ public class NametagHandler implements Listener {
         }
 
         if (config.getInt(path, -1) <= 0) return null;
-        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20 * config.getInt(path));
+        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20L * config.getInt(path));
     }
 
     public void reload() {
@@ -340,19 +342,11 @@ public class NametagHandler implements Listener {
             m.addCustomChart(new Metrics.SimplePie("using_spigot", () -> PlaceholderAPIPlugin.getServerVersion().isSpigot() ? "yes" : "no"));
         }
 
-        clearEmptyTeamTask = createTask("ClearEmptyTeamsInterval", clearEmptyTeamTask, new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nte teams clear");
-            }
-        });
+        clearEmptyTeamTask = createTask("ClearEmptyTeamsInterval", clearEmptyTeamTask, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nte teams clear"));
 
-        refreshNametagTask = createTask("RefreshInterval", refreshNametagTask, new Runnable() {
-            @Override
-            public void run() {
-                nametagManager.reset();
-                applyTags();
-            }
+        refreshNametagTask = createTask("RefreshInterval", refreshNametagTask, () -> {
+            nametagManager.reset();
+            applyTags();
         });
     }
 
@@ -433,14 +427,11 @@ public class NametagHandler implements Listener {
             return;
         }
 
-        UUIDFetcher.lookupUUID(player, plugin, new UUIDFetcher.UUIDLookup() {
-            @Override
-            public void response(UUID uuid) {
-                if (uuid == null) {
-                    NametagMessages.UUID_LOOKUP_FAILED.send(sender);
-                } else {
-                    handleClear(uuid, player);
-                }
+        UUIDFetcher.lookupUUID(player, plugin, uuid -> {
+            if (uuid == null) {
+                NametagMessages.UUID_LOOKUP_FAILED.send(sender);
+            } else {
+                handleClear(uuid, player);
             }
         });
     }

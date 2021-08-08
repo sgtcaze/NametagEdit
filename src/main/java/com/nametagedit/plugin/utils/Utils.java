@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.utils;
 
+import com.nametagedit.plugin.packets.VersionChecker;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,22 +8,24 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import com.nametagedit.plugin.packets.VersionChecker;
-import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
+
+    private static final Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
 
     public static String format(String[] text, int to, int from) {
         return StringUtils.join(text, ' ', to, from).replace("'", "");
     }
 
     public static String deformat(String input) {
-        return input.replace("§", "&");
+        return ChatColor.stripColor(input);
     }
 
     public static String format(String input) {
@@ -30,25 +33,41 @@ public class Utils {
     }
 
     public static String format(String input, boolean limitChars) {
-        String colored = ChatColor.translateAlternateColorCodes('&', input);
+        String colored = color(input);
 
-        if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_13_R1) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R1) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_14_R2) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_15_R1) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R1) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R2) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else if(VersionChecker.getBukkitVersion() == BukkitVersion.v1_16_R3) {
-            return limitChars && colored.length() > 128 ? colored.substring(0, 128) : colored;
-        } else {
-            return limitChars && colored.length() > 16 ? colored.substring(0, 16) : colored;
+        switch (VersionChecker.getBukkitVersion()) {
+            case v1_13_R1: case v1_14_R1: case v1_14_R2: case v1_15_R1: case v1_16_R1:
+            case v1_16_R2: case v1_16_R3: case v1_17_R1:
+                return limitChars && colored.length() > 256 ? colored.substring(0, 256) : colored;
+            default:
+                return limitChars && colored.length() > 16 ? colored.substring(0, 16) : colored;
         }
+    }
+
+    public static String color(String text) {
+        if (text == null) return "";
+
+        text = ChatColor.translateAlternateColorCodes('&', text);
+
+        if (VersionChecker.canHex()) {
+            final char colorChar = ChatColor.COLOR_CHAR;
+
+            final Matcher matcher = hexPattern.matcher(text);
+            final StringBuffer buffer = new StringBuffer(text.length() + 4 * 8);
+
+            while (matcher.find()) {
+                final String group = matcher.group(1);
+
+                matcher.appendReplacement(buffer, colorChar + "x"
+                        + colorChar + group.charAt(0) + colorChar + group.charAt(1)
+                        + colorChar + group.charAt(2) + colorChar + group.charAt(3)
+                        + colorChar + group.charAt(4) + colorChar + group.charAt(5));
+            }
+
+            text = matcher.appendTail(buffer).toString();
+        }
+
+        return text;
     }
 
     public static List<Player> getOnline() {
