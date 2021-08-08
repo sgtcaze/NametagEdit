@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 @AllArgsConstructor
 public class HookLibsDisguise implements Listener {
 
-    private final NametagEdit plugin;
+    private NametagEdit plugin;
 
     @EventHandler
     public void onDisguiseEvent(final DisguiseEvent event) {

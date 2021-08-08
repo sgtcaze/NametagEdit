@@ -13,9 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PlayerPriority extends BukkitRunnable {
 
-    private final UUID player;
-    private final int priority;
-    private final HikariDataSource hikari;
+    private UUID player;
+    private int priority;
+    private HikariDataSource hikari;
 
     @Override
     public void run() {

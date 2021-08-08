@@ -10,7 +10,7 @@ This plugin allows users to add up to 16 characters before and after their name.
 
 1.7.x to 1.12.x max 16 characters
 
-1.13.x to 1.17.x allows more than 16 characters. :)
+1.13.x to 1.16.x allows more than 16 characters. :)
 
 NametagEdit has support for EssentialsGroupManager, PermissionsEx, zPermissions, LuckPerms and LibsDisguises. If a user changes groups or permissions, their tag is automatically updated.
 

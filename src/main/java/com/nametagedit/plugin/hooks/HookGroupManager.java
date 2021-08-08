@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 @AllArgsConstructor
 public class HookGroupManager implements Listener {
 
-    private final NametagHandler handler;
+    private NametagHandler handler;
 
     @EventHandler
     public void onGMUserEvent(GMUserEvent event) {

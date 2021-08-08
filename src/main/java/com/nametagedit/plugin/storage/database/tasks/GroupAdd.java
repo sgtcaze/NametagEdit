@@ -13,8 +13,8 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class GroupAdd extends BukkitRunnable {
 
-    private final GroupData groupData;
-    private final HikariDataSource hikari;
+    private GroupData groupData;
+    private HikariDataSource hikari;
 
     @Override
     public void run() {

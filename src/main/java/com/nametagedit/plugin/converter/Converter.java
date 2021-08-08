@@ -36,7 +36,7 @@ public class Converter {
         }
     }
 
-    private List<String> getLines(CommandSender commandSender, Plugin plugin, String oldFileName) {
+    private List<String> getLines(CommandSender commandSender, Plugin plugin, String oldFileName) throws IOException {
         File oldFile = new File(plugin.getDataFolder(), oldFileName);
         if (!oldFile.exists()) {
             NametagMessages.FILE_DOESNT_EXIST.send(commandSender, oldFileName);

@@ -11,7 +11,7 @@ import ru.tehkode.permissions.events.PermissionEntityEvent;
 @AllArgsConstructor
 public class HookPermissionsEX implements Listener {
 
-    private final NametagHandler handler;
+    private NametagHandler handler;
 
     @EventHandler
     public void onPermissionEntityEvent(PermissionEntityEvent event) {
