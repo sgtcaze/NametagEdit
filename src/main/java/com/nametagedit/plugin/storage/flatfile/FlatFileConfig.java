@@ -16,8 +16,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class FlatFileConfig implements AbstractConfig {
 
@@ -70,6 +72,22 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     @Override
+    public CompletableFuture<Collection<PlayerData>> players() {
+        List<PlayerData> data = new ArrayList<>();
+
+        for (Player player : Utils.getOnline()) {
+            data.add(PlayerData.fromFile(player.getUniqueId().toString(),players));
+        }
+
+        return CompletableFuture.completedFuture(data);
+    }
+
+    @Override
+    public CompletableFuture<Collection<GroupData>> groups() {
+        return CompletableFuture.completedFuture(this.getGroups());
+    }
+
+    @Override
     public void load(Player player, boolean loggedIn) {
         loadPlayerTag(player);
         plugin.getHandler().applyTagToPlayer(player, loggedIn);
@@ -108,20 +126,17 @@ public class FlatFileConfig implements AbstractConfig {
         if (playerTag) {
             final Player target = Bukkit.getPlayerExact(key);
             if (target != null) {
-                if (players.contains("Players." + target.getUniqueId().toString())) {
-                    players.set("Players." + target.getUniqueId().toString(), priority);
+                if (players.contains("Players." + target.getUniqueId())) {
+                    players.set("Players." + target.getUniqueId(), priority);
                     save(players, playersFile);
                 }
                 return;
             }
 
-            UUIDFetcher.lookupUUID(key, plugin, new UUIDFetcher.UUIDLookup() {
-                @Override
-                public void response(UUID uuid) {
-                    if (players.contains("Players." + uuid.toString())) {
-                        players.set("Players." + uuid, priority);
-                        save(players, playersFile);
-                    }
+            UUIDFetcher.lookupUUID(key, plugin, uuid -> {
+                if (players.contains("Players." + uuid.toString())) {
+                    players.set("Players." + uuid, priority);
+                    save(players, playersFile);
                 }
             });
         }
@@ -135,7 +150,8 @@ public class FlatFileConfig implements AbstractConfig {
 
     @Override
     public void add(GroupData groupData) {
-        // NOTE: Nothing to do
+        this.storeGroup(groupData);
+        save(groups,groupsFile);
     }
 
     @Override
@@ -187,6 +203,12 @@ public class FlatFileConfig implements AbstractConfig {
     }
 
     private void loadGroups() {
+        List<GroupData> groupData = this.getGroups();
+
+        handler.assignGroupData(groupData);
+    }
+
+    private List<GroupData> getGroups() {
         List<GroupData> groupData = new ArrayList<>();
         for (String groupName : groups.getConfigurationSection("Groups").getKeys(false)) {
             GroupData data = new GroupData();
@@ -198,7 +220,7 @@ public class FlatFileConfig implements AbstractConfig {
             groupData.add(data);
         }
 
-        handler.assignGroupData(groupData);
+        return groupData;
     }
 
     private void storeGroup(GroupData groupData) {

@@ -5,8 +5,10 @@ import com.nametagedit.plugin.api.data.PlayerData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This is responsible for abstracting
@@ -19,6 +21,10 @@ public interface AbstractConfig {
     void reload();
 
     void shutdown();
+
+    CompletableFuture<Collection<PlayerData>> players();
+
+    CompletableFuture<Collection<GroupData>> groups();
 
     void load(Player player, boolean loggedIn);
 

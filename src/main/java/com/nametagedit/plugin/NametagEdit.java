@@ -74,7 +74,7 @@ public class NametagEdit extends JavaPlugin {
         handler.getAbstractConfig().shutdown();
     }
 
-    void debug(String message) {
+    public void debug(String message) {
         if (handler != null && handler.debug()) {
             getLogger().info("[DEBUG] " + message);
         }

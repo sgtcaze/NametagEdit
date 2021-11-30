@@ -17,7 +17,7 @@ public class GroupData implements INametag {
     private String prefix;
     private String suffix;
     private String permission;
-    private Permission bukkitPermission;
+    private transient Permission bukkitPermission;
     private int sortPriority;
 
     public GroupData() {

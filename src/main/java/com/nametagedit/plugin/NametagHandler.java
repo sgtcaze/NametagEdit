@@ -241,7 +241,7 @@ public class NametagHandler implements Listener {
         return player == null ? null : playerData.get(player.getUniqueId());
     }
 
-    void addGroup(GroupData data) {
+    public void addGroup(GroupData data) {
         abstractConfig.add(data);
 
         try {
@@ -252,7 +252,7 @@ public class NametagHandler implements Listener {
         }
     }
 
-    void deleteGroup(GroupData data) {
+    public void deleteGroup(GroupData data) {
         abstractConfig.delete(data);
 
         try {

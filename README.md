@@ -1,7 +1,7 @@
 # NametagEdit
 
 [![Dev Builds](https://img.shields.io/badge/Jenkins-Development%20Builds-lightgrey.svg)](http://ci.nametagedit.com/job/NametagEdit/)
-[![Support](https://img.shields.io/badge/Minecraft-1.7--1.16-green.svg)](documentation/Support)
+[![Support](https://img.shields.io/badge/Minecraft-1.7--1.17-green.svg)](documentation/Support)
 [![Spigot](https://img.shields.io/badge/Spigot-Project%20Page-yellow.svg)](https://www.spigotmc.org/resources/nametagedit.3836/)
 [![JDK](https://img.shields.io/badge/JDK-1.8-blue.svg)](http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html)
 [![NametagEditAPI](https://img.shields.io/badge/NTE-Developer%20API-ff69b4.svg)](documentation/Developers.creole)
