@@ -82,7 +82,10 @@ class PacketAccessor {
                 Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.level.EntityPlayer");
                 Class<?> typePlayerConnection = Class.forName("net.minecraft.server.network.PlayerConnection");
                 playerConnection = typeNMSPlayer.getField("b");
-                sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.network.protocol.Packet"));
+                Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
+                sendPacket = Arrays.stream(typePlayerConnection.getMethods())
+                        .filter(method -> Arrays.equals(method.getParameterTypes(), sendPacketParameters))
+                        .findFirst().orElseThrow(NoSuchMethodException::new);
             }
 
             PacketData currentVersion = null;
