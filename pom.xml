@@ -11,14 +11,15 @@
     <url>https://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <dependencies>
         <!--Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <artifactId>spigot</artifactId>
             <version>${spigot.version}</version>
+            <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>
         <!--Bukkit API -->
@@ -27,7 +28,7 @@
             <artifactId>bukkit</artifactId>
             <version>${spigot.version}</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/craftbukkit-1.17.jar</systemPath>
+            <systemPath>${basedir}/lib/craftbukkit-1.18.jar</systemPath>
         </dependency>
         <!-- PermissionsEx -->
         <dependency>
