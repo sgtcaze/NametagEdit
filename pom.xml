@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.5.2</version>
+    <version>4.5.3</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>https://maven.apache.org</url>
@@ -14,7 +14,13 @@
         <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <dependencies>
-        <!--Spigot API -->
+        <!--Spigot -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
@@ -28,6 +34,53 @@
             <version>${spigot.version}</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/craftbukkit-1.18.jar</systemPath>
+        </dependency>
+        <!-- LuckPerms -->
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Clip Placeholder API -->
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- HikariCP -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+        <!-- SL4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.32</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Google Guava API -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.0.1-jre</version>
+        </dependency>
+        <!-- bStats -->
+        <dependency>
+            <groupId>org.bstats.bStats-Metrics</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.3</version>
+            <scope>compile</scope>
         </dependency>
         <!-- PermissionsEx -->
         <dependency>
@@ -61,20 +114,6 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/Guilds-3.5.3.8-RELEASE.jar</systemPath>
         </dependency>
-        <!-- LuckPerms -->
-        <dependency>
-            <groupId>net.luckperms</groupId>
-            <artifactId>api</artifactId>
-            <version>5.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Clip Placeholder API -->
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.10.9</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- LibsDisguises -->
         <dependency>
             <groupId>LibsDisguises</groupId>
@@ -83,41 +122,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/LibsDisguises-10.0.25.jar</systemPath>
         </dependency>
-        <!-- HikariCP -->
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-        </dependency>
-        <!-- SL4J -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.24</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Google Guava API -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>30.0-jre</version>
-        </dependency>
-        <!-- bStats -->
-        <dependency>
-        	<groupId>org.bstats.bStats-Metrics</groupId>
-        	<artifactId>bstats-bukkit</artifactId>
-        	<version>1.3</version>
-        	<scope>compile</scope>
-        </dependency>
     </dependencies>
     <repositories>
+        <!-- CodeMC -->
+        <repository>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.io/repository/nms/</url>
+        </repository>
         <!-- Spigot -->
         <repository>
             <id>spigot-repo</id>
@@ -130,9 +141,9 @@
         </repository>
         <!-- bStats -->
         <repository>
-        	<id>jitpack.io</id>
-        	<url>https://jitpack.io</url>
-		</repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
     <!-- Builds NametagEdit -->
     <build>
@@ -178,7 +189,7 @@
             <!-- Make a Jar -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
