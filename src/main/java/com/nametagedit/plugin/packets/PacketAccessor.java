@@ -70,11 +70,20 @@ class PacketAccessor {
                 playerConnection = typeNMSPlayer.getField("field_71135_a");
                 sendPacket = typePlayerConnection.getMethod("func_147359_a", Class.forName("net.minecraft.server.v1_7_R4.Packet"));
             } else if (!isParamsVersion()) {
-                packetClass = Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutScoreboardTeam");
-                Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + VERSION + ".EntityPlayer");
-                Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + VERSION + ".PlayerConnection");
-                playerConnection = typeNMSPlayer.getField("playerConnection");
-                sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"));
+                try {
+                    packetClass = Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutScoreboardTeam");
+                    Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + VERSION + ".EntityPlayer");
+                    Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + VERSION + ".PlayerConnection");
+                    playerConnection = typeNMSPlayer.getField("playerConnection");
+                    sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"));
+                } catch (Exception exception){
+                    packetClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam");
+                    packetParamsClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam$b");
+                    Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.level.EntityPlayer");
+                    Class<?> typePlayerConnection = Class.forName("net.minecraft.server.network.PlayerConnection");
+                    playerConnection = typeNMSPlayer.getField("b");
+                    sendPacket = typePlayerConnection.getMethod("a", Class.forName("net.minecraft.network.protocol.Packet"));
+                }
             } else {
                 // 1.17+
                 packetClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam");
@@ -82,10 +91,11 @@ class PacketAccessor {
                 Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.level.EntityPlayer");
                 Class<?> typePlayerConnection = Class.forName("net.minecraft.server.network.PlayerConnection");
                 playerConnection = typeNMSPlayer.getField("b");
-                Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
-                sendPacket = Arrays.stream(typePlayerConnection.getMethods())
-                        .filter(method -> Arrays.equals(method.getParameterTypes(), sendPacketParameters))
-                        .findFirst().orElseThrow(NoSuchMethodException::new);
+                try {
+                    sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.network.protocol.Packet"));
+                } catch (Exception exception){
+                    sendPacket = typePlayerConnection.getMethod("a", Class.forName("net.minecraft.network.protocol.Packet"));
+                }
             }
 
             PacketData currentVersion = null;
