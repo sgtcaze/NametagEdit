@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.5.4</version>
+    <version>4.5.5</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>https://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.18.1-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.18.2-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <dependencies>
         <!--Spigot -->
@@ -27,19 +27,11 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--Bukkit API -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>${spigot.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/craftbukkit-1.18.1.jar</systemPath>
-        </dependency>
         <!-- LuckPerms -->
         <dependency>
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
-            <version>5.3</version>
+            <version>5.4</version>
             <scope>provided</scope>
         </dependency>
         <!-- Clip Placeholder API -->
