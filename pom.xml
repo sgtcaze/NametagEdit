@@ -119,6 +119,12 @@
         <repository>
             <id>nms-repo</id>
             <url>https://repo.codemc.io/repository/nms/</url>
+            <exclusions>
+                <exclusion>
+                    <groupId>triumph-gui</groupId>
+                    <artifactId>triumph-gui</artifactId>
+                </exclusion>
+            </exclusions>
         </repository>
         <!-- Spigot -->
         <repository>
