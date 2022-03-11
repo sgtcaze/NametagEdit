@@ -49,9 +49,6 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx, zPermissions,
 #### Q: My nametag is cut short, even with LongTags enabled!
 **A:** LongTags is only able to disable a longer nametag in the tablist. The name above your head has a different limit (16 characters for prefix and suffix.) We are unable to change this, as this limit is imposed by Mojang.
 
-#### Q: My nametag is still visible, even when I use an invisibility potion!
-**A:** This is a well known bug in 1.8 Minecraft and below. The issue was fixed in 1.9. The issue occurs because of an ignored data watcher flag (which tells the client what to render, and what not to.) We are unable to fix this.
-
 #### Q: Can I sort nametags in the tab list?
 **A:** Yes. Read up on how to use it [here](documentation/Configuration.creole)
 
