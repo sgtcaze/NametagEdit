@@ -1,21 +1,21 @@
 # NametagEdit
 
-[![Dev Builds](https://img.shields.io/badge/Jenkins-Development%20Builds-lightgrey.svg)](https://ci.nametagedit.com/job/NametagEdit-Dev)
-[![Support](https://img.shields.io/badge/Minecraft-1.7--1.18-green.svg)](documentation/Support)
+[![Dev Builds](https://img.shields.io/badge/Jenkins-Development%20Builds-lightgrey.svg)](https://ci.nametagedit.com/job/NametagEdit)
+[![Support](https://img.shields.io/badge/Minecraft-1.7--1.19-green.svg)](documentation/Support)
 [![Spigot](https://img.shields.io/badge/Spigot-Project%20Page-yellow.svg)](https://www.spigotmc.org/resources/nametagedit.3836/)
-[![JDK](https://img.shields.io/badge/JDK-1.8-blue.svg)](http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html)
+[![JDK](https://img.shields.io/badge/JDK-1.8-blue.svg)]
 [![NametagEditAPI](https://img.shields.io/badge/NTE-Developer%20API-ff69b4.svg)](documentation/Developers.creole)
 
 This plugin allows users to add up to 16 characters before and after their name. Individual tags can be created for players, or a group can be created that can be joined via permissions.
 
-1.7.x to 1.12.x max 16 characters
-
-1.13.x to 1.18.x allows more than 16 characters. :)
+* Minecraft `1.7.x to 1.12.x` has a max `16 character` limit.
+* Minecraft `1.13.x to 1.19.x` has a max `256 character` limit.
+* Minecraft `11.16.x to 1.19.x` has `hex color` support.
 
 NametagEdit has support for EssentialsGroupManager, PermissionsEx, zPermissions, LuckPerms and LibsDisguises. If a user changes groups or permissions, their tag is automatically updated.
 
 * [Official Project Page](https://www.spigotmc.org/resources/nametagedit.3836/)
-* [Development Builds](https://ci.nametagedit.com/job/NametagEdit-Dev)
+* [Development Builds](https://ci.nametagedit.com/job/NametagEdit)
 
 # Quick Links
 * [API & Developers](documentation/Developers.creole)
@@ -49,14 +49,8 @@ NametagEdit has support for EssentialsGroupManager, PermissionsEx, zPermissions,
 #### Q: My nametag is cut short, even with LongTags enabled!
 **A:** LongTags is only able to disable a longer nametag in the tablist. The name above your head has a different limit (16 characters for prefix and suffix.) We are unable to change this, as this limit is imposed by Mojang.
 
-#### Q: My nametag is still visible, even when I use an invisibility potion!
-**A:** This is a well known bug in 1.8 Minecraft and below. The issue was fixed in 1.9. The issue occurs because of an ignored data watcher flag (which tells the client what to render, and what not to.) We are unable to fix this.
-
 #### Q: Can I sort nametags in the tab list?
 **A:** Yes. Read up on how to use it [here](documentation/Configuration.creole)
-
-#### Q: NametagEdit doesn't work with Placeholder API related plugins!
-**A:** NametagEdit does not have anything to do with this process. The placeholder API is an interface, and requires OTHER plugins to function. Consult the documentation for your chosen plugin.
 
 # TODO
 
