@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nametagedit</groupId>
     <artifactId>nametagedit</artifactId>
-    <version>4.5.6</version>
+    <version>4.5.8</version>
     <packaging>jar</packaging>
     <name>NametagEdit</name>
     <url>https://maven.apache.org</url>
@@ -139,6 +139,11 @@
         <repository>
             <id>guilds</id>
             <url>https://repo.glaremasters.me/repository/public/</url>
+        </repository>
+        <!-- Aikar Repo -->
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
     </repositories>
     <!-- Builds NametagEdit -->
