@@ -3,14 +3,14 @@
 [![Dev Builds](https://img.shields.io/badge/Jenkins-Development%20Builds-lightgrey.svg)](https://ci.nametagedit.com/job/NametagEdit)
 [![Support](https://img.shields.io/badge/Minecraft-1.7--1.19-green.svg)](documentation/Support)
 [![Spigot](https://img.shields.io/badge/Spigot-Project%20Page-yellow.svg)](https://www.spigotmc.org/resources/nametagedit.3836/)
-[![JDK](https://img.shields.io/badge/JDK-1.8-blue.svg)]
+[JDK](https://img.shields.io/badge/JDK-1.8-blue.svg)
 [![NametagEditAPI](https://img.shields.io/badge/NTE-Developer%20API-ff69b4.svg)](documentation/Developers.creole)
 
 This plugin allows users to add up to 16 characters before and after their name. Individual tags can be created for players, or a group can be created that can be joined via permissions.
 
 * Minecraft `1.7.x to 1.12.x` has a max `16 character` limit.
 * Minecraft `1.13.x to 1.19.x` has a max `256 character` limit.
-* Minecraft `11.16.x to 1.19.x` has `hex color` support.
+* Minecraft `1.16.x to 1.19.x` has `hex color` support.
 
 NametagEdit has support for EssentialsGroupManager, PermissionsEx, zPermissions, LuckPerms and LibsDisguises. If a user changes groups or permissions, their tag is automatically updated.
 
