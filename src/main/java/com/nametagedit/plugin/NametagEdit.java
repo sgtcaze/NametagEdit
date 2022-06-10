@@ -2,6 +2,7 @@ package com.nametagedit.plugin;
 
 import java.util.ArrayList;
 
+import com.nametagedit.plugin.hooks.invisibility.HookInvisibilityFix;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +27,8 @@ import lombok.Getter;
 @Getter
 public class NametagEdit extends JavaPlugin {
 
+    private static NametagEdit instance;
+
     private static INametagApi api;
 
     private NametagHandler handler;
@@ -40,10 +43,15 @@ public class NametagEdit extends JavaPlugin {
         testCompat();
         if (!isEnabled()) return;
 
+        instance = this;
+
         manager = new NametagManager(this);
         handler = new NametagHandler(this, manager);
 
         PluginManager pluginManager = Bukkit.getPluginManager();
+
+        pluginManager.registerEvents(new HookInvisibilityFix(), this);
+
         if (checkShouldRegister("zPermissions")) {
             pluginManager.registerEvents(new HookZPermissions(handler), this);
         } else if (checkShouldRegister("PermissionsEx")) {
@@ -66,6 +74,10 @@ public class NametagEdit extends JavaPlugin {
         if (api == null) {
             api = new NametagAPI(handler, manager);
         }
+    }
+
+    public static NametagEdit getInstance(){
+        return instance;
     }
 
     @Override
