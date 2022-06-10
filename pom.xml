@@ -140,6 +140,11 @@
             <id>guilds</id>
             <url>https://repo.glaremasters.me/repository/public/</url>
         </repository>
+        <!-- Aikar Repo -->
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
     </repositories>
     <!-- Builds NametagEdit -->
     <build>
