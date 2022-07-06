@@ -25,7 +25,7 @@ public class Utils {
     }
 
     public static String deformat(String input) {
-        return ChatColor.stripColor(input);
+        return input.replace("§", "&");
     }
 
     public static String format(String input) {
