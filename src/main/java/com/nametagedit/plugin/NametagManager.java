@@ -1,25 +1,24 @@
 package com.nametagedit.plugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
+import com.nametagedit.plugin.api.data.FakeTeam;
+import com.nametagedit.plugin.packets.PacketWrapper;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import com.nametagedit.plugin.api.data.FakeTeam;
-import com.nametagedit.plugin.packets.PacketWrapper;
-
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @AllArgsConstructor
 public class NametagManager {
 
-    private final HashMap<String, FakeTeam> TEAMS = new HashMap<>();
-    private final HashMap<String, FakeTeam> CACHED_FAKE_TEAMS = new HashMap<>();
+    private final Map<String, FakeTeam> TEAMS = new ConcurrentHashMap<>();
+    private final Map<String, FakeTeam> CACHED_FAKE_TEAMS = new ConcurrentHashMap<>();
     private final NametagEdit plugin;
 
     /**
