@@ -76,7 +76,7 @@ public class PacketWrapper {
                         suffix = ChatColor.getByChar(colorCode) + suffix;
 
                     if (!PacketAccessor.isParamsVersion()) {
-                        PacketAccessor.TEAM_COLOR.set(packet, colorEnum);
+                        PacketAccessor.TEAM_COLOR.set(packet, colorEnum == null ? RESET_COLOR : colorEnum);
                         PacketAccessor.DISPLAY_NAME.set(packet, Array.get(CraftChatMessage.invoke(null, name), 0));
                         PacketAccessor.PREFIX.set(packet, Array.get(CraftChatMessage.invoke(null, prefix), 0));
                         PacketAccessor.SUFFIX.set(packet, Array.get(CraftChatMessage.invoke(null, suffix), 0));
