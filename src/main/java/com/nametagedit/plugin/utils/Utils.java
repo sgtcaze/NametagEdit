@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,12 +116,7 @@ public class Utils {
     }
 
     public static String generateUUID() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            builder.append(chars.charAt((int) (Math.random() * chars.length())));
-        }
-        return builder.toString();
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
 }
