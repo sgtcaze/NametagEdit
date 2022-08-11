@@ -30,9 +30,7 @@ public class VersionChecker {
     }
 
     public static boolean canHex() {
-        String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
-        String minorVer = split[1];
-        return Integer.parseInt(minorVer) >= 16;
+        return bukkitVersion.getProtocolNumber() >= BukkitVersion.v1_16_R1.getProtocolNumber();
     }
 
     @RequiredArgsConstructor
