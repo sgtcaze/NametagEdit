@@ -48,7 +48,7 @@ public class FakeTeam {
         this.prefix = prefix;
         this.suffix = suffix;
 
-        this.createdTeamsNames.add(this.name);
+        createdTeamsNames.add(this.name);
     }
 
     public void addMember(String player) {
