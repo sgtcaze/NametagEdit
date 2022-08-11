@@ -1,5 +1,6 @@
 package com.nametagedit.plugin.utils;
 
+import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.packets.VersionChecker;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -36,7 +37,7 @@ public class Utils {
     public static String format(String input, boolean limitChars) {
         String colored = color(input);
 
-        switch (VersionChecker.getBukkitVersion()) {
+        switch (NametagEdit.getInstance().getVersion()) {
             case v1_13_R1: case v1_14_R1: case v1_14_R2: case v1_15_R1: case v1_16_R1:
             case v1_16_R2: case v1_16_R3: case v1_17_R1: case v1_18_R1: case v1_19_R1:
                 return limitChars && colored.length() > 256 ? colored.substring(0, 256) : colored;

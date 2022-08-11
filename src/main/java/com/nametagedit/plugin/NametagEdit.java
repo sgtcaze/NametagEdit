@@ -28,6 +28,7 @@ public class NametagEdit extends JavaPlugin {
 
     private NametagHandler handler;
     private NametagManager manager;
+    private VersionChecker.BukkitVersion version;
 
     public static INametagApi getApi() {
         return api;
@@ -40,7 +41,9 @@ public class NametagEdit extends JavaPlugin {
 
         instance = this;
 
-        getLogger().info("Successfully loaded using bukkit version: " + VersionChecker.getBukkitVersion().name());
+        version = VersionChecker.getBukkitVersion();
+
+        getLogger().info("Successfully loaded using bukkit version: " + version.name());
 
         manager = new NametagManager(this);
         handler = new NametagHandler(this, manager);
@@ -70,7 +73,8 @@ public class NametagEdit extends JavaPlugin {
             api = new NametagAPI(handler, manager);
         }
 
-        new InvisibilityTask().runTaskTimerAsynchronously(this, 100L, 20L);
+        if(version.name().startsWith("v1_8_"))
+            new InvisibilityTask().runTaskTimerAsynchronously(this, 100L, 20L);
     }
 
     public static NametagEdit getInstance(){

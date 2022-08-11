@@ -1,6 +1,6 @@
 package com.nametagedit.plugin.api.data;
 
-import com.nametagedit.plugin.packets.VersionChecker;
+import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.Data;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class FakeTeam {
         }
         this.name = generatedName;
 
-        switch (VersionChecker.getBukkitVersion()) {
+        switch (NametagEdit.getInstance().getVersion()) {
             case v1_13_R1: case v1_14_R1: case v1_14_R2: case v1_15_R1: case v1_16_R1:
             case v1_16_R2: case v1_16_R3: case v1_17_R1: case v1_18_R1: case v1_19_R1:
                 this.name = this.name.length() > 256 ? this.name.substring(0, 256) : this.name;
