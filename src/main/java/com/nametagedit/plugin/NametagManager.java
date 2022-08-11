@@ -27,13 +27,7 @@ public class NametagManager {
      * team is created.
      */
     private FakeTeam getFakeTeam(String prefix, String suffix, boolean visible) {
-        for (FakeTeam fakeTeam : TEAMS.values()) {
-            if (fakeTeam.isSimilar(prefix, suffix, visible)) {
-                return fakeTeam;
-            }
-        }
-
-        return null;
+        return TEAMS.values().stream().filter(fakeTeam -> fakeTeam.isSimilar(prefix, suffix, visible)).findFirst().orElse(null);
     }
 
     /**
