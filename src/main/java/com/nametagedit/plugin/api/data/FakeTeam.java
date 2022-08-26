@@ -1,11 +1,12 @@
 package com.nametagedit.plugin.api.data;
 
-import com.nametagedit.plugin.packets.VersionChecker;
-import com.nametagedit.plugin.packets.VersionChecker.BukkitVersion;
+import com.nametagedit.plugin.NametagEdit;
 import com.nametagedit.plugin.utils.Utils;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a Scoreboard Team. It is used
@@ -14,6 +15,8 @@ import java.util.ArrayList;
  */
 @Data
 public class FakeTeam {
+
+    @Getter private static final List<String> createdTeamsNames = new ArrayList<>();
 
     // Because some networks use NametagEdit on multiple servers, we may have clashes
     // with the same Team names. The UNIQUE_ID ensures there will be no clashing.
@@ -28,19 +31,22 @@ public class FakeTeam {
     private boolean visible = true;
 
     public FakeTeam(String prefix, String suffix, int sortPriority, boolean playerTag) {
-        this.name = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
+        String generatedName = UNIQUE_ID + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
+        while(createdTeamsNames.contains(generatedName)){
+            generatedName = Utils.generateUUID() + "_" + getNameFromInput(sortPriority) + ++ID + (playerTag ? "+P" : "");
+        }
+        this.name = generatedName;
 
-        switch (VersionChecker.getBukkitVersion()) {
-            case v1_13_R1: case v1_14_R1: case v1_14_R2: case v1_15_R1: case v1_16_R1:
-            case v1_16_R2: case v1_16_R3: case v1_17_R1: case v1_18_R1: case v1_19_R1:
-                this.name = this.name.length() > 256 ? this.name.substring(0, 256) : this.name;
-            default:
-                this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
+        if(NametagEdit.getInstance().getVersion().getProtocolNumber() >= 393){
+            this.name = this.name.length() > 256 ? this.name.substring(0, 256) : this.name;
+        }else{
+            this.name = this.name.length() > 16 ? this.name.substring(0, 16) : this.name;
         }
 
         this.prefix = prefix;
         this.suffix = suffix;
 
+        createdTeamsNames.add(this.name);
     }
 
     public void addMember(String player) {

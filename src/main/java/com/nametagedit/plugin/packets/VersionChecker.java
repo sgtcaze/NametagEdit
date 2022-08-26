@@ -9,54 +9,20 @@
  */
 package com.nametagedit.plugin.packets;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 
 public class VersionChecker {
 
-    private static final BukkitVersion bukkitVersion;
+    private static BukkitVersion bukkitVersion;
 
     static {
-        final String version = Bukkit.getVersion();
-        if (version.contains("(MC: 1.8)") || version.contains("(MC: 1.8.1)") || version.contains("(MC: 1.8.2)"))
-            bukkitVersion = BukkitVersion.v1_8_R1;
-        else if (version.contains("(MC: 1.8.3)"))
-            bukkitVersion = BukkitVersion.v1_8_R2;
-        else if (version.contains("(MC: 1.8.4)") || version.contains("(MC: 1.8.5)") || version.contains("(MC: 1.8.6)") || version.contains("(MC: 1.8.7)") || version.contains("(MC: 1.8.8)") || version.contains("(MC: 1.8.9)"))
-            bukkitVersion = BukkitVersion.v1_8_R3;
-        else if (version.contains("(MC: 1.9)") || version.contains("(MC: 1.9.1)") || version.contains("(MC: 1.9.2)") || version.contains("(MC: 1.9.3)"))
-            bukkitVersion = BukkitVersion.v1_9_R1;
-        else if (version.contains("(MC: 1.9.4)"))
-            bukkitVersion = BukkitVersion.v1_9_R2;
-        else if (version.contains("(MC: 1.10)") || version.contains("(MC: 1.10.1)") || version.contains("(MC: 1.10.2)"))
-            bukkitVersion = BukkitVersion.v1_10_R1;
-        else if (version.contains("(MC: 1.11)") || version.contains("(MC: 1.11.1)") || version.contains("(MC: 1.11.2)"))
-            bukkitVersion = BukkitVersion.v1_11_R1;
-        else if (version.contains("(MC: 1.12)") || version.contains("(MC: 1.12.1)") || version.contains("(MC: 1.12.2)"))
-            bukkitVersion = BukkitVersion.v1_12_R1;
-        else if (version.contains("(MC: 1.13)"))
-            bukkitVersion = BukkitVersion.v1_13_R1;
-        else if (version.contains("(MC: 1.13.1)") || version.contains("(MC: 1.13.2)"))
-            bukkitVersion = BukkitVersion.v1_13_R2;
-        else if (version.contains("(MC: 1.14)") || version.contains("(MC: 1.14.1)") || version.contains("(MC: 1.14.2)") || version.contains("(MC: 1.14.3)"))
-            bukkitVersion = BukkitVersion.v1_14_R1;
-        else if (version.contains("(MC: 1.14.4)"))
-            bukkitVersion = BukkitVersion.v1_14_R2;
-        else if (version.contains("(MC: 1.15)") || version.contains("(MC: 1.15.1)") || version.contains("(MC: 1.15.2)"))
-            bukkitVersion = BukkitVersion.v1_15_R1;
-        else if (version.contains("(MC: 1.16.1)"))
-            bukkitVersion = BukkitVersion.v1_16_R1;
-        else if (version.contains("(MC: 1.16.2)") || version.contains("(MC: 1.16.3)"))
-            bukkitVersion = BukkitVersion.v1_16_R2;
-        else if (version.contains("(MC: 1.16.4)") || version.contains("(MC: 1.16.5)"))
-            bukkitVersion = BukkitVersion.v1_16_R3;
-        else if (version.contains("(MC: 1.17)") || version.contains("(MC: 1.17.1)"))
-            bukkitVersion = BukkitVersion.v1_17_R1;
-        else if (version.contains("(MC: 1.18)") || version.contains("(MC: 1.18.1)") || version.contains("(MC: 1.18.2)"))
-            bukkitVersion = BukkitVersion.v1_18_R1;
-        else if (version.contains("(MC: 1.19)") || version.contains("(MC: 1.19.1)") || version.contains("(MC: 1.19.2)"))
-            bukkitVersion = BukkitVersion.v1_19_R1;
-        else
+        try{
+            bukkitVersion = BukkitVersion.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace("org.bukkit.craftbukkit.", ""));
+        }catch (Exception ex){
             bukkitVersion = null;
+        }
     }
 
     public static BukkitVersion getBukkitVersion() {
@@ -64,13 +30,32 @@ public class VersionChecker {
     }
 
     public static boolean canHex() {
-        String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
-        String minorVer = split[1];
-        return Integer.parseInt(minorVer) >= 16;
+        return bukkitVersion.getProtocolNumber() >= BukkitVersion.v1_16_R1.getProtocolNumber();
     }
 
+    @RequiredArgsConstructor
+    @Getter
     public enum BukkitVersion {
-        v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1, v1_11_R1, v1_12_R1, v1_13_R1, v1_13_R2, v1_14_R1, v1_14_R2, v1_15_R1, v1_16_R1, v1_16_R2, v1_16_R3, v1_17_R1, v1_18_R1, v1_19_R1
+        v1_8_R1(47),
+        v1_8_R2(47),
+        v1_8_R3(47),
+        v1_9_R1(107),
+        v1_9_R2(108),
+        v1_10_R1(210),
+        v1_11_R1(316),
+        v1_12_R1(340),
+        v1_13_R1(393),
+        v1_13_R2(404),
+        v1_14_R1(477),
+        v1_14_R2(498),
+        v1_15_R1(578),
+        v1_16_R1(736),
+        v1_16_R2(754),
+        v1_17_R1(756),
+        v1_18_R1(758),
+        v1_19_R1(760);
+
+        private final int protocolNumber;
     }
 
 }
