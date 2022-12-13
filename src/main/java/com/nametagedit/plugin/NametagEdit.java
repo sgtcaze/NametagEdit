@@ -5,6 +5,7 @@ import com.nametagedit.plugin.api.NametagAPI;
 import com.nametagedit.plugin.hooks.*;
 import com.nametagedit.plugin.invisibility.InvisibilityTask;
 import com.nametagedit.plugin.packets.PacketWrapper;
+import com.nametagedit.plugin.packets.VersionChecker;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -27,6 +28,7 @@ public class NametagEdit extends JavaPlugin {
 
     private NametagHandler handler;
     private NametagManager manager;
+    private VersionChecker.BukkitVersion version;
 
     public static INametagApi getApi() {
         return api;
@@ -38,6 +40,10 @@ public class NametagEdit extends JavaPlugin {
         if (!isEnabled()) return;
 
         instance = this;
+
+        version = VersionChecker.getBukkitVersion();
+
+        getLogger().info("Successfully loaded using bukkit version: " + version.name());
 
         manager = new NametagManager(this);
         handler = new NametagHandler(this, manager);
@@ -67,7 +73,8 @@ public class NametagEdit extends JavaPlugin {
             api = new NametagAPI(handler, manager);
         }
 
-        new InvisibilityTask().runTaskTimerAsynchronously(this, 100L, 20L);
+        if(version.name().startsWith("v1_8_"))
+            new InvisibilityTask().runTaskTimerAsynchronously(this, 100L, 20L);
     }
 
     public static NametagEdit getInstance(){
