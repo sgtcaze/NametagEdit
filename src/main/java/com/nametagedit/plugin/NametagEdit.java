@@ -1,22 +1,17 @@
 package com.nametagedit.plugin;
 
-import java.util.ArrayList;
-
-import com.nametagedit.plugin.hooks.invisibility.HookInvisibilityFix;
+import com.nametagedit.plugin.api.INametagApi;
+import com.nametagedit.plugin.api.NametagAPI;
+import com.nametagedit.plugin.hooks.*;
+import com.nametagedit.plugin.invisibility.InvisibilityTask;
+import com.nametagedit.plugin.packets.PacketWrapper;
+import com.nametagedit.plugin.packets.VersionChecker;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nametagedit.plugin.api.INametagApi;
-import com.nametagedit.plugin.api.NametagAPI;
-import com.nametagedit.plugin.hooks.HookGroupManager;
-import com.nametagedit.plugin.hooks.HookGuilds;
-import com.nametagedit.plugin.hooks.HookLibsDisguise;
-import com.nametagedit.plugin.hooks.HookLuckPerms;
-import com.nametagedit.plugin.hooks.HookPermissionsEX;
-import com.nametagedit.plugin.hooks.HookZPermissions;
-import com.nametagedit.plugin.packets.PacketWrapper;
-import lombok.Getter;
+import java.util.ArrayList;
 
 /**
  * TODO:
@@ -33,6 +28,7 @@ public class NametagEdit extends JavaPlugin {
 
     private NametagHandler handler;
     private NametagManager manager;
+    private VersionChecker.BukkitVersion version;
 
     public static INametagApi getApi() {
         return api;
@@ -45,12 +41,14 @@ public class NametagEdit extends JavaPlugin {
 
         instance = this;
 
+        version = VersionChecker.getBukkitVersion();
+
+        getLogger().info("Successfully loaded using bukkit version: " + version.name());
+
         manager = new NametagManager(this);
         handler = new NametagHandler(this, manager);
 
         PluginManager pluginManager = Bukkit.getPluginManager();
-
-        pluginManager.registerEvents(new HookInvisibilityFix(), this);
 
         if (checkShouldRegister("zPermissions")) {
             pluginManager.registerEvents(new HookZPermissions(handler), this);
@@ -74,6 +72,9 @@ public class NametagEdit extends JavaPlugin {
         if (api == null) {
             api = new NametagAPI(handler, manager);
         }
+
+        if(version.name().startsWith("v1_8_"))
+            new InvisibilityTask().runTaskTimerAsynchronously(this, 100L, 20L);
     }
 
     public static NametagEdit getInstance(){
