@@ -102,7 +102,7 @@
         <dependency>
             <groupId>me.glaremasters</groupId>
             <artifactId>guilds</artifactId>
-            <version>3.5.6.6-SNAPSHOT</version>
+            <version>3.5.6.9-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- LibsDisguises -->
@@ -112,6 +112,12 @@
             <version>10.0.25</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/LibsDisguises-10.0.25.jar</systemPath>
+        </dependency>
+        <!-- Aikar -->
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <repositories>
@@ -181,6 +187,7 @@
                                     <include>org.slf4j:*</include>
                                     <include>com.zaxxer:*</include>
                                     <include>org.bstats.bStats-Metrics:*</include>
+                                    <include>co.aikar:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
