@@ -9,7 +9,7 @@ Add the following repository to your POM.xml:
 {{{
 <repository>
     <id>upstream</id>
-    <url>http://ci.nametagedit.com/plugin/repository/everything/</url>
+    <url>https://ci.nametagedit.com/plugin/repository/everything/</url>
 </repository>
 }}}
 
