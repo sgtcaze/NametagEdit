@@ -118,7 +118,6 @@
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
     <repositories>
@@ -142,15 +141,15 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!-- Glare Repo -->
-        <repository>
-            <id>guilds</id>
-            <url>https://repo.glaremasters.me/repository/public/</url>
-        </repository>
         <!-- Aikar Repo -->
         <repository>
             <id>aikar</id>
             <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
+        <!-- Glare Repo -->
+        <repository>
+            <id>guilds</id>
+            <url>https://repo.glaremasters.me/repository/public/</url>
         </repository>
     </repositories>
     <!-- Builds NametagEdit -->
