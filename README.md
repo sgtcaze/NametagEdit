@@ -8,9 +8,9 @@
 
 This plugin allows users to add up to 16 characters before and after their name. Individual tags can be created for players, or a group can be created that can be joined via permissions.
 
-* Minecraft `1.7.x to 1.12.x` has a max `16 character` limit.
-* Minecraft `1.13.x to 1.19.x` has a max `256 character` limit.
-* Minecraft `1.16.x to 1.19.x` has `hex color` support.
+* Minecraft `1.7.x to 1.12.x` has a max 16-character limit.
+* Minecraft `1.13.x to 1.20.x` has a max 256-character limit.
+* Minecraft `1.16.x to 1.20.x` has `hex color` support.
 
 NametagEdit has support for EssentialsGroupManager, PermissionsEx, zPermissions, LuckPerms and LibsDisguises. If a user changes groups or permissions, their tag is automatically updated.
 

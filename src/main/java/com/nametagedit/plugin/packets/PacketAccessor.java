@@ -81,7 +81,13 @@ class PacketAccessor {
                 packetParamsClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam$b");
                 Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.level.EntityPlayer");
                 Class<?> typePlayerConnection = Class.forName("net.minecraft.server.network.PlayerConnection");
-                playerConnection = typeNMSPlayer.getField("b");
+                if (MINOR_VERSION >= 20) {
+                    // 1.20
+                    playerConnection = typeNMSPlayer.getField("c");
+                } else {
+                    // 1.17-1.19
+                    playerConnection = typeNMSPlayer.getField("b");
+                }
                 Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
                 sendPacket = Arrays.stream(typePlayerConnection.getMethods())
                         .filter(method -> Arrays.equals(method.getParameterTypes(), sendPacketParameters))
