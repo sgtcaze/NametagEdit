@@ -15,6 +15,7 @@ import java.util.Optional;
 public class PacketWrapper {
 
     public String error;
+    private final int param;
     private final Object packet = PacketAccessor.createPacket();
     private final Object packetParams = PacketAccessor.createPacketParams();
 
@@ -44,12 +45,14 @@ public class PacketWrapper {
         if (param != 3 && param != 4) {
             throw new IllegalArgumentException("Method must be join or leave for player constructor");
         }
+        this.param = param;
         setupDefaults(name, param);
         setupMembers(members);
     }
 
     @SuppressWarnings("unchecked")
     public PacketWrapper(String name, String prefix, String suffix, int param, Collection<?> players, boolean visible) {
+        this.param = param;
         setupDefaults(name, param);
         if (param == 0 || param == 2) {
             try {
@@ -152,7 +155,7 @@ public class PacketWrapper {
         try {
             if (PacketAccessor.isParamsVersion()) {
                 // 1.17+
-                PacketAccessor.PARAMS.set(packet, Optional.ofNullable(packetParams));
+                PacketAccessor.PARAMS.set(packet, param == 0 ? Optional.ofNullable(packetParams) : Optional.empty());
             }
         } catch (Exception e) {
             error = e.getMessage();
