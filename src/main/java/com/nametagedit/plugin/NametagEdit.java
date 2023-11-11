@@ -73,7 +73,7 @@ public class NametagEdit extends JavaPlugin {
             api = new NametagAPI(handler, manager);
         }
 
-        if(version.name().startsWith("v1_8_"))
+        if (version.name().startsWith("v1_8_"))
             new InvisibilityTask().runTaskTimerAsynchronously(this, 100L, 20L);
     }
 

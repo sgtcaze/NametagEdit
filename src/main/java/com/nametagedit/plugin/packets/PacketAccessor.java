@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 class PacketAccessor {
 
@@ -89,7 +90,10 @@ class PacketAccessor {
                     playerConnection = typeNMSPlayer.getField("b");
                 }
                 Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
-                sendPacket = Arrays.stream(typePlayerConnection.getMethods())
+                sendPacket = Stream.concat(
+                                Arrays.stream(typePlayerConnection.getSuperclass().getMethods()), // 1.20.2+ priority to packet sending
+                                Arrays.stream(typePlayerConnection.getMethods())
+                        )
                         .filter(method -> Arrays.equals(method.getParameterTypes(), sendPacketParameters))
                         .findFirst().orElseThrow(NoSuchMethodException::new);
             }
@@ -190,7 +194,6 @@ class PacketAccessor {
     }
 
     static Object createPacketParams() {
-
         try {
             if (!isParamsVersion()) {
                 return null;
