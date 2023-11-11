@@ -61,6 +61,8 @@ public class VersionChecker {
             bukkitVersion = BukkitVersion.v1_19_R3;
         else if (version.contains("(MC: 1.20)") || version.contains("(MC: 1.20.1)"))
             bukkitVersion = BukkitVersion.v1_20_R1;
+        else if (version.contains("(MC: 1.20.2)"))
+            bukkitVersion = BukkitVersion.v1_20_R2;
         else
             bukkitVersion = null;
     }
@@ -76,7 +78,7 @@ public class VersionChecker {
     }
 
     public enum BukkitVersion {
-        v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1, v1_11_R1, v1_12_R1, v1_13_R1, v1_13_R2, v1_14_R1, v1_14_R2, v1_15_R1, v1_16_R1, v1_16_R2, v1_16_R3, v1_17_R1, v1_18_R1, v1_19_R1, v1_19_R2, v1_19_R3, v1_20_R1
+        v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1, v1_11_R1, v1_12_R1, v1_13_R1, v1_13_R2, v1_14_R1, v1_14_R2, v1_15_R1, v1_16_R1, v1_16_R2, v1_16_R3, v1_17_R1, v1_18_R1, v1_19_R1, v1_19_R2, v1_19_R3, v1_20_R1, v1_20_R2
     }
 
 }
