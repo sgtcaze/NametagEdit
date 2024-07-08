@@ -118,3 +118,7 @@ run/
 # Database and server directory
 db/
 server/
+
+# Gradle
+.gradle
+build
