@@ -27,12 +27,12 @@ public class PacketWrapper {
         try {
             if (!PacketAccessor.isLegacyVersion()) {
                 if (!PacketAccessor.isParamsVersion()) {
-                    typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.server." + PacketAccessor.VERSION + ".EnumChatFormat");
+                    typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.server." + PacketAccessor.SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION + ".EnumChatFormat");
                 } else {
                     // 1.17+
                     typeEnumChatFormat = (Class<? extends Enum>) Class.forName("net.minecraft.EnumChatFormat");
                 }
-                Class<?> typeCraftChatMessage = Class.forName("org.bukkit.craftbukkit." + PacketAccessor.VERSION + ".util.CraftChatMessage");
+                Class<?> typeCraftChatMessage = Class.forName(PacketAccessor.CRAFT_BUKKIT_PACKAGE + ".util.CraftChatMessage");
                 CraftChatMessage = typeCraftChatMessage.getMethod("fromString", String.class);
                 RESET_COLOR = Enum.valueOf(typeEnumChatFormat, "RESET");
             }
