@@ -53,6 +53,17 @@ class PacketAccessor {
     // 1.17+
     private static Class<?> packetParamsClass;
 
+    // Helper to try multiple class names
+    private static Class<?> tryClasses(String... names) {
+        for (String n : names) {
+            try {
+                return Class.forName(n);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+        return null;
+    }
+
     static {
         try {
             Class.forName("cpw.mods.fml.common.Mod");
@@ -96,29 +107,95 @@ class PacketAccessor {
                 sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION + ".Packet"));
             } else {
                 // 1.17+
-                packetClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam");
-                packetParamsClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam$b");
-                Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.level.EntityPlayer");
-                Class<?> typePlayerConnection = Class.forName("net.minecraft.server.network.PlayerConnection");
-
-                if (MINOR_VERSION >= 21 && PATCH_VERSION >= 2) {
-                    // 1.21.2+
-                    playerConnection = typeNMSPlayer.getField("f");
-                } else if (MINOR_VERSION >= 20) {
-                    // 1.20+
-                    playerConnection = typeNMSPlayer.getField("c");
+                // Try multiple possible packet class names (some versions renamed packet class)
+                Class<?> tryPacket = tryClasses(
+                        "net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket",
+                        "net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam",
+                        "net.minecraft.network.protocol.game.ClientboundPlayerTeamPacket"
+                );
+                if (tryPacket == null) {
+                    // fallback to the known name
+                    packetClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam");
                 } else {
-                    // 1.17-1.19
-                    playerConnection = typeNMSPlayer.getField("b");
+                    packetClass = tryPacket;
                 }
 
-                Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
-                sendPacket = Stream.concat(
-                                Arrays.stream(typePlayerConnection.getSuperclass().getMethods()), // 1.20.2+ priority to packet sending
-                                Arrays.stream(typePlayerConnection.getMethods())
-                        )
-                        .filter(method -> Arrays.equals(method.getParameterTypes(), sendPacketParameters))
-                        .findFirst().orElseThrow(NoSuchMethodException::new);
+                // try multiple param/inner-class names for parameters (1.17+ inner class names vary)
+                Class<?> tryParams = null;
+                try {
+                    tryParams = Class.forName(packetClass.getName() + "$Parameters");
+                } catch (ClassNotFoundException ignored) {
+                }
+                if (tryParams == null) {
+                    tryParams = tryClasses(
+                            "net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam$b",
+                            "net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket$Parameters",
+                            "net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket$b"
+                    );
+                }
+                packetParamsClass = tryParams;
+
+                // Try several possible NMS player and player connection class names
+                Class<?> typeNMSPlayer = tryClasses(
+                        "net.minecraft.server.level.EntityPlayer",
+                        "net.minecraft.server.level.ServerPlayer",
+                        "net.minecraft.server.level.EntityHuman",
+                        "net.minecraft.server.level.Player"
+                );
+                Class<?> typePlayerConnection = tryClasses(
+                        "net.minecraft.server.network.PlayerConnection",
+                        "net.minecraft.server.level.PlayerConnection",
+                        "net.minecraft.server/network/NetworkManager"
+                );
+
+                // If we couldn't find the specific classes by name, try to guess player connection field
+                if (typeNMSPlayer != null) {
+                    // prefer explicit names for newer versions
+                    Field found = null;
+                    for (Field f : typeNMSPlayer.getDeclaredFields()) {
+                        Class<?> ft = f.getType();
+                        String tn = ft.getSimpleName().toLowerCase();
+                        String fn = f.getName().toLowerCase();
+                        if (tn.contains("playerconnection") || fn.contains("playerconnection") || fn.contains("connection")) {
+                            found = f;
+                            break;
+                        }
+                    }
+                    if (found != null) {
+                        found.setAccessible(true);
+                        playerConnection = found;
+                    } else {
+                        // fallback to prior hardcoded names depending on version
+                        if (MINOR_VERSION >= 21 && PATCH_VERSION >= 2) {
+                            try {
+                                playerConnection = typeNMSPlayer.getField("f");
+                            } catch (Exception ignored) {
+                            }
+                        } else if (MINOR_VERSION >= 20) {
+                            try {
+                                playerConnection = typeNMSPlayer.getField("c");
+                            } catch (Exception ignored) {
+                            }
+                        } else {
+                            try {
+                                playerConnection = typeNMSPlayer.getField("b");
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                }
+
+                if (typePlayerConnection != null) {
+                    Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
+                    sendPacket = Stream.concat(
+                                    Arrays.stream(typePlayerConnection.getSuperclass().getMethods()), // 1.20.2+ priority to packet sending
+                                    Arrays.stream(typePlayerConnection.getMethods())
+                            )
+                            .filter(method -> Arrays.equals(method.getParameterTypes(), sendPacketParameters))
+                            .findFirst().orElse(null);
+                }
+
+                // If sendPacket still null, we'll try to locate a suitable send method later at runtime per connection instance
             }
 
             PacketData currentVersion = null;
@@ -238,7 +315,34 @@ class PacketAccessor {
         try {
             Object nmsPlayer = getHandle.invoke(player);
             Object connection = playerConnection.get(nmsPlayer);
-            sendPacket.invoke(connection, packet);
+            try {
+                // First try the pre-resolved method if available
+                if (sendPacket != null) {
+                    sendPacket.invoke(connection, packet);
+                } else {
+                    // fallback: find a send method on the actual connection instance
+                    Method runtimeSend = Arrays.stream(connection.getClass().getMethods())
+                            .filter(m -> m.getParameterCount() == 1)
+                            .filter(m -> m.getParameterTypes()[0].getSimpleName().toLowerCase().contains("packet") || m.getParameterTypes()[0].getName().toLowerCase().contains("packet"))
+                            .findFirst().orElse(null);
+                    if (runtimeSend != null) {
+                        runtimeSend.invoke(connection, packet);
+                    } else {
+                        throw new NoSuchMethodException("No suitable sendPacket method found on connection class: " + connection.getClass());
+                    }
+                }
+            } catch (IllegalArgumentException iae) {
+                // Receiver might not match the method's declaring class. Try to find the method dynamically on the actual connection instance and invoke it.
+                Method runtimeSend = Arrays.stream(connection.getClass().getMethods())
+                        .filter(m -> m.getParameterCount() == 1)
+                        .filter(m -> m.getParameterTypes()[0].getSimpleName().toLowerCase().contains("packet") || m.getParameterTypes()[0].getName().toLowerCase().contains("packet"))
+                        .findFirst().orElse(null);
+                if (runtimeSend != null) {
+                    runtimeSend.invoke(connection, packet);
+                } else {
+                    throw iae; // rethrow if we can't recover
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

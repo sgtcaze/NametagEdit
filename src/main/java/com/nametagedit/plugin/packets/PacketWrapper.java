@@ -139,10 +139,45 @@ public class PacketWrapper {
                 // 1.17+ These null values are not allowed, this initializes them.
                 PacketAccessor.MEMBERS.set(packet, new ArrayList<>());
                 // Initialize PUSH using helper - in newer versions this field may be an enum (e.g. collisionRule)
-                PacketAccessor.PUSH.set(packetParams, getPushValue(PacketAccessor.PUSH, "", true));
+                // Guard the assignment: only set a value that matches the field's type to avoid IllegalArgumentException
+                Object pushVal = getPushValue(PacketAccessor.PUSH, "", true);
+                if (PacketAccessor.PUSH != null) {
+                    Class<?> pushType = PacketAccessor.PUSH.getType();
+                    try {
+                        if (pushVal != null && pushType.isInstance(pushVal)) {
+                            PacketAccessor.PUSH.set(packetParams, pushVal);
+                        } else if (pushType.isEnum()) {
+                            // try to set a sensible default enum constant
+                            try {
+                                @SuppressWarnings({"unchecked", "rawtypes"})
+                                Object enumDef = Enum.valueOf((Class) pushType, "ALWAYS");
+                                PacketAccessor.PUSH.set(packetParams, enumDef);
+                            } catch (Exception ex) {
+                                // if ALWAYS not present, try first enum constant
+                                Object[] consts = pushType.getEnumConstants();
+                                if (consts != null && consts.length > 0) {
+                                    PacketAccessor.PUSH.set(packetParams, consts[0]);
+                                }
+                            }
+                        } else {
+                            PacketAccessor.PUSH.set(packetParams, pushVal == null ? "" : pushVal.toString());
+                        }
+                    } catch (IllegalArgumentException iae) {
+                        // defensive: don't let a wrong type crash plugin enable
+                        // leave field as-is
+                    }
+                }
                 // VISIBILITY puede ser enum o String dependiendo de la versión; usa el helper
                 if (PacketAccessor.VISIBILITY != null) {
-                    PacketAccessor.VISIBILITY.set(packetParams, getVisibilityValue(PacketAccessor.VISIBILITY, false, true));
+                    Object visVal = getVisibilityValue(PacketAccessor.VISIBILITY, false, true);
+                    try {
+                        if (visVal != null && PacketAccessor.VISIBILITY.getType().isInstance(visVal)) {
+                            PacketAccessor.VISIBILITY.set(packetParams, visVal);
+                        } else if (!PacketAccessor.VISIBILITY.getType().isEnum()) {
+                            PacketAccessor.VISIBILITY.set(packetParams, visVal == null ? "" : visVal.toString());
+                        }
+                    } catch (IllegalArgumentException ignored) {
+                    }
                 }
                 PacketAccessor.TEAM_COLOR.set(packetParams, RESET_COLOR);
             }
@@ -151,7 +186,13 @@ public class PacketWrapper {
                     PacketAccessor.PUSH.set(packet, getPushValue(PacketAccessor.PUSH, "never", false));
                 } else {
                     // 1.17+
-                    PacketAccessor.PUSH.set(packetParams, getPushValue(PacketAccessor.PUSH, "never", false));
+                    Object pushVal = getPushValue(PacketAccessor.PUSH, "never", false);
+                    try {
+                        if (pushVal != null && PacketAccessor.PUSH.getType().isInstance(pushVal)) {
+                            PacketAccessor.PUSH.set(packetParams, pushVal);
+                        }
+                    } catch (IllegalArgumentException ignored) {
+                    }
                 }
             }
         } catch (Exception e) {
