@@ -12,10 +12,20 @@ import java.util.stream.Stream;
 
 class PacketAccessor {
 
-    protected static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-    protected static final int MINOR_VERSION = Integer.parseInt(VERSION.split("_")[1]);
+    protected static final String SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION;
+    protected static final String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
+    protected static final String VERSION = Bukkit.getBukkitVersion().split("-")[0];
+    protected static final int MINOR_VERSION = Integer.parseInt(VERSION.split("\\.")[1]);
+    protected static final int PATCH_VERSION = Integer.parseInt(VERSION.split("\\.")[2]);
 
-    private static final List<String> legacyVersions = Arrays.asList("v1_7_R1", "v1_7_R2", "v1_7_R3", "v1_7_R4", "v1_8_R1", "v1_8_R2", "v1_8_R3", "v1_9_R1", "v1_9_R2", "v1_10_R1", "v1_11_R1", "v1_12_R1");
+    private static final List<String> legacyVersions = Arrays.asList(
+            "1.7.2", "1.7.4", "1.7.5", "1.7.6", "1.7.7", "1.7.8", "1.7.9", "1.7.10",
+            "1.8", "1.8.1", "1.8.2", "1.8.3", "1.8.4", "1.8.5", "1.8.6", "1.8.7", "1.8.8", "1.8.9",
+            "1.9", "1.9.1", "1.9.2", "1.9.3", "1.9.4",
+            "1.10", "1.10.1", "1.10.2",
+            "1.11", "1.11.1", "1.11.2",
+            "1.12", "1.12.1", "1.12.2"
+    );
     private static boolean CAULDRON_SERVER = false;
     private static boolean LEGACY_SERVER = false;
 
@@ -51,6 +61,14 @@ class PacketAccessor {
             // This is not a cauldron server
         }
 
+        String spigotMappedCraftBukkitVersion = "";
+        try {
+            spigotMappedCraftBukkitVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+            // This a modern mapped version
+        }
+        SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION = spigotMappedCraftBukkitVersion;
+
         try {
             Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
             Field theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
@@ -61,7 +79,7 @@ class PacketAccessor {
             if (legacyVersions.contains(VERSION))
                 LEGACY_SERVER = true;
 
-            Class<?> typeCraftPlayer = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
+            Class<?> typeCraftPlayer = Class.forName(CRAFT_BUKKIT_PACKAGE + ".entity.CraftPlayer");
             getHandle = typeCraftPlayer.getMethod("getHandle");
 
             if (CAULDRON_SERVER) {
@@ -71,24 +89,29 @@ class PacketAccessor {
                 playerConnection = typeNMSPlayer.getField("field_71135_a");
                 sendPacket = typePlayerConnection.getMethod("func_147359_a", Class.forName("net.minecraft.server.v1_7_R4.Packet"));
             } else if (!isParamsVersion()) {
-                packetClass = Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutScoreboardTeam");
-                Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + VERSION + ".EntityPlayer");
-                Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + VERSION + ".PlayerConnection");
+                packetClass = Class.forName("net.minecraft.server." + SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION + ".PacketPlayOutScoreboardTeam");
+                Class<?> typeNMSPlayer = Class.forName("net.minecraft.server." + SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION + ".EntityPlayer");
+                Class<?> typePlayerConnection = Class.forName("net.minecraft.server." + SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION + ".PlayerConnection");
                 playerConnection = typeNMSPlayer.getField("playerConnection");
-                sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"));
+                sendPacket = typePlayerConnection.getMethod("sendPacket", Class.forName("net.minecraft.server." + SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION + ".Packet"));
             } else {
                 // 1.17+
                 packetClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam");
                 packetParamsClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam$b");
                 Class<?> typeNMSPlayer = Class.forName("net.minecraft.server.level.EntityPlayer");
                 Class<?> typePlayerConnection = Class.forName("net.minecraft.server.network.PlayerConnection");
-                if (MINOR_VERSION >= 20) {
-                    // 1.20
+
+                if (MINOR_VERSION >= 21 && PATCH_VERSION >= 2) {
+                    // 1.21.2+
+                    playerConnection = typeNMSPlayer.getField("f");
+                } else if (MINOR_VERSION >= 20) {
+                    // 1.20+
                     playerConnection = typeNMSPlayer.getField("c");
                 } else {
                     // 1.17-1.19
                     playerConnection = typeNMSPlayer.getField("b");
                 }
+
                 Class<?>[] sendPacketParameters = new Class[]{Class.forName("net.minecraft.network.protocol.Packet")};
                 sendPacket = Stream.concat(
                                 Arrays.stream(typePlayerConnection.getSuperclass().getMethods()), // 1.20.2+ priority to packet sending
@@ -99,10 +122,9 @@ class PacketAccessor {
             }
 
             PacketData currentVersion = null;
-            for (PacketData packetData : PacketData.values()) {
-                if (VERSION.contains(packetData.name())) {
-                    currentVersion = packetData;
-                }
+            VersionChecker.BukkitVersion bukkitVersion = VersionChecker.getBukkitVersion();
+            if (bukkitVersion != null) {
+                currentVersion = bukkitVersion.getPacketData();
             }
 
             if (CAULDRON_SERVER) {
