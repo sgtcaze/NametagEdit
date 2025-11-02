@@ -15,8 +15,8 @@ class PacketAccessor {
     protected static final String SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION;
     protected static final String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
     protected static final String VERSION = Bukkit.getBukkitVersion().split("-")[0];
-    protected static final int MINOR_VERSION = Integer.parseInt(VERSION.split("\\.")[1]);
-    protected static final int PATCH_VERSION = Integer.parseInt(VERSION.split("\\.")[2]);
+    protected static final int MINOR_VERSION = parseVersionPart(VERSION, 1);
+    protected static final int PATCH_VERSION = parseVersionPart(VERSION, 2);
 
     private static final List<String> legacyVersions = Arrays.asList(
             "1.7.2", "1.7.4", "1.7.5", "1.7.6", "1.7.7", "1.7.8", "1.7.9", "1.7.10",
@@ -74,9 +74,15 @@ class PacketAccessor {
 
         String spigotMappedCraftBukkitVersion = "";
         try {
-            spigotMappedCraftBukkitVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-            // This a modern mapped version
+            // Safely extract the last segment of the CraftBukkit package name instead of assuming index 3
+            // Example package: org.bukkit.craftbukkit.v1_21_R1 -> last segment is v1_21_R1
+            String packageName = Bukkit.getServer().getClass().getPackage().getName();
+            String[] pkgParts = packageName.split("\\.");
+            if (pkgParts.length > 0) {
+                spigotMappedCraftBukkitVersion = pkgParts[pkgParts.length - 1];
+            }
+        } catch (Throwable ignored) {
+            // ignore and fall back to empty string
         }
         SPIGOT_MAPPED_CRAFT_BUKKIT_VERSION = spigotMappedCraftBukkitVersion;
 
@@ -264,6 +270,18 @@ class PacketAccessor {
 
     private static boolean isVisibilityVersion() {
         return MINOR_VERSION >= 8;
+    }
+
+    // Safe helper to parse minor/patch from VERSION string (e.g. "1.21.2")
+    private static int parseVersionPart(String version, int index) {
+        try {
+            String[] parts = version.split("\\.");
+            if (parts.length > index) {
+                return Integer.parseInt(parts[index]);
+            }
+        } catch (Exception ignored) {
+        }
+        return 0;
     }
 
     private static Field getNMS(String path) throws Exception {
