@@ -83,8 +83,21 @@ public class NametagEdit extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        manager.reset();
-        handler.getAbstractConfig().shutdown();
+        if (manager != null) {
+            try {
+                manager.reset();
+            } catch (Exception e) {
+                getLogger().severe("Error while resetting NametagManager: " + e.getMessage());
+            }
+        }
+
+        if (handler != null) {
+            try {
+                if (handler.getAbstractConfig() != null) handler.getAbstractConfig().shutdown();
+            } catch (Exception e) {
+                getLogger().severe("Error while shutting down config: " + e.getMessage());
+            }
+        }
     }
 
     void debug(String message) {

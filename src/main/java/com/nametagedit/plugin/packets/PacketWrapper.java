@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,14 +97,17 @@ public class PacketWrapper {
                     PacketAccessor.PACK_OPTION.set(packet, 1);
 
                     if (PacketAccessor.VISIBILITY != null) {
-                        PacketAccessor.VISIBILITY.set(packet, visible ? "always" : "never");
+                        // VISIBILITY can be a String field in older versions or an Enum in newer versions
+                        Object value = getVisibilityValue(PacketAccessor.VISIBILITY, visible, false);
+                        PacketAccessor.VISIBILITY.set(packet, value);
                     }
                 } else {
                     // 1.17+
                     PacketAccessor.PACK_OPTION.set(packetParams, 1);
 
                     if (PacketAccessor.VISIBILITY != null) {
-                        PacketAccessor.VISIBILITY.set(packetParams, visible ? "always" : "never");
+                        Object value = getVisibilityValue(PacketAccessor.VISIBILITY, visible, false);
+                        PacketAccessor.VISIBILITY.set(packetParams, value);
                     }
                 }
 
@@ -134,20 +138,108 @@ public class PacketWrapper {
             if (PacketAccessor.isParamsVersion()) {
                 // 1.17+ These null values are not allowed, this initializes them.
                 PacketAccessor.MEMBERS.set(packet, new ArrayList<>());
-                PacketAccessor.PUSH.set(packetParams, "");
-                PacketAccessor.VISIBILITY.set(packetParams, "");
+                // Initialize PUSH using helper - in newer versions this field may be an enum (e.g. collisionRule)
+                PacketAccessor.PUSH.set(packetParams, getPushValue(PacketAccessor.PUSH, "", true));
+                // VISIBILITY puede ser enum o String dependiendo de la versión; usa el helper
+                if (PacketAccessor.VISIBILITY != null) {
+                    PacketAccessor.VISIBILITY.set(packetParams, getVisibilityValue(PacketAccessor.VISIBILITY, false, true));
+                }
                 PacketAccessor.TEAM_COLOR.set(packetParams, RESET_COLOR);
             }
             if (NametagHandler.DISABLE_PUSH_ALL_TAGS && PacketAccessor.PUSH != null) {
                 if (!PacketAccessor.isParamsVersion()) {
-                    PacketAccessor.PUSH.set(packet, "never");
+                    PacketAccessor.PUSH.set(packet, getPushValue(PacketAccessor.PUSH, "never", false));
                 } else {
                     // 1.17+
-                    PacketAccessor.PUSH.set(packetParams, "never");
+                    PacketAccessor.PUSH.set(packetParams, getPushValue(PacketAccessor.PUSH, "never", false));
                 }
             }
         } catch (Exception e) {
             error = e.getMessage();
+        }
+    }
+
+    private Object getVisibilityValue(Field visibilityField, boolean visible, boolean isInitialEmpty) {
+        try {
+            Class<?> fieldType = visibilityField.getType();
+            if (fieldType.isEnum()) {
+                // Map to enum constant (try common names in uppercase, fall back to lowercase)
+                String name;
+                if (isInitialEmpty) {
+                    // default initialization: choose ALWAYS as neutral default
+                    name = "ALWAYS";
+                } else {
+                    name = visible ? "ALWAYS" : "NEVER";
+                }
+                try {
+                    @SuppressWarnings({"unchecked", "rawtypes"})
+                    Object enumVal = Enum.valueOf((Class) fieldType, name);
+                    return enumVal;
+                } catch (IllegalArgumentException iae) {
+                    // try lowercase variant
+                    try {
+                        @SuppressWarnings({"unchecked", "rawtypes"})
+                        Object enumVal = Enum.valueOf((Class) fieldType, name.toLowerCase());
+                        return enumVal;
+                    } catch (Exception ex) {
+                        // give up and return null
+                        return null;
+                    }
+                }
+            } else {
+                if (isInitialEmpty) return "";
+                return visible ? "always" : "never";
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Helper for setting the PUSH field which in some NMS versions is a String and in others is an Enum
+     * (for example collisionRule). This tries to return an enum constant when appropriate or a string.
+     *
+     * @param pushField The reflected field for PUSH/collisionRule
+     * @param value The desired string value (e.g. "never", "always" or "")
+     * @param isInitialEmpty true when initializing defaults (map to a neutral enum if needed)
+     * @return An enum constant instance or a String depending on the field type, or null on error
+     */
+    private Object getPushValue(Field pushField, String value, boolean isInitialEmpty) {
+        try {
+            if (pushField == null) return null;
+            Class<?> fieldType = pushField.getType();
+            if (fieldType.isEnum()) {
+                String name;
+                if (isInitialEmpty) {
+                    name = "ALWAYS"; // neutral default
+                } else {
+                    name = (value == null || value.isEmpty()) ? "ALWAYS" : value.toUpperCase();
+                }
+
+                // Normalize common variants
+                name = name.replace('-', '_').replace(' ', '_');
+
+                try {
+                    @SuppressWarnings({"unchecked", "rawtypes"})
+                    Object enumVal = Enum.valueOf((Class) fieldType, name);
+                    return enumVal;
+                } catch (IllegalArgumentException iae) {
+                    // try lowercase variant of field constants
+                    try {
+                        @SuppressWarnings({"unchecked", "rawtypes"})
+                        Object enumVal = Enum.valueOf((Class) fieldType, name.toLowerCase());
+                        return enumVal;
+                    } catch (Exception ex) {
+                        // give up and return null so reflection won't try to set incompatible value
+                        return null;
+                    }
+                }
+            } else {
+                if (isInitialEmpty) return "";
+                return value == null ? "" : value.toLowerCase();
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 
